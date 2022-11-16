@@ -1,0 +1,72 @@
+{
+    "name": "360-manager-H5",
+    "description": "后台H5管理系统",
+    "version": "0.0.1",
+    "scripts": {
+        "serve": "vue-cli-service serve",
+        "build": "vue-cli-service build",
+        "lint": "vue-cli-service lint"
+    },
+    "dependencies": {
+        "core-js": "^3.25.5",
+        "vue": "^3.2.41",
+        "pinia": "^2.0.23",
+        "vue-router": "^4.1.5",
+        "axios": "^1.1.3",
+        "dayjs": "^1.11.6",
+        "element-plus": "2.2.19",
+        "@element-plus/icons-vue": "^2.0.10",
+        "vuedraggable": "^4.1.0",
+        "mockjs": "^1.1.0"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.12.16",
+        "@babel/eslint-parser": "^7.12.16",
+        "@vue/cli-plugin-babel": "~5.0.8",
+        "@vue/cli-plugin-eslint": "~5.0.8",
+        "@vue/cli-service": "~5.0.8",
+        "@vue/cli-plugin-router": "~5.0.8",
+        "@vue/cli-plugin-vuex": "~5.0.8",
+        "eslint": "^7.32.0",
+        "eslint-plugin-vue": "^8.0.3",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "eslint-plugin-promise": "^6.1.1",
+        "eslint-plugin-standard": "^5.0.0",
+        "alphabetjs": "^0.1.4",
+        "less": "^4.1.3",
+        "less-loader": "^8.0.0",
+        "sass": "^1.50.0",
+        "sass-loader": "^12.6.0",
+        "mockjs": "^1.1.0",
+        "postcss": "^8.4.18",
+        "postcss-html": "^1.5.0",
+        "postcss-less": "^6.0.0",
+        "prettier": "^2.7.1"
+    },
+    "prettier": {
+        "tabWidth": 4,
+        "useTabs": false,
+        "jsxBracketSameLine": false,
+        "printWidth": 200,
+        "trailingComma": "none",
+        "arrowParens": "avoid",
+        "semi": true,
+        "singleQuote": false
+    },
+    "engines": {
+        "node": ">=14"
+    },
+    "lint-staged": {
+        "src/**/*.{jsx,txs,ts,js,json,vue,md}": [
+            "vue-cli-service lint",
+            "git add"
+        ]
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not dead",
+        "not ie 11"
+    ]
+}

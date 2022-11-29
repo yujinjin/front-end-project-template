@@ -2,13 +2,22 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 10:31:46
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-11-14 11:45:29
- * @项目的路径: \360-manager-H5\src\js\components\search-page.vue
+ * @最后修改时间: 2022-11-23 10:03:24
+ * @项目的路径: \front-end-project-template\src\js\components\search-page.vue
  * @描述: 搜索页组件
 -->
 <template>
     <div class="search-page" v-loading="isLoadingForInit">
-        <search-form v-if="searchFormProps" v-bind="searchFormProps" :pageName="pageName" :isSearchLoading="isSearchLoading" @search="searchHandle" @change="searchValueChangeHandle" @generateFormFields="initSearchFormValue" @collapseStatusChange="collapseStatusChangeHandle" ref="searchFormRef">
+        <search-form
+            v-if="searchFormProps"
+            v-bind="searchFormProps"
+            :pageName="pageName"
+            :isSearchLoading="isSearchLoading"
+            @search="searchHandle"
+            @change="searchValueChangeHandle"
+            @generateFormFields="initSearchFormValue"
+            ref="searchFormRef"
+        >
             <template v-for="name in distributeSlots.searchForm" #[name]="scope">
                 <slot :name="name" v-bind="scope"></slot>
             </template>
@@ -19,7 +28,16 @@
                 <slot :name="distributeSlots.actionBar[0]" v-bind="scope"></slot>
             </template>
         </action-bar>
-        <data-table v-if="dataTableProps" v-bind="dataTableProps" :pageName="pageName" :filters="searchFormInput" ref="dataTableRef" v-model:selectRows="selectRows" :autoInitQuery="!isLoadingForInit" @search="isLoading => (isSearchLoading = isLoading)">
+        <data-table
+            v-if="dataTableProps"
+            v-bind="dataTableProps"
+            :pageName="pageName"
+            :filters="searchFormInput"
+            ref="dataTableRef"
+            v-model:selectRows="selectRows"
+            :autoInitQuery="!isLoadingForInit"
+            @search="isLoading => (isSearchLoading = isLoading)"
+        >
             <template v-for="name in distributeSlots.dataTable" #[name]="scope">
                 <slot :name="name" v-bind="scope"></slot>
             </template>
@@ -28,7 +46,7 @@
     </div>
 </template>
 <script setup>
-import { ref, defineProps, defineEmits, useSlots, computed, defineExpose, watch } from "vue";
+import { ref, defineProps, defineEmits, useSlots, computed, defineExpose, watch, nextTick } from "vue";
 import extend from "@js/utils/extend";
 
 const props = defineProps({
@@ -113,11 +131,11 @@ const queryDataList = function () {
 };
 
 // 展开/收起状态更改操作
-const collapseStatusChangeHandle = function () {
-    if (dataTableRef.value) {
-        dataTableRef.value.initTableMaxHeight();
-    }
-};
+// const collapseStatusChangeHandle = function () {
+//     if (dataTableRef.value) {
+//         dataTableRef.value.initTableMaxHeight();
+//     }
+// };
 
 // 搜索操作
 const searchHandle = function (searchFormValue) {
@@ -133,11 +151,15 @@ const getSearchFormValue = function () {
     return extend(true, {}, searchFormInput.value);
 };
 
-const unwatch = watch(props.isLoadingForInit, value => {
-    unwatch();
-    if (value) return;
-    queryDataList();
-});
+const unwatch = watch(
+    () => props.isLoadingForInit,
+    async value => {
+        unwatch();
+        if (value) return;
+        await nextTick();
+        queryDataList();
+    }
+);
 
 defineExpose({ searchFormInput, getSearchFormValue });
 </script>

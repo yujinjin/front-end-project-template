@@ -1,7 +1,7 @@
 {
-    "name": "360-manager-H5",
-    "description": "后台H5管理系统",
-    "version": "0.0.1",
+    "name": "{{projectName}}",
+    "description": "{{description}}",
+    "author": "{{author}}",
     "scripts": {
         "serve": "vue-cli-service serve",
         "build": "vue-cli-service build",

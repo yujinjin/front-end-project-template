@@ -2,8 +2,8 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 16:04:46
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-11-14 11:46:43
- * @项目的路径: \360-manager-H5\src\js\components\search-form.vue
+ * @最后修改时间: 2022-11-23 10:03:07
+ * @项目的路径: \front-end-project-template\src\js\components\search-form.vue
  * @描述: 搜索表单组件
 -->
 <template>
@@ -20,7 +20,13 @@
 
                 <!-- select -->
                 <el-select v-else-if="field.type === 'select'" v-model="field.value" @change="changeHandle(field)" v-bind="field.props || {}" v-on="field.events || {}">
-                    <el-option v-for="(item, index) in field.data" :key="(item[field.optionValueKey || 'value'] || '') + '_' + index" :label="item[field.optionLabelKey || 'label']" :value="item[field.optionValueKey || 'value']" />
+                    <el-option
+                        v-for="(item, index) in field.data"
+                        :key="(item[field.optionValueKey || 'value'] || '') + '_' + index"
+                        :label="item[field.optionLabelKey || 'label']"
+                        :value="item[field.optionValueKey || 'value']"
+                        :disabled="item.disabled === true"
+                    />
                 </el-select>
 
                 <!-- date-picker -->
@@ -30,7 +36,16 @@
         <!-- 占位 -->
         <div class="placeholder-button-box" :style="{ width: buttonBoxWidth + 'px' }" v-show="isShowCollapse && collapseStatus"></div>
         <div class="button-box" ref="buttonBoxRef">
-            <el-button v-for="(button, index) in extendButtons" :key="(button.handleCode || '') + '_' + index" v-permission="{ value: button.handleCode, pageName }" v-bind="button.props || {}" @click="extendButtonClickHandle(button)" :loading="button.isLoading" type="primary">{{ button.text }}</el-button>
+            <el-button
+                v-for="(button, index) in extendButtons"
+                :key="(button.handleCode || '') + '_' + index"
+                v-permission="{ value: button.handleCode, pageName }"
+                v-bind="button.props || {}"
+                @click="extendButtonClickHandle(button)"
+                :loading="button.isLoading"
+                type="primary"
+                >{{ button.text }}</el-button
+            >
             <el-button @click="searchHandle" :loading="isSearchLoading" type="primary">查询</el-button>
             <el-button @click="resetHandle">重置</el-button>
             <el-button v-if="isShowCollapse" type="primary" link @click="collapseStatus = !collapseStatus">{{ collapseStatus ? "收起" : "展开" }}</el-button>
@@ -144,6 +159,14 @@ const generateExtendButtons = function () {
     });
 };
 
+// 触发window resize 事件，通常是为了让datatable最大高度重新计算
+const triggerResizeEvent = async function () {
+    // let resizeEvent = new Event('resize');
+    // resizeEvent.initEvent('resize', true, true)
+    await nextTick();
+    window.dispatchEvent(new Event("resize"));
+};
+
 const init = function () {
     buttonBoxWidth.value = buttonBoxRef.value.offsetWidth;
 };
@@ -171,6 +194,7 @@ const resetHandle = function () {
             formFields.value[index].value = field.value;
         }
     });
+    searchHandle();
 };
 
 // 查询表单数值变化
@@ -214,12 +238,14 @@ watch(
     () => collapseStatus.value,
     () => {
         emits("collapseStatusChange", collapseStatus.value);
+        triggerResizeEvent();
     }
 );
 
 onMounted(async () => {
     await nextTick();
     init();
+    triggerResizeEvent();
 });
 
 defineExpose({ formFields, getSearchFormValue });

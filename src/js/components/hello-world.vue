@@ -2,9 +2,9 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 10:12:51
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-10-24 14:03:55
- * @项目的路径: \360-manager-H5\src\js\components\hello-word.vue
- * @描述: 头部注释配置模板
+ * @最后修改时间: 2022-11-18 16:26:10
+ * @项目的路径: \front-end-project-template\src\js\components\hello-world.vue
+ * @描述: hello world 组件测试
 -->
 
 <template>

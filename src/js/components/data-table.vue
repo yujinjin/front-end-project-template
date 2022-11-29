@@ -2,8 +2,8 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 10:31:46
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-11-14 11:45:13
- * @项目的路径: \360-manager-H5\src\js\components\data-table.vue
+ * @最后修改时间: 2022-11-21 15:12:40
+ * @项目的路径: \front-end-project-template\src\js\components\data-table.vue
  * @描述: 组件模板页
 -->
 <template>
@@ -215,6 +215,7 @@ const initTableProps = function () {
             border: false, // 是否带有纵向边框
             rowKey: "id",
             size: "small",
+            scrollbarAlwaysOn: true,
             style: {
                 width: "100%"
             },

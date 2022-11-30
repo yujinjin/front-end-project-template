@@ -17,7 +17,7 @@ function pathResolve(dir) {
 
 let fileValue = "";
 let baseUrl = "./";
-const projectName = "360-manager-H5";
+const projectName = process.env.VUE_APP_NAME;
 if (process.env.NODE_ENV === "production") {
     fileValue = "../../../modules/" + projectName + "/dist/";
     baseUrl = "/static/modules/" + projectName + "/";
@@ -143,7 +143,7 @@ module.exports = {
         historyApiFallback: true,
         allowedHosts: "all",
         hot: false,
-        port: process.env.VUE_APP_PORT,
+        port: process.env.VUE_APP_SERVER_PORT,
         client: {
             overlay: {
                 warnings: false,

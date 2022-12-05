@@ -2,13 +2,13 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-21 17:18:53
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-10-21 17:38:54
- * @项目的路径: \360-manager-H5\src\js\services\local-storage.js
+ * @最后修改时间: 2022-12-05 14:32:56
+ * @项目的路径: \front-end-project-template\src\js\services\local-storage.js
  * @描述: 浏览器本地存储操作
  */
 
 // 本地存储的应用名称
-const localStorageName = config.appName + "LocalStorage";
+const localStorageName = config.appName + "Storage";
 
 /**
  * 本地存储操作
@@ -64,7 +64,16 @@ export default {
      * @param value 存储的业务对象value值, undefined|''|null时表示删除
      */
     setValue(type = 0, key, value) {
-        const localStorageObject = storeUp(type);
+        const localStorageContents = storeUp(type);
+        // 返回站点存储的对象
+        let localStorageObject = {};
+        if (localStorageContents) {
+            try {
+                localStorageObject = JSON.parse(localStorageContents);
+            } catch (error) {
+                logs.warn(error, localStorageContents);
+            }
+        }
         if (value === undefined || value === null || value === "") {
             if (Object.keys(localStorageObject).includes(key)) {
                 delete localStorageObject[key];

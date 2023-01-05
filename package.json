@@ -38,7 +38,6 @@
         "less-loader": "^8.0.0",
         "sass": "^1.50.0",
         "sass-loader": "^12.6.0",
-        "mockjs": "^1.1.0",
         "postcss": "^8.4.18",
         "postcss-html": "^1.5.0",
         "postcss-less": "^6.0.0",
@@ -52,7 +51,8 @@
         "trailingComma": "none",
         "arrowParens": "avoid",
         "semi": true,
-        "singleQuote": false
+        "singleQuote": false,
+        "htmlWhitespaceSensitivity": "ignore"
     },
     "engines": {
         "node": ">=14"

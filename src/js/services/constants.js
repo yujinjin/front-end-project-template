@@ -2,8 +2,8 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-25 10:08:07
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-11-01 14:01:19
- * @项目的路径: \360-manager-H5\src\js\services\constants.js
+ * @最后修改时间: 2023-01-05 10:48:20
+ * @项目的路径: \front-end-project-template\src\js\services\constants.js
  * @描述: 常量集合
  */
 
@@ -12,12 +12,18 @@ export const PAGE_ITEMS = 50;
 
 // 查询表单中的组件默认属性
 export const SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES = {
-    // input 输入框默认配置选项(具体见element Input 输入框文档)
+    // input 输入框默认配置选项(具体见element plus Input 输入框文档)
     input: {
         placeholder: "请输入",
         clearable: true
     },
-    // select 选择器默认配置选项（具体见element Select 选择器文档）
+    // Input Number 数字输入框默认配置选项(具体见element plus Input Number 输入框文档)
+    inputNumber: {
+        placeholder: "请输入",
+        controls: false,
+        valueOnClear: null
+    },
+    // select 选择器默认配置选项（具体见element plus Select 选择器文档）
     select: {
         clearable: true,
         collapseTags: true,

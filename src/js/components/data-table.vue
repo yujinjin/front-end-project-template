@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 10:31:46
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-11-21 15:12:40
+ * @最后修改时间: 2022-12-08 16:02:18
  * @项目的路径: \front-end-project-template\src\js\components\data-table.vue
  * @描述: 组件模板页
 -->
@@ -13,28 +13,18 @@
                 <template v-if="columnItem.slotHeader" #header="scope">
                     <slot :name="columnItem.slotHeader" v-bind="scope"></slot>
                 </template>
-                <template v-if="columnItem.slot" #default="scope">
-                    <slot :name="columnItem.slot" v-bind="scope"></slot>
-                </template>
-                <template v-else-if="columnItem.type === 'date'" #default="{ row }">
+                <template #default="scope">
+                    <slot v-if="columnItem.slot" :name="columnItem.slot" v-bind="scope"></slot>
                     <!-- 日期 -->
-                    <table-column-date :value="getCellValue(row, columnItem)" :formate="columnItem.formate" :separator="columnItem.separator" />
-                </template>
-                <template v-else-if="columnItem.type === 'number'" #default="{ row }">
+                    <table-column-date v-else-if="columnItem.type === 'date'" :value="getCellValue(scope.row, columnItem)" :formate="columnItem.formate" />
                     <!-- 数字 -->
-                    <table-column-number :value="getCellValue(row, columnItem)" :digit="columnItem.digit || 0" />
-                </template>
-                <template v-else-if="columnItem.type === 'image'" #default="{ row }">
+                    <table-column-number v-else-if="columnItem.type === 'number'" :value="getCellValue(scope.row, columnItem)" :digit="columnItem.digit || 0" />
                     <!-- 图片 -->
-                    <table-column-img :imgs="getCellValue(row, columnItem)" />
-                </template>
-                <template v-else-if="columnItem.type === 'enum'" #default="{ row }">
+                    <table-column-img v-else-if="columnItem.type === 'image'" :imgs="getCellValue(scope.row, columnItem)" />
                     <!-- 枚举 -->
-                    <table-column-enum v-bind="columnItem" :value="getCellValue(row, columnItem)" />
-                </template>
-                <template v-else-if="columnItem.type === 'action'" #default="{ row }">
+                    <table-column-enum v-else-if="columnItem.type === 'enum'" v-bind="columnItem" :value="getCellValue(scope.row, columnItem)" />
                     <!-- 操作按钮 -->
-                    <table-column-action v-bind="columnItem" :row="row" />
+                    <table-column-action v-else-if="columnItem.type === 'action'" v-bind="columnItem" :row="scope.row" />
                 </template>
             </el-table-column>
         </el-table>
@@ -323,7 +313,7 @@ watch(
 );
 
 watch(
-    () => props.tableProps,
+    () => props.props,
     () => {
         initTableProps();
     },

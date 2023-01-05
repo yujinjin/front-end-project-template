@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-21 17:43:58
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-12-05 14:35:18
+ * @最后修改时间: 2022-12-05 16:49:42
  * @项目的路径: \front-end-project-template\src\js\stores\storage.js
  * @描述: 本地存储数据管理
  */
@@ -25,7 +25,7 @@ export default defineStore("storage", {
             if (value === undefined) {
                 value = null;
             }
-            this.session.exampleData1 = value;
+            this.exampleData1 = value;
             localStorage.setValue(1, "exampleData1", value);
         },
         // 示例数据1(简单获取)-勿需缓存直接获取
@@ -38,7 +38,6 @@ export default defineStore("storage", {
             if (value === undefined) {
                 value = null;
             }
-            this.exampleData2 = value;
             localStorage.setValue(0, "exampleData2", value);
         },
         // 获取示例数据3，判断本地存储的数据是否过期

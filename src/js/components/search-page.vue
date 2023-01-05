@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 10:31:46
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-11-23 10:03:24
+ * @最后修改时间: 2023-01-05 10:11:08
  * @项目的路径: \front-end-project-template\src\js\components\search-page.vue
  * @描述: 搜索页组件
 -->
@@ -161,7 +161,7 @@ const unwatch = watch(
     }
 );
 
-defineExpose({ searchFormInput, getSearchFormValue });
+defineExpose({ searchFormInput, formFields: searchFormRef.value?.formFields, getSearchFormValue });
 </script>
 <style lang="less" scoped>
 .search-page {

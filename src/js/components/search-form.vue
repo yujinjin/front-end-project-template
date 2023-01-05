@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 16:04:46
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-11-23 10:03:07
+ * @最后修改时间: 2023-01-05 10:46:26
  * @项目的路径: \front-end-project-template\src\js\components\search-form.vue
  * @描述: 搜索表单组件
 -->
@@ -14,9 +14,11 @@
                 <!-- 自定义插件，插槽 -->
                 <slot v-if="field.slot" :name="field.slot" :field="field" :formFields="formFields"></slot>
 
-                <!-- TODO: 验证@keyup.enter事件是否触发change -->
                 <!-- input -->
                 <el-input v-else-if="field.type === 'input'" v-model.trim="field.value" @change="changeHandle(field)" v-bind="field.props || {}" v-on="field.events || {}" />
+
+                <!-- input-number -->
+                <el-input-number v-else-if="field.type === 'inputNumber'" v-model.trim="field.value" @change="changeHandle(field)" v-bind="field.props || {}" v-on="field.events || {}" />
 
                 <!-- select -->
                 <el-select v-else-if="field.type === 'select'" v-model="field.value" @change="changeHandle(field)" v-bind="field.props || {}" v-on="field.events || {}">
@@ -44,8 +46,9 @@
                 @click="extendButtonClickHandle(button)"
                 :loading="button.isLoading"
                 type="primary"
-                >{{ button.text }}</el-button
             >
+                {{ button.text }}
+            </el-button>
             <el-button @click="searchHandle" :loading="isSearchLoading" type="primary">查询</el-button>
             <el-button @click="resetHandle">重置</el-button>
             <el-button v-if="isShowCollapse" type="primary" link @click="collapseStatus = !collapseStatus">{{ collapseStatus ? "收起" : "展开" }}</el-button>
@@ -286,6 +289,12 @@ defineExpose({ formFields, getSearchFormValue });
 
             :deep(.el-radio) {
                 height: 28px;
+            }
+
+            :deep(.el-input-number) {
+                .el-input__inner {
+                    text-align: left;
+                }
             }
         }
     }

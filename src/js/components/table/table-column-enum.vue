@@ -2,19 +2,19 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 10:31:46
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-10-26 17:51:21
- * @项目的路径: \360-manager-H5\src\js\components\table\table-column-enum.vue
+ * @最后修改时间: 2023-01-09 19:04:15
+ * @项目的路径: \front-end-project-template\src\js\components\table\table-column-enum.vue
  * @描述: 组件模板页
 -->
 <template>
     <div class="table-column-enum">{{ enumText }}</div>
 </template>
 <script setup>
-import { computed, defineProps } from "vue";
+import { computed } from "vue";
 
 const props = defineProps({
     value: {
-        type: String
+        type: [String, Number, Boolean]
     },
     data: {
         type: Array,
@@ -39,6 +39,10 @@ const props = defineProps({
 });
 
 const enumText = computed(() => {
+    if (typeof props.value === "number" || typeof props.value === "boolean") {
+        const findItem = props.data.find(dateItem => dateItem[props.valueKey] === props.value);
+        return findItem ? findItem[props.textKey] : props.value;
+    }
     if (!props.value) {
         return "-";
     }

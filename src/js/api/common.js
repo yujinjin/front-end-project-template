@@ -121,7 +121,7 @@ export default {
                 break;
             }
             case "blob": {
-                const {
+                let {
                     data,
                     headers: { "content-disposition": fileName }
                 } = await request({
@@ -130,6 +130,11 @@ export default {
                     data: downloadConfig.inputData,
                     responseType: "blob"
                 });
+                if (fileName) {
+                    fileName = decodeURIComponent(fileName.split("filename=")[1]);
+                } else {
+                    fileName = new Date().getTime();
+                }
                 const aElement = document.createElement("a");
                 aElement.setAttribute("download", downloadConfig.fileName || fileName || String(new Date().getTime()));
                 aElement.setAttribute("href", window.URL.createObjectURL(data));
@@ -140,5 +145,10 @@ export default {
         iframeElement.onload = function () {
             document.body.removeChild(iframeElement);
         };
+    },
+
+    // 上传图片
+    uploadImage(inputData, requestConfig) {
+        return this.upload(inputData, "/common/uploadImage", requestConfig);
     }
 };

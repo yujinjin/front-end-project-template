@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-21 17:18:53
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-12-05 14:32:56
+ * @最后修改时间: 2023-01-17 10:19:51
  * @项目的路径: \front-end-project-template\src\js\services\local-storage.js
  * @描述: 浏览器本地存储操作
  */
@@ -34,53 +34,42 @@ const storeUp = function (type = 0, value) {
     }
 };
 
-export default {
-    /**
-     * 根据key值获取本地存储信息
-     * @param key 存储业务对象key值，如果不传返回整个站点存储对象
-     */
-    getValue(type = 0, key) {
-        // 获取本地存储内容
-        const localStorageContents = storeUp(type);
-        // 返回站点存储的对象
-        let localStorageObject = {};
-        if (localStorageContents) {
-            try {
-                localStorageObject = JSON.parse(localStorageContents);
-            } catch (error) {
-                logs.warn(error, localStorageContents);
-            }
+/**
+ * 根据key值获取本地存储信息
+ * @param key 存储业务对象key值，如果不传返回整个站点存储对象
+ */
+export const getValue = function (type = 0, key) {
+    // 获取本地存储内容
+    const localStorageContents = storeUp(type);
+    // 返回站点存储的对象
+    let localStorageObject = {};
+    if (localStorageContents) {
+        try {
+            localStorageObject = JSON.parse(localStorageContents);
+        } catch (error) {
+            logs.warn(error, localStorageContents);
         }
-        if (key) {
-            return localStorageObject[key];
-        } else {
-            return localStorageObject;
-        }
-    },
-
-    /**
-     * 根据key值设置本地存储信息
-     * @param key 存储业务对象key值
-     * @param value 存储的业务对象value值, undefined|''|null时表示删除
-     */
-    setValue(type = 0, key, value) {
-        const localStorageContents = storeUp(type);
-        // 返回站点存储的对象
-        let localStorageObject = {};
-        if (localStorageContents) {
-            try {
-                localStorageObject = JSON.parse(localStorageContents);
-            } catch (error) {
-                logs.warn(error, localStorageContents);
-            }
-        }
-        if (value === undefined || value === null || value === "") {
-            if (Object.keys(localStorageObject).includes(key)) {
-                delete localStorageObject[key];
-            }
-        } else {
-            localStorageObject[key] = value;
-        }
-        storeUp(type, JSON.stringify(localStorageObject));
     }
+    if (key) {
+        return localStorageObject[key];
+    } else {
+        return localStorageObject;
+    }
+};
+
+/**
+ * 根据key值设置本地存储信息
+ * @param key 存储业务对象key值
+ * @param value 存储的业务对象value值, undefined|''|null时表示删除
+ */
+export const setValue = function (type = 0, key, value) {
+    let localStorageObject = getValue(type, key) || {};
+    if (value === undefined || value === null || value === "") {
+        if (Object.keys(localStorageObject).includes(key)) {
+            delete localStorageObject[key];
+        }
+    } else {
+        localStorageObject[key] = value;
+    }
+    storeUp(type, JSON.stringify(localStorageObject));
 };

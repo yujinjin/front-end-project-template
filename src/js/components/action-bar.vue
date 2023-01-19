@@ -2,20 +2,29 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 10:31:46
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-11-01 14:47:41
- * @项目的路径: \360-manager-H5\src\js\components\action-bar.vue
+ * @最后修改时间: 2023-01-18 15:06:39
+ * @项目的路径: \front-end-project-template\src\js\components\action-bar.vue
  * @描述: 列表操作栏
 -->
 <template>
     <div class="action-bar-panel">
         <slot></slot>
         <div class="buttons-panel" :style="{ textAlign: align }" v-if="actionButtons.length > 0">
-            <el-button v-for="(button, index) in actionButtons" :key="(button.handleCode || '') + '_' + index" v-bind="button.props" @click="clickHandle(button)" :loading="button.isLoading">{{ button.text }}</el-button>
+            <template v-for="(button, index) in actionButtons">
+                <slot v-if="button.slot" :name="button.slot" :button="button"></slot>
+                <el-button v-else :key="(button.handleCode || '') + '_' + index" v-bind="button.props" @click="clickHandle(button)" :loading="button.isLoading">
+                    <template v-if="button.icon">
+                        <i v-if="typeof button.icon === 'string'" :class="[button.icon]"></i>
+                        <el-icon v-else><component :is="button.icon" /></el-icon>
+                    </template>
+                    {{ button.text }}
+                </el-button>
+            </template>
         </div>
     </div>
 </template>
 <script setup>
-import { ref, watch, defineProps, defineEmits } from "vue";
+import { ref, watch } from "vue";
 import { dataStore } from "@js/stores/";
 
 const props = defineProps({
@@ -42,8 +51,6 @@ const props = defineProps({
         type: String
     }
 });
-
-const emits = defineEmits(["selectRowsChange"]);
 
 // 实际数据列中的操作按钮列表
 // isLoading: 当前按钮是否正在加载
@@ -90,13 +97,16 @@ watch(
     { deep: true, immediate: true }
 );
 
-watch(
-    () => props.selectRows,
-    () => {
-        emits("selectRowsChange", props.selectRows, actionButtons.value);
-    },
-    { deep: true, immediate: true }
-);
+defineExpose({
+    // 修改当前生成的button按钮值
+    changeButtons: function (callback) {
+        if (callback && typeof callback === "function") {
+            callback(actionButtons.value);
+        } else {
+            logs.warn("callback 必须是一个函数");
+        }
+    }
+});
 </script>
 <style lang="less" scoped>
 .action-bar-panel {
@@ -104,6 +114,7 @@ watch(
 
     .el-button {
         height: 28px;
+        min-width: 80px;
 
         + .el-button {
             margin-left: 6px;

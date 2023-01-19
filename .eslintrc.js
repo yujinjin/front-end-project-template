@@ -2,8 +2,8 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-20 13:55:12
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-10-24 14:00:18
- * @项目的路径: \360-manager-H5\.eslintrc.js
+ * @最后修改时间: 2023-01-05 14:24:37
+ * @项目的路径: \front-end-project-template\.eslintrc.js
  * @描述: eslint 配置
  */
 
@@ -12,7 +12,8 @@ module.exports = {
     env: {
         browser: true,
         node: true,
-        es6: true
+        es6: true,
+        "vue/setup-compiler-macros": true
     },
     parser: "vue-eslint-parser",
     parserOptions: {

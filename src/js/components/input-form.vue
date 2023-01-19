@@ -1,0 +1,300 @@
+<template>
+    <div class="input-form" v-loading="isLoading">
+        <el-form v-bind="formProps" :model="inputFormValue" ref="inputFormRef">
+            <el-row>
+                <el-col v-for="(field, index) in formFields" :key="(field.name || '') + '_' + index" :span="field.span">
+                    <el-form-item v-bind="field.formItemProps">
+                        <!-- 自定义插件，插槽 -->
+                        <slot v-if="field.slot" :name="field.slot" :field="field" :formFields="formFields"></slot>
+
+                        <!-- 标签内容 -->
+                        <div class="label-contents" v-if="field.type === 'label'">{{ getObjectProperty(inputFormValue, field.name) }}</div>
+
+                        <!-- 图片上传 -->
+                        <img-upload
+                            v-if="field.type === 'imgUpload'"
+                            :modelValue="getObjectProperty(inputFormValue, field.name)"
+                            @update:modelValue="value => setFieldValue(value.trim(), field)"
+                            v-bind="field.props || {}"
+                        />
+
+                        <!-- 富文本框 -->
+                        <web-editor
+                            v-if="field.type === 'webEditor'"
+                            :modelValue="getObjectProperty(inputFormValue, field.name)"
+                            @update:modelValue="value => setFieldValue(value, field)"
+                            v-bind="field.props || {}"
+                        />
+
+                        <!-- select -->
+                        <el-select
+                            v-else-if="field.type === 'select'"
+                            :modelValue="getObjectProperty(inputFormValue, field.name)"
+                            @update:modelValue="value => setFieldValue(value, field)"
+                            v-bind="field.props || {}"
+                            v-on="field.events || {}"
+                        >
+                            <el-option
+                                v-for="(item, index) in field.data"
+                                :key="(item[field.optionValueKey || 'value'] || '') + '_' + index"
+                                :label="item[field.optionLabelKey || 'label']"
+                                :value="item[field.optionValueKey || 'value']"
+                                :disabled="item.disabled === true"
+                            />
+                        </el-select>
+
+                        <!-- checkbox -->
+                        <el-checkbox-group
+                            v-else-if="field.type === 'checkbox'"
+                            :modelValue="getObjectProperty(inputFormValue, field.name)"
+                            @update:modelValue="value => setFieldValue(value, field)"
+                            v-bind="field.props || {}"
+                            v-on="field.events || {}"
+                        >
+                            <el-checkbox
+                                v-for="(item, index) in field.data"
+                                :key="(item[field.optionValueKey || 'value'] || '') + '_' + index"
+                                :label="item[field.optionValueKey || 'value']"
+                                :disabled="item.disabled === true"
+                            >
+                                {{ item[field.optionLabelKey || "label"] }}
+                            </el-checkbox>
+                        </el-checkbox-group>
+
+                        <!-- radio -->
+                        <el-radio-group
+                            v-else-if="field.type === 'radio'"
+                            :modelValue="getObjectProperty(inputFormValue, field.name)"
+                            @update:modelValue="value => setFieldValue(value, field)"
+                            v-bind="field.props || {}"
+                            v-on="field.events || {}"
+                        >
+                            <el-radio-button
+                                v-for="(item, index) in field.data"
+                                :key="(item[field.optionValueKey || 'value'] || '') + '_' + index"
+                                :label="item[field.optionValueKey || 'value']"
+                                :disabled="item.disabled === true"
+                            >
+                                {{ item[field.optionLabelKey || "label"] }}
+                            </el-radio-button>
+                        </el-radio-group>
+                        <!-- element 组件 -->
+                        <component
+                            v-else
+                            :is="getElComponentName(field)"
+                            :modelValue="getObjectProperty(inputFormValue, field.name)"
+                            @update:modelValue="value => setFieldValue(value, field)"
+                            v-bind="field.props || {}"
+                            v-on="field.events || {}"
+                        />
+                    </el-form-item>
+                </el-col>
+            </el-row>
+        </el-form>
+    </div>
+</template>
+<script setup>
+import { ref, watch } from "vue";
+import { INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES } from "@js/services/constants";
+import { setObjectProperty, getObjectProperty } from "@js/utils/others";
+import extend from "@js/utils/extend";
+
+const props = defineProps({
+    fields: {
+        type: Array,
+        default() {
+            return [];
+        },
+        required: true
+    },
+    isLoading: {
+        type: Boolean,
+        default: false
+    },
+    // 一行表单数
+    columns: {
+        type: Number,
+        default: 1
+    },
+    // form表单属性
+    props: {
+        type: Object
+    },
+    // form表单事件
+    events: {
+        type: Object
+    },
+    // 表单数据默认值
+    value: {
+        type: Object,
+        default: function () {
+            return {};
+        }
+    }
+});
+
+const emits = defineEmits(["fieldValueChange"]);
+
+// 表单属性
+const formProps = ref({});
+
+// form ref
+const inputFormRef = ref(null);
+
+// 表单数据
+const inputFormValue = ref({});
+
+// 表单字段列表
+const formFields = ref([]);
+
+// 生成表单字段列表
+const generateFormFields = function () {
+    formFields.value = [];
+    if (!props.fields || props.fields.length === 0) {
+        return;
+    }
+    const style = { width: "400px" };
+    if (props.columns === 2) {
+        style.width = "220px";
+    }
+    props.fields.forEach(field => {
+        if (!field.name) {
+            logs.warn("字段没有属性name值", field);
+            return;
+        }
+        const newField = extend(true, {}, field);
+        if (!newField.span) {
+            newField.span = 24 / props.columns;
+        }
+        if (!newField.formItemProps) {
+            newField.formItemProps = {};
+        }
+        if (!newField.props) {
+            newField.props = {};
+        }
+        if (newField.type && INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES[newField.type]) {
+            if (newField.type === "datePicker") {
+                newField.props = Object.assign({}, INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES[newField.type][newField.props.type || "date"], newField.props);
+            } else {
+                if (!newField.props.placeholder) {
+                    newField.props.placeholder = (INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES[newField.type].placeholder || "") + (newField.label || "");
+                }
+                newField.props = Object.assign({}, INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES[newField.type], newField.props);
+            }
+        }
+        if (newField.inputWidth) {
+            newField.props.style = newField.props.style || {};
+            newField.props.style.width = newField.inputWidth + "px";
+        } else {
+            newField.props.style = Object.assign({}, style, newField.props.style);
+        }
+        if (newField.label) {
+            newField.formItemProps.label = newField.label + (newField.label.endsWith("：") ? "" : "：");
+        }
+        if (newField.labelWidth) {
+            newField.formItemProps.labelWidth = newField.labelWidth;
+        }
+        if (!newField.formItemProps.prop) {
+            newField.formItemProps.prop = newField.name;
+        }
+        if (newField.rules) {
+            newField.formItemProps.rules = newField.rules;
+        }
+        formFields.value.push(newField);
+    });
+    initInputFormValue();
+};
+
+// 初始化表单数据
+const initInputFormValue = function () {
+    inputFormValue.value = extend(true, {}, props.value);
+    formFields.value.forEach(field => {
+        // 设置field 的value值
+        let fieldValue = getObjectProperty(inputFormValue.value, field.name);
+        if (fieldValue === undefined) {
+            fieldValue = Object.prototype.hasOwnProperty.call(field, "value") ? field.value : null;
+            setObjectProperty(inputFormValue.value, field.name, fieldValue);
+            emits("fieldValueChange", field, fieldValue, formFields.value);
+        }
+    });
+};
+
+// 获取elment 组件名称
+const getElComponentName = function (field) {
+    return "el-" + field.type.replace(/([A-Z])/g, "-$1").toLowerCase();
+};
+
+// 设置字段的值
+const setFieldValue = function (fieldValue, field) {
+    if (field.type === "input") {
+        fieldValue = fieldValue.trim();
+    }
+    setObjectProperty(inputFormValue.value, field.name, fieldValue);
+    emits("fieldValueChange", field, fieldValue, formFields.value);
+};
+
+watch(
+    () => props.fields,
+    () => {
+        generateFormFields();
+    },
+    {
+        immediate: true,
+        deep: true
+    }
+);
+
+watch(
+    () => props.value,
+    () => {
+        initInputFormValue();
+    },
+    {
+        deep: true
+    }
+);
+
+watch(
+    () => props.props,
+    value => {
+        formProps.value = Object.assign(
+            {
+                labelWidth: 120
+            },
+            value
+        );
+    },
+    {
+        immediate: true,
+        deep: true
+    }
+);
+
+defineExpose({
+    // 获取表单的value
+    getInputValue: function () {
+        return JSON.parse(JSON.stringify(inputFormValue.value));
+    },
+    // 修改当前form字段的属性
+    changeFormFields: function (callback) {
+        if (callback && typeof callback === "function") {
+            callback(formFields.value);
+        } else {
+            logs.warn("callback 必须是一个函数");
+        }
+    },
+    // 获取form Ref
+    getFormRef: function () {
+        return inputFormRef.value;
+    }
+});
+</script>
+<style lang="less" scoped>
+.input-form {
+    :deep(.el-input-number.is-without-controls) {
+        .el-input__inner {
+            text-align: left;
+        }
+    }
+}
+</style>

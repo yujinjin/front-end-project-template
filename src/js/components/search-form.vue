@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 16:04:46
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-05 10:46:26
+ * @最后修改时间: 2023-01-11 11:41:24
  * @项目的路径: \front-end-project-template\src\js\components\search-form.vue
  * @描述: 搜索表单组件
 -->
@@ -57,7 +57,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch, defineProps, defineEmits, nextTick, defineExpose } from "vue";
+import { onMounted, ref, watch, nextTick } from "vue";
 import { SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES } from "@js/services/constants";
 import { setObjectProperty } from "@js/utils/others";
 import extend from "@js/utils/extend";
@@ -102,7 +102,9 @@ const props = defineProps({
     pageName: String
 });
 
-const emits = defineEmits(["generateFormFields", "search", "update:isShowCollapse", "change", "collapseStatusChange"]);
+// fieldsChange: 当前表单字段变化事件; search: 搜索操作; change: 表单字段值变化事件;
+// update:isShowCollapse: 修改折叠状态; collapseStatusChange: 折叠状态变化事件
+const emits = defineEmits(["fieldsChange", "search", "change", "update:isShowCollapse", "collapseStatusChange"]);
 
 // search 表单字段列表
 const formFields = ref([]);
@@ -126,6 +128,10 @@ const generateFormFields = function () {
         return;
     }
     props.fields.forEach(field => {
+        if (!field.name) {
+            logs.warn("字段没有属性name值", field);
+            return;
+        }
         const newField = extend(true, {}, field);
         if (!Object.prototype.hasOwnProperty.call(newField, "value")) {
             newField.value = null;
@@ -148,7 +154,7 @@ const generateFormFields = function () {
         }
         formFields.value.push(newField);
     });
-    emits("generateFormFields", getSearchFormValue(), formFields.value);
+    emits("fieldsChange", formFields.value);
 };
 
 // 生成扩展按钮列表
@@ -251,7 +257,18 @@ onMounted(async () => {
     triggerResizeEvent();
 });
 
-defineExpose({ formFields, getSearchFormValue });
+defineExpose({
+    // 修改当前form字段的属性
+    changeFormFields: function (callback) {
+        if (callback && typeof callback === "function") {
+            callback(formFields.value);
+        } else {
+            logs.warn("callback 必须是一个函数");
+        }
+    },
+    // 获取当前搜索表单的数据对象
+    getValue: getSearchFormValue
+});
 </script>
 
 <style lang="less" scoped>

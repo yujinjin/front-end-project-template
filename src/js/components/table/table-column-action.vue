@@ -2,14 +2,23 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 10:31:46
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-11-10 15:48:26
- * @项目的路径: \360-manager-H5\src\js\components\table\table-column-action.vue
+ * @最后修改时间: 2023-01-11 11:15:42
+ * @项目的路径: \front-end-project-template\src\js\components\table\table-column-action.vue
  * @描述: 数据列表操作列
 -->
 <template>
     <div class="table-column-action">
-        <el-button v-for="(button, index) in showStatusButtons" :key="(button.handleCode || '') + '_' + index" v-bind="button.props" @click="clickHandle(button)" :loading="button.isLoading" type="primary">{{ button.text }}</el-button>
-        <el-dropdown v-if="hideStatusButtons.length > 0" @command="dropdownCommandHandle">
+        <el-button
+            v-for="(button, index) in showStatusButtons"
+            :key="(button.handleCode || '') + '_' + index"
+            v-bind="button.props"
+            @click="clickHandle(button)"
+            :loading="button.isLoading"
+            type="primary"
+        >
+            {{ button.text }}
+        </el-button>
+        <el-dropdown v-if="hideStatusButtons.length > 0" popper-class="custom-action-dropdown" @command="dropdownCommandHandle">
             <span>
                 <i class="icomoon-more"></i>
             </span>
@@ -28,7 +37,7 @@
     </div>
 </template>
 <script setup>
-import { ref, watch, computed, defineProps } from "vue";
+import { ref, watch, computed } from "vue";
 import { Loading } from "@element-plus/icons-vue";
 
 const props = defineProps({
@@ -73,7 +82,7 @@ const initActionButtons = function () {
         }
     });
     if (props.maxNumShow && actionButtons.value.length > props.maxNumShow) {
-        actionButtons.value.slice(props.maxNumShow - 1).forEach(button => {
+        actionButtons.value.slice(props.maxNumShow).forEach(button => {
             button.isShow = false;
         });
     }

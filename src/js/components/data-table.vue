@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 10:31:46
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-12-08 16:02:18
+ * @最后修改时间: 2023-01-11 11:00:59
  * @项目的路径: \front-end-project-template\src\js\components\data-table.vue
  * @描述: 组件模板页
 -->
@@ -20,7 +20,7 @@
                     <!-- 数字 -->
                     <table-column-number v-else-if="columnItem.type === 'number'" :value="getCellValue(scope.row, columnItem)" :digit="columnItem.digit || 0" />
                     <!-- 图片 -->
-                    <table-column-img v-else-if="columnItem.type === 'image'" :imgs="getCellValue(scope.row, columnItem)" />
+                    <table-column-image v-else-if="columnItem.type === 'image'" v-bind="columnItem" :value="getCellValue(scope.row, columnItem)" />
                     <!-- 枚举 -->
                     <table-column-enum v-else-if="columnItem.type === 'enum'" v-bind="columnItem" :value="getCellValue(scope.row, columnItem)" />
                     <!-- 操作按钮 -->
@@ -34,11 +34,11 @@
     </div>
 </template>
 <script setup>
-import { onMounted, onUnmounted, ref, watch, nextTick, defineProps, defineEmits, defineExpose } from "vue";
+import { onMounted, onUnmounted, ref, watch, nextTick } from "vue";
 import { PAGE_ITEMS } from "@js/services/constants";
 import tableColumnDate from "./table/table-column-date";
 import tableColumnNumber from "./table/table-column-number";
-import tableColumnImg from "./table/table-column-img";
+import tableColumnImage from "./table/table-column-image";
 import tableColumnEnum from "./table/table-column-enum";
 import tableColumnAction from "./table/table-column-action";
 import { dataStore } from "@js/stores/";
@@ -236,7 +236,11 @@ const initColumns = function () {
             }
         } else if (newColumnItem.type === "index" && !newColumnItem.index) {
             newColumnItem.index = function (index) {
-                return (paginationData.value.currentPage - 1) * paginationData.value.pageSize + index + 1;
+                if (props.isShowPagination) {
+                    return (paginationData.value.currentPage - 1) * paginationData.value.pageSize + index + 1;
+                } else {
+                    return index + 1;
+                }
             };
         } else if (!newColumnItem.type && !newColumnItem.formatter) {
             newColumnItem.formatter = function (row, column, cellValue) {
@@ -266,8 +270,10 @@ const queryDataList = async function (isInit = true) {
         if (props.queryResponseProcess) {
             queryResult = props.queryResponseProcess(queryResult);
         }
-        dataList.value = queryResult.items || [];
-        paginationData.value.total = queryResult.totalCount;
+        dataList.value = queryResult.rows || [];
+        if (props.isShowPagination) {
+            paginationData.value.total = queryResult.totalCount || 0;
+        }
     } catch (error) {
         logs.error(error);
     }
@@ -337,8 +343,8 @@ if (!props.props || (!props.props.height && !props.props.maxHeight)) {
     window.addEventListener("resize", resizeHandle);
 }
 
-onMounted(() => {
-    initTableMaxHeight();
+onMounted(async () => {
+    await initTableMaxHeight();
     if (props.autoInitQuery) {
         queryDataList();
     }

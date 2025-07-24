@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 16:04:46
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-11 11:41:24
+ * @最后修改时间: 2023-04-10 11:24:02
  * @项目的路径: \front-end-project-template\src\js\components\search-form.vue
  * @描述: 搜索表单组件
 -->
@@ -10,43 +10,17 @@
     <div class="search-panel" :class="{ collapse: !collapseStatus }" :style="{ paddingRight: collapseStatus ? '' : buttonBoxWidth + 'px' }">
         <div class="field-box" v-for="(field, index) in formFields" :key="(field.name || '') + '_' + index">
             <div class="label-text" :style="{ width: (field.labelWidth || labelWidth) + 'px' }" v-if="field.label">{{ field.label }}</div>
-            <div class="input-box" :style="{ width: (field.inputWidth || inputWidth) + 'px' }">
-                <!-- 自定义插件，插槽 -->
+            <search-field :field="field" v-model="field.value" @change="changeHandle" :style="{ width: (field.inputWidth || inputWidth) + 'px' }">
+                <!-- <template v-if="field.slot"> -->
                 <slot v-if="field.slot" :name="field.slot" :field="field" :formFields="formFields"></slot>
-
-                <!-- input -->
-                <el-input v-else-if="field.type === 'input'" v-model.trim="field.value" @change="changeHandle(field)" v-bind="field.props || {}" v-on="field.events || {}" />
-
-                <!-- input-number -->
-                <el-input-number v-else-if="field.type === 'inputNumber'" v-model.trim="field.value" @change="changeHandle(field)" v-bind="field.props || {}" v-on="field.events || {}" />
-
-                <!-- select -->
-                <el-select v-else-if="field.type === 'select'" v-model="field.value" @change="changeHandle(field)" v-bind="field.props || {}" v-on="field.events || {}">
-                    <el-option
-                        v-for="(item, index) in field.data"
-                        :key="(item[field.optionValueKey || 'value'] || '') + '_' + index"
-                        :label="item[field.optionLabelKey || 'label']"
-                        :value="item[field.optionValueKey || 'value']"
-                        :disabled="item.disabled === true"
-                    />
-                </el-select>
-
-                <!-- date-picker -->
-                <el-date-picker v-else-if="field.type === 'datePicker'" v-model="field.value" @change="changeHandle(field)" v-bind="field.props || {}" v-on="field.events || {}" />
-            </div>
+                <!-- </template> -->
+            </search-field>
         </div>
         <!-- 占位 -->
         <div class="placeholder-button-box" :style="{ width: buttonBoxWidth + 'px' }" v-show="isShowCollapse && collapseStatus"></div>
         <div class="button-box" ref="buttonBoxRef">
-            <el-button
-                v-for="(button, index) in extendButtons"
-                :key="(button.handleCode || '') + '_' + index"
-                v-permission="{ value: button.handleCode, pageName }"
-                v-bind="button.props || {}"
-                @click="extendButtonClickHandle(button)"
-                :loading="button.isLoading"
-                type="primary"
-            >
+            <el-button v-for="(button, index) in extendButtons" :key="(button.handleCode || '') + '_' + index" v-permission="{ value: button.handleCode, pageName }" v-bind="button.props || {}"
+                @click="extendButtonClickHandle(button)" :loading="button.isLoading" type="primary">
                 {{ button.text }}
             </el-button>
             <el-button @click="searchHandle" :loading="isSearchLoading" type="primary">查询</el-button>
@@ -102,9 +76,9 @@ const props = defineProps({
     pageName: String
 });
 
-// fieldsChange: 当前表单字段变化事件; search: 搜索操作; change: 表单字段值变化事件;
+// fieldsChange: 当前表单字段变化事件; search: 搜索操作; change: 表单字段值变化事件; reset: 重置操作按钮;
 // update:isShowCollapse: 修改折叠状态; collapseStatusChange: 折叠状态变化事件
-const emits = defineEmits(["fieldsChange", "search", "change", "update:isShowCollapse", "collapseStatusChange"]);
+const emits = defineEmits(["fieldsChange", "search", "change", "reset", "update:isShowCollapse", "collapseStatusChange"]);
 
 // search 表单字段列表
 const formFields = ref([]);
@@ -132,7 +106,7 @@ const generateFormFields = function () {
             logs.warn("字段没有属性name值", field);
             return;
         }
-        const newField = extend(true, {}, field);
+        const newField = extend(true, { type: "input" }, field);
         if (!Object.prototype.hasOwnProperty.call(newField, "value")) {
             newField.value = null;
         }
@@ -203,6 +177,7 @@ const resetHandle = function () {
             formFields.value[index].value = field.value;
         }
     });
+    emits("reset", formFields.value);
     searchHandle();
 };
 

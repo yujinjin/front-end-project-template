@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 10:31:46
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-11 11:00:59
+ * @最后修改时间: 2023-02-01 10:57:10
  * @项目的路径: \front-end-project-template\src\js\components\data-table.vue
  * @描述: 组件模板页
 -->
@@ -182,7 +182,6 @@ const initPaginationData = function () {
     );
 };
 
-// TODO: 收起/展开事件触发
 // 初始化table 最大高度
 const initTableMaxHeight = async function () {
     if (props.props && (props.props.height || props.props.maxHeight)) {

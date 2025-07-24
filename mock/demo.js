@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-01-18 13:39:27
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-18 14:24:59
+ * @最后修改时间: 2023-01-29 16:10:22
  * @项目的路径: \front-end-project-template\mock\demo.js
  * @描述: demo模块mock数据
  */
@@ -33,6 +33,8 @@ module.exports = function (app) {
                         "exposurePv|0-1000000": 0, // 最新曝光PV
                         "clickPv|0-1000000": 0, // 最新点击PV
                         sourceSystem: "ELE",
+                        isNewPlatform: "1",
+                        "mateAb|1": [0, 1],
                         clickPvRate: "@float(0, 100, 2, 2)", // 点击率-PV
                         dateUpdated: "@integer(" + (time - 30 * 24 * 60 * 60 * 1000) + ", " + time + ")", // 最近操作时间
                         createdBy: "@cname()", // 创建人
@@ -168,29 +170,101 @@ module.exports = function (app) {
     });
 
     // 路由页面demo 分页查询
-    app.post("/demo/queryPageListForRouters", function (request, response) {
+    app.post("/demo/queryPageListForOrder", function (request, response) {
         const time = new Date().getTime();
         response.json(
             wrapResponse({
                 "total|10-1000": 0,
                 "rows|50": [
                     {
-                        activityBelongName: "@cword(4, 20)", // 活动名称
-                        materialCode: "SC@date('yyyyMMddHH')@string('number', 8)", // 素材ID
-                        picture: "@image()", // 素材缩略图
-                        "genre|1": [1, 2], // 素材类型
-                        pictureLength: "@string('number', 2, 4)", // 素材高度
-                        state: [0, 1, 2, 3], // 素材状态
-                        refuseRemark: "@cword(4, 20)",
-                        eleType: "", // 关联资源位
-                        eleState: "", // 关联资源位状态
-                        dateCreated: "@integer(" + (time - 30 * 24 * 60 * 60 * 1000) + ", " + time + ")", // 创建时间
-                        createdBy: "@cname()", // 创建人
-                        pictureSize: "@string('number', 1, 4)", // 素材大小
-                        pictureWidth: "@string('number', 2, 4)" // 素材宽度
+                        orderNo: "ON@date('yyyyMMddHH')@string('number', 8)", // 订单编号
+                        "orderAmount|1-9999.1-2": 1, // 订单金额
+                        "orderStatus|1": [1, 2, 3, 10, 20, 30], // 订单状态
+                        createTime: "@integer(" + (time - 30 * 24 * 60 * 60 * 1000) + ", " + (time + 30 * 24 * 60 * 60 * 1000) + ")", // 订单创建时间
+                        goodsImgs: function () {
+                            const imgs = [
+                                "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+                                "https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg",
+                                "https://fuss10.elemecdn.com/1/8e/aeffeb4de74e2fde4bd74fc7b4486jpeg.jpeg",
+                                ...new Array(20).fill(0).map(() => Mock.Random.image(null, Mock.Random.color(), Mock.Random.color()))
+                            ];
+                            return new Array(Mock.mock("@integer(0, 5)"))
+                                .fill(0)
+                                .map(() => Mock.Random.pick(imgs))
+                                .join("|");
+                        }, // 商品图片
+                        "goodsNumber|1-20": 1, // 商品数量
+                        receiveMan: "@cname()", // 收货人
+                        receiveMobileNumber: /1[3456789]\d{9}/, // 收货电话
+                        remark: "@csentence(0, 100)" // 备注
                     }
                 ]
             })
         );
+    });
+
+    // 新增订单
+    app.post("/demo/insertOrder", function (request, response) {
+        response.json(wrapResponse(Mock.Random.boolean(), true));
+    });
+
+    // 修改订单
+    app.post("/demo/updateOrder", function (request, response) {
+        response.json(wrapResponse(Mock.Random.boolean(), true));
+    });
+
+    // 复制订单
+    app.post("/demo/copyOrder", function (request, response) {
+        response.json(wrapResponse(Mock.Random.boolean(), true));
+    });
+
+    // 导出订单
+    app.post("/demo/downloadOrder", function (request, response) {
+        response.json(wrapResponse(Mock.Random.image(null, Mock.Random.color(), Mock.Random.color()), true));
+    });
+
+    // 导入订单文件
+    app.post("/demo/importFileForOrder", function (request, response) {
+        const time = new Date().getTime();
+        response.json(
+            wrapResponse(
+                [
+                    {
+                        orderNo: "ON@date('yyyyMMddHH')@string('number', 8)", // 订单编号
+                        "orderAmount|1-9999.1-2": 1, // 订单金额
+                        "orderStatus|1": [1, 2, 3, 10, 20, 30], // 订单状态
+                        createTime: "@integer(" + (time - 30 * 24 * 60 * 60 * 1000) + ", " + (time + 30 * 24 * 60 * 60 * 1000) + ")", // 订单创建时间
+                        goodsImgs: function () {
+                            const imgs = [
+                                "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+                                "https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg",
+                                "https://fuss10.elemecdn.com/1/8e/aeffeb4de74e2fde4bd74fc7b4486jpeg.jpeg",
+                                ...new Array(20).fill(0).map(() => Mock.Random.image(null, Mock.Random.color(), Mock.Random.color()))
+                            ];
+                            return new Array(Mock.mock("@integer(0, 5)"))
+                                .fill(0)
+                                .map(() => Mock.Random.pick(imgs))
+                                .join("|");
+                        }, // 商品图片
+                        "goodsNumber|1-20": 1, // 商品数量
+                        receiveMan: "@cname()", // 收货人
+                        receiveMobileNumber: /1[3456789]\d{9}/, // 收货电话
+                        remark: "@csentence(0, 100)" // 备注
+                    }
+                ],
+                true,
+                Mock.mock("@integer(10, 400)")
+            )
+        );
+    });
+
+    // 导入订单数据
+    app.post("/demo/importDataForOrder", function (request, response) {
+        response.json(wrapResponse(Mock.Random.boolean(), false));
+    });
+
+    // 根据订单号删除订单
+    app.post("/demo/deleteOrderByOrderNo", function (request, response) {
+        response.json(wrapResponse(Mock.Random.boolean(), true));
     });
 };

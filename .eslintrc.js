@@ -31,7 +31,7 @@ module.exports = {
         logs: true,
         config: true
     },
-    extends: ["plugin:vue/vue3-essential", "eslint:recommended", "prettier", "plugin:promise/recommended"],
+    extends: ["plugin:vue/vue3-essential", "eslint:recommended", "prettier", "@vue/prettier", "plugin:promise/recommended"],
     rules: {
         "vue/script-setup-uses-vars": "error",
         "vue/custom-event-name-casing": "off",

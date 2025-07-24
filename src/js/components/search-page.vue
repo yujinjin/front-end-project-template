@@ -2,22 +2,14 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 10:31:46
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-18 15:37:24
+ * @最后修改时间: 2023-06-06 18:03:18
  * @项目的路径: \front-end-project-template\src\js\components\search-page.vue
  * @描述: 搜索页组件
 -->
 <template>
     <div class="search-page" v-loading="isLoadingForInit">
-        <search-form
-            v-if="searchFormProps"
-            v-bind="searchFormProps"
-            :pageName="pageName"
-            :isSearchLoading="isSearchLoading"
-            @search="searchHandle"
-            @change="searchValueChangeHandle"
-            @fieldsChange="searchFieldsChangeHandle"
-            ref="searchFormRef"
-        >
+        <search-form v-if="searchFormProps" v-bind="searchFormProps" :pageName="pageName" :isSearchLoading="isSearchLoading" @search="searchHandle" @change="searchValueChangeHandle"
+            @reset="resetHandle" @fieldsChange="searchFieldsChangeHandle" ref="searchFormRef">
             <template v-for="name in distributeSlots.searchForm" #[name]="scope">
                 <slot :name="name" v-bind="scope"></slot>
             </template>
@@ -27,16 +19,8 @@
                 <slot :name="name" v-bind="scope"></slot>
             </template>
         </action-bar>
-        <data-table
-            v-if="dataTableProps"
-            v-bind="dataTableProps"
-            :pageName="pageName"
-            :filters="searchFormInput"
-            ref="dataTableRef"
-            v-model:selectRows="selectRows"
-            :autoInitQuery="!isLoadingForInit"
-            @search="isLoading => (isSearchLoading = isLoading)"
-        >
+        <data-table v-if="dataTableInnerProps" v-bind="dataTableInnerProps" :pageName="pageName" :filters="searchFormInput" ref="dataTableRef" v-model:selectRows="selectRows"
+            :autoInitQuery="!isLoadingForInit" @search="isLoading => (isSearchLoading = isLoading)">
             <template v-for="name in distributeSlots.dataTable" #[name]="scope">
                 <slot :name="name" v-bind="scope"></slot>
             </template>
@@ -54,12 +38,15 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
+    // search-form 组件属性
     searchFormProps: {
         type: Object
     },
+    // action-bar 组件属性
     actionBarProps: {
         type: Object
     },
+    // data-table 组件属性
     dataTableProps: {
         type: Object
     },
@@ -67,7 +54,7 @@ const props = defineProps({
     pageName: String
 });
 
-const emits = defineEmits(["searchValueChange", "searchFieldsChange", "selectRowsChange"]);
+const emits = defineEmits(["searchValueChange", "searchFieldsChange", "selectRowsChange", "resetFields"]);
 
 const slots = useSlots();
 
@@ -108,6 +95,21 @@ const distributeSlots = computed(() => {
     return typeSlotList;
 });
 
+// data-table 组件属性
+const dataTableInnerProps = ref(null);
+
+// 初始化data-table 组件属性
+const initDataTableInnerProps = function () {
+    if (!props.dataTableProps) {
+        dataTableInnerProps.value = null;
+        return;
+    }
+    dataTableInnerProps.value = Object.assign(dataTableInnerProps.value || {}, props.dataTableProps);
+    if (dataTableInnerProps.value.autoInitQuery === undefined) {
+        dataTableInnerProps.value.autoInitQuery = !props.isLoadingForInit;
+    }
+};
+
 // 搜索表单的值变化事件
 const searchValueChangeHandle = function (field, formFields) {
     emits("searchValueChange", field, formFields);
@@ -118,14 +120,20 @@ const searchFieldsChangeHandle = function (formFields) {
     emits("searchFieldsChange", formFields);
 };
 
+// 搜索表单的字段重置
+const resetHandle = function (formFields) {
+    emits("resetFields", formFields);
+};
+
 // 查询方法
 const queryDataList = function (isInit = true) {
     dataTableRef.value?.queryDataList(isInit);
 };
 
 // 搜索操作
-const searchHandle = function (searchFormValue) {
-    extend(true, searchFormInput.value, searchFormValue);
+const searchHandle = async function (searchFormValue) {
+    searchFormInput.value = extend(true, {}, props.dataTableProps && props.dataTableProps.filters, searchFormValue);
+    await nextTick();
     queryDataList();
 };
 
@@ -139,22 +147,30 @@ watch(
     }
 );
 
+watch(
+    () => props.dataTableProps,
+    () => {
+        initDataTableInnerProps();
+    },
+    {
+        immediate: true,
+        deep: true
+    }
+);
+
 const unwatch = watch(
     () => props.isLoadingForInit,
     async value => {
         unwatch();
         if (value) return;
-        if (searchFormRef.value) {
-            extend(true, searchFormInput.value, searchFormRef.value.getValue());
-        }
         await nextTick();
-        queryDataList();
+        searchHandle(searchFormRef.value?.getValue() || {});
     }
 );
 
 onMounted(() => {
     if (searchFormRef.value) {
-        extend(true, searchFormInput.value, searchFormRef.value.getValue());
+        searchHandle(searchFormRef.value.getValue());
     }
     emits("selectRowsChange", selectRows.value);
 });

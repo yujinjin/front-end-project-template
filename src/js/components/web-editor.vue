@@ -1,11 +1,11 @@
 <template>
-    <div class="web-editor-container">
+    <div class="web-editor-container" :class="{ 'is-disabled': isDisabled }">
         <div class="web-editor" ref="webEditorRef"></div>
         <input type="file" @change="imgFileChangeHandle" accept="image/*" ref="inputFileRef" v-show="false" />
     </div>
 </template>
 <script setup>
-import { onMounted, onUnmounted, ref, watch, inject } from "vue";
+import { onMounted, onUnmounted, ref, watch, inject, computed } from "vue";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import { debounce } from "@js/utils/others";
@@ -16,7 +16,7 @@ const props = defineProps({
     modelValue: String,
     disabled: {
         type: Boolean,
-        default: false
+        default: undefined
     },
     // quill 的配置选项
     options: Object
@@ -35,6 +35,8 @@ const elForm = inject(formContextKey, {});
 
 // 当前elFormItem实例
 const elFormItem = inject(formItemContextKey, {});
+
+const isDisabled = computed(() => props.disabled === true || (elForm?.disabled === true && props.disabled !== false));
 
 // quill富文本框编辑器实例
 let quillInstance;
@@ -88,7 +90,7 @@ const initQuill = function () {
                     }
                 },
                 theme: "snow",
-                readOnly: props.disabled === true,
+                readOnly: isDisabled.value,
                 placeholder: "输入内容..."
             },
             props.options
@@ -111,7 +113,7 @@ watch(
 );
 
 watch(
-    () => props.disabled === true || (elForm?.disabled === true && props.disabled !== false),
+    () => isDisabled.value,
     value => {
         if (!quillInstance) return;
         quillInstance.enable(!value);
@@ -128,7 +130,7 @@ onUnmounted(() => {
     }
 });
 </script>
-<style lang="less" scoped>
+<style lang="less">
 .web-editor-container {
     width: 100%;
     min-height: 200px;
@@ -142,6 +144,27 @@ onUnmounted(() => {
 
     .ql-toolbar.ql-snow {
         width: 100%;
+    }
+
+    &.is-disabled {
+        color: #a8abb2;
+
+        .ql-toolbar {
+            background-color: #f5f7fa;
+
+            button {
+                color: #a8abb2;
+
+                &:hover {
+                    color: #a8abb2;
+                }
+            }
+        }
+
+        .web-editor {
+            background-color: #f5f7fa;
+            color: #a8abb2;
+        }
     }
 }
 </style>

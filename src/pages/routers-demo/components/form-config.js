@@ -21,13 +21,16 @@ export default function ({ actionType, row, saveHandle }) {
             {
                 text: "保存",
                 click: saveHandle,
-                isShow: actionType === HANDLE_CODES.CREATE || actionType === HANDLE_CODES.UPDATE,
+                isShow: actionType === HANDLE_CODES.CREATE || actionType === HANDLE_CODES.UPDATE || actionType === HANDLE_CODES.COPY,
                 props: {
                     type: "primary"
                 }
             }
         ],
         inputFormProps: {
+            props: {
+                disabled: actionType === HANDLE_CODES.QUERY
+            },
             value: (function () {
                 if (actionType === HANDLE_CODES.CREATE) {
                     return null;

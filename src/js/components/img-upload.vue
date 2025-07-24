@@ -274,33 +274,41 @@ watch(
 );
 </script>
 <style lang="less" scoped>
-// 因为是dialog是放在body上的，所以不能在img-upload下写样式
-// 由于该插件不能动态计算宽高，所以只能在样式里指定宽高才会展示
-.cropper-panel {
-    display: flex;
-    width: 100%;
-    height: 500px;
-
-    .cropper-box {
-        width: 780px;
+.img-upload {
+    // 因为是dialog是放在body上的，所以不能在img-upload下写样式
+    // 由于该插件不能动态计算宽高，所以只能在样式里指定宽高才会展示
+    .cropper-panel {
+        display: flex;
+        width: 100%;
         height: 500px;
-        border: solid 1px #ddd;
-    }
 
-    .preview-box {
-        display: inline-block;
-        width: 180px;
-        padding-left: 20px;
-
-        .tips-text {
-            line-height: 40px;
-            color: #000;
+        .cropper-box {
+            width: 780px;
+            height: 500px;
+            border: solid 1px #ddd;
         }
 
-        .preview-img-box {
-            width: 160px;
-            height: 160px;
-            overflow: hidden;
+        .preview-box {
+            display: inline-block;
+            width: 180px;
+            padding-left: 20px;
+
+            .tips-text {
+                line-height: 40px;
+                color: #000;
+            }
+
+            .preview-img-box {
+                width: 160px;
+                height: 160px;
+                overflow: hidden;
+            }
+        }
+    }
+
+    :deep(.el-upload-list.is-disabled) {
+        .el-upload-list__item:hover {
+            display: flex;
         }
     }
 }

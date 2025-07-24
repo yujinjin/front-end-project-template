@@ -4,89 +4,10 @@
             <el-row>
                 <el-col v-for="(field, index) in formFields" :key="(field.name || '') + '_' + index" :span="field.span">
                     <el-form-item v-bind="field.formItemProps">
-                        <!-- 自定义插件，插槽 -->
-                        <slot v-if="field.slot" :name="field.slot" :field="field" :formFields="formFields"></slot>
-
-                        <!-- 标签内容 -->
-                        <div class="label-contents" v-if="field.type === 'label'">{{ getObjectProperty(inputFormValue, field.name) }}</div>
-
-                        <!-- 图片上传 -->
-                        <img-upload
-                            v-if="field.type === 'imgUpload'"
-                            :modelValue="getObjectProperty(inputFormValue, field.name)"
-                            @update:modelValue="value => setFieldValue(value.trim(), field)"
-                            v-bind="field.props || {}"
-                        />
-
-                        <!-- 富文本框 -->
-                        <web-editor
-                            v-if="field.type === 'webEditor'"
-                            :modelValue="getObjectProperty(inputFormValue, field.name)"
-                            @update:modelValue="value => setFieldValue(value, field)"
-                            v-bind="field.props || {}"
-                        />
-
-                        <!-- select -->
-                        <el-select
-                            v-else-if="field.type === 'select'"
-                            :modelValue="getObjectProperty(inputFormValue, field.name)"
-                            @update:modelValue="value => setFieldValue(value, field)"
-                            v-bind="field.props || {}"
-                            v-on="field.events || {}"
-                        >
-                            <el-option
-                                v-for="(item, index) in field.data"
-                                :key="(item[field.optionValueKey || 'value'] || '') + '_' + index"
-                                :label="item[field.optionLabelKey || 'label']"
-                                :value="item[field.optionValueKey || 'value']"
-                                :disabled="item.disabled === true"
-                            />
-                        </el-select>
-
-                        <!-- checkbox -->
-                        <el-checkbox-group
-                            v-else-if="field.type === 'checkbox'"
-                            :modelValue="getObjectProperty(inputFormValue, field.name)"
-                            @update:modelValue="value => setFieldValue(value, field)"
-                            v-bind="field.props || {}"
-                            v-on="field.events || {}"
-                        >
-                            <el-checkbox
-                                v-for="(item, index) in field.data"
-                                :key="(item[field.optionValueKey || 'value'] || '') + '_' + index"
-                                :label="item[field.optionValueKey || 'value']"
-                                :disabled="item.disabled === true"
-                            >
-                                {{ item[field.optionLabelKey || "label"] }}
-                            </el-checkbox>
-                        </el-checkbox-group>
-
-                        <!-- radio -->
-                        <el-radio-group
-                            v-else-if="field.type === 'radio'"
-                            :modelValue="getObjectProperty(inputFormValue, field.name)"
-                            @update:modelValue="value => setFieldValue(value, field)"
-                            v-bind="field.props || {}"
-                            v-on="field.events || {}"
-                        >
-                            <el-radio-button
-                                v-for="(item, index) in field.data"
-                                :key="(item[field.optionValueKey || 'value'] || '') + '_' + index"
-                                :label="item[field.optionValueKey || 'value']"
-                                :disabled="item.disabled === true"
-                            >
-                                {{ item[field.optionLabelKey || "label"] }}
-                            </el-radio-button>
-                        </el-radio-group>
-                        <!-- element 组件 -->
-                        <component
-                            v-else
-                            :is="getElComponentName(field)"
-                            :modelValue="getObjectProperty(inputFormValue, field.name)"
-                            @update:modelValue="value => setFieldValue(value, field)"
-                            v-bind="field.props || {}"
-                            v-on="field.events || {}"
-                        />
+                        <input-field :field="field" :modelValue="getObjectProperty(inputFormValue, field.name)" @update:modelValue="value => setFieldValue(value, field)">
+                            <!-- 自定义插件，插槽 -->
+                            <slot v-if="field.slot" :name="field.slot" :field="field" :value="getObjectProperty(inputFormValue, field.name)" :formFields="formFields"></slot>
+                        </input-field>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -217,11 +138,6 @@ const initInputFormValue = function () {
             emits("fieldValueChange", field, fieldValue, formFields.value);
         }
     });
-};
-
-// 获取elment 组件名称
-const getElComponentName = function (field) {
-    return "el-" + field.type.replace(/([A-Z])/g, "-$1").toLowerCase();
 };
 
 // 设置字段的值

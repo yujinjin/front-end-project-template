@@ -2,14 +2,14 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 10:31:46
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-09 19:04:24
+ * @最后修改时间: 2023-01-19 11:53:08
  * @项目的路径: \front-end-project-template\src\js\components\table\table-column-image.vue
  * @描述: 组件模板页
 -->
 <template>
     <div class="table-column-img">
         <div class="no-image" v-if="!previewImgList || previewImgList.length === 0">没有图片</div>
-        <el-image v-else v-for="(img, index) in previewImgList" :key="img + '_' + index" :src="img" :preview-src-list="previewImgList" fit="contain" :preview-teleported="true">
+        <el-image v-else v-for="(img, index) in previewImgList" :key="img + '_' + index" :src="img" :preview-src-list="previewImgList" :initial-index="index" fit="contain" :preview-teleported="true">
             <template #error>
                 <div class="error-box">
                     <el-icon><Picture /></el-icon>

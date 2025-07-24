@@ -10,7 +10,9 @@ console.log(chalk.bgBlueBright("------------------------------------------------
 const pkg = require("./package.json");
 const glob = require("glob");
 const fs = require("fs-extra");
+const bodyParser = require("body-parser");
 const mock = require("./mock/index");
+
 function pathResolve(dir) {
     return path.resolve(process.cwd(), ".", dir);
 }
@@ -131,7 +133,10 @@ module.exports = {
             if (!devServer) {
                 throw new Error("webpack-dev-server is not defined");
             }
-            mock.init(devServer.app);
+            if (process.env.MOCK_DATA === "1") {
+                devServer.app.use(bodyParser.json());
+                mock(devServer.app);
+            }
             // devServer.app.get('/some/path', function (req, res) {
             //   res.json({ custom: 'response' });
             // });

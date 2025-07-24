@@ -2,14 +2,27 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-27 15:47:36
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-11-08 17:32:46
- * @项目的路径: \360-manager-H5\src\pages\common-demo\search-config.js
+ * @最后修改时间: 2023-01-30 11:35:26
+ * @项目的路径: \front-end-project-template\src\pages\common-demo\search-config.js
  * @描述: 普通页面搜索配置
  */
 import demoApi from "@js/api/demo";
 import { HANDLE_CODES } from "@js/services/constants";
 
-export default function ({ batchSubmitHandle, batchCancelHandle, batchAuthHandle, downloadDataHandle, gotoPlanPage, submitHandle, cancelHandle, pauseHandle, startUpHandle, monitorHandle, deleteHandle, auditDetaile, actionHandle }) {
+export default function ({
+    batchSubmitHandle,
+    batchCancelHandle,
+    batchAuthHandle,
+    downloadDataHandle,
+    gotoPlanPage,
+    submitHandle,
+    cancelHandle,
+    pauseHandle,
+    startUpHandle,
+    monitorHandle,
+    deleteHandle,
+    auditDetaile
+}) {
     const stateList = [
         {
             value: "1",
@@ -93,10 +106,12 @@ export default function ({ batchSubmitHandle, batchCancelHandle, batchAuthHandle
                     optionLabelKey: "name",
                     optionValueKey: "code"
                 },
+                // 演示自定属性
                 {
                     name: "showPlanCodeName",
                     type: "input",
-                    label: "计划名称"
+                    label: "计划名称",
+                    slot: "searchForm_showPlanCodeName"
                 },
                 {
                     name: "state",
@@ -213,16 +228,19 @@ export default function ({ batchSubmitHandle, batchCancelHandle, batchAuthHandle
                 {
                     label: "业务模块",
                     prop: "serviceModuleName",
+                    showOverflowTooltip: true,
                     minWidth: 100
                 },
                 {
                     label: "资源位名称",
                     prop: "eleTypeName",
+                    showOverflowTooltip: true,
                     minWidth: 140
                 },
                 {
                     label: "活动归属",
                     prop: "activityBelongName",
+                    showOverflowTooltip: true,
                     minWidth: 140
                 },
                 {
@@ -288,7 +306,7 @@ export default function ({ batchSubmitHandle, batchCancelHandle, batchAuthHandle
                 },
                 {
                     type: "action",
-                    width: 160,
+                    width: 180,
                     buttons: [
                         {
                             text: "复制",
@@ -379,69 +397,6 @@ export default function ({ batchSubmitHandle, batchCancelHandle, batchAuthHandle
                                 const { auditStatus, sourceSystem } = row;
                                 return sourceSystem === "ELE" && +auditStatus === 1 ? true : false;
                             }
-                        },
-                        {
-                            handleCode: HANDLE_CODES.SUBMIT,
-                            text: "提交",
-                            click: actionHandle,
-                            display: row => {
-                                const { auditStatus, sourceSystem } = row;
-                                return sourceSystem === "ELE" && (+auditStatus === 1 || +auditStatus === 4) ? true : false;
-                            }
-                        },
-                        {
-                            handleCode: HANDLE_CODES.UPDATE,
-                            text: "编辑",
-                            click: actionHandle,
-                            display: row => {
-                                const { auditStatus, sourceSystem } = row;
-                                return sourceSystem === "ELE" && (+auditStatus === 1 || +auditStatus === 4 || +auditStatus === 7) ? true : false;
-                            }
-                        },
-                        {
-                            handleCode: HANDLE_CODES.RESET,
-                            text: "撤回",
-                            click: actionHandle,
-                            display: row => {
-                                const { auditStatus, sourceSystem } = row;
-                                return sourceSystem === "ELE" && +auditStatus === 2 ? true : false;
-                            }
-                        },
-                        {
-                            handleCode: HANDLE_CODES.OFFSHELF,
-                            text: "暂停",
-                            click: actionHandle,
-                            display: row => {
-                                const { auditStatus, sourceSystem } = row;
-                                return sourceSystem === "ELE" && +auditStatus === 6 ? true : false;
-                            }
-                        },
-                        {
-                            handleCode: HANDLE_CODES.ONSHELF,
-                            text: "启动",
-                            click: actionHandle,
-                            display: row => {
-                                const { auditStatus, sourceSystem } = row;
-                                return sourceSystem === "ELE" && +auditStatus === 7 ? true : false;
-                            }
-                        },
-                        {
-                            handleCode: HANDLE_CODES.SUPPLEMENT,
-                            text: "变更素材",
-                            click: actionHandle,
-                            display: row => {
-                                const { auditStatus, isNewPlatform, sourceSystem } = row;
-                                return sourceSystem === "ELE" && isNewPlatform === "1" && (+auditStatus === 5 || +auditStatus === 6 || +auditStatus === 7) ? true : false;
-                            }
-                        },
-                        {
-                            handleCode: HANDLE_CODES.DELETE,
-                            text: "删除",
-                            click: actionHandle,
-                            display: row => {
-                                const { auditStatus, sourceSystem } = row;
-                                return sourceSystem === "ELE" && +auditStatus === 1 ? true : false;
-                            }
                         }
                     ]
                 }
@@ -454,12 +409,14 @@ export default function ({ batchSubmitHandle, batchCancelHandle, batchAuthHandle
                 return parameters;
             },
             queryResponseProcess: function ({ total, rows }) {
-                return { items: rows, totalCount: total };
+                return { rows, totalCount: total };
             },
             props: {
                 rowKey: "showPlanCode"
             }
         },
+        // 这里初始化时datatable不查询,等其业务数据加载完后设置成false才做查询
+        isLoadingForInit: true,
         pageName: "CommonDemo"
     };
 }

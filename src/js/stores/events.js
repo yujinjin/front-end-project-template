@@ -1,9 +1,6 @@
 /*
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-21 16:55:33
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-10-21 17:12:42
- * @项目的路径: \360-manager-H5\src\js\stores\events.js
  * @描述: 事件管理
  */
 import { defineStore } from "pinia";

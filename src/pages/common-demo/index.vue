@@ -1,28 +1,38 @@
 <!--
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 10:31:46
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-30 11:33:05
- * @项目的路径: \front-end-project-template\src\pages\common-demo\index.vue
  * @描述: 常用页演示
 -->
 <template>
-    <search-page v-bind="searchConfigData" @searchValueChange="searchValueChangeHandle" @selectRowsChange="selectRowsChangeHandle" ref="searchPageRef">
+    <search-page v-bind="searchPageConfig" :isLoadingForInit="isLoadingForInit" @searchValueChange="searchValueChangeHandle" @selectRowsChange="selectRowsChangeHandle" ref="searchPageRef">
         <template #searchForm_showPlanCodeName="scope">
             <el-input v-model="scope.field.value" placeholder="请输入计划名称" />
         </template>
         <template #dataTable_showPlanCodeName="scope">
             <span class="plan-name-text">{{ scope.row.showPlanCodeName || "-" }}</span>
         </template>
+        <customer-column-dialog
+            :is-show="isShowCustomerColumnDialog"
+            :tableColumns="searchPageConfig.dataTableProps.columns"
+            localStorageKey="commonDemoCustomerColumns"
+            localStorageKeyVersion="1.0"
+            @close="isShowCustomerColumnDialog = false"
+            @save="saveColumnShowStatusHandle"
+        />
     </search-page>
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
+import { ref, nextTick } from "vue";
+import { ElMessage } from "element-plus";
 import searchConfig from "./search-config";
 import demoAPI from "@js/api/demo";
+import { HANDLE_CODES } from "@js/services/constants";
+import customerColumnDialog from "@pages/components/customer-column-dialog.vue";
 
 const searchPageRef = ref(null);
+
+const isShowCustomerColumnDialog = ref(false);
 
 // 所有的资源位数据
 let elementList = [];
@@ -66,9 +76,9 @@ const searchValueChangeHandle = function (field, formFields) {
 const selectRowsChangeHandle = function (selectRows) {
     const isDisabled = selectRows.length === 0;
     searchPageRef.value.changeButtons(buttons => {
-        buttons[0].props.disabled = isDisabled;
         buttons[1].props.disabled = isDisabled;
         buttons[2].props.disabled = isDisabled;
+        buttons[3].props.disabled = isDisabled;
     });
 };
 
@@ -92,93 +102,135 @@ const initSearchFormSelectOptions = function (formFields) {
     }
 };
 
-// 批量提交操作
-const batchSubmitHandle = function (selectRows) {
-    console.info(">>>>>>>>>>batchSubmitHandle", selectRows);
+const actionHandle = function (selectRows, { handleCode }) {
+    console.info(selectRows);
+    switch (handleCode) {
+        case HANDLE_CODES.CUSTOM:
+            isShowCustomerColumnDialog.value = true;
+            break;
+        case HANDLE_CODES.BATCHSUBMIT:
+            ElMessage({
+                message: "你点击了”批量提交“按钮",
+                type: "info"
+            });
+            break;
+        case HANDLE_CODES.BATCHRESET:
+            ElMessage({
+                message: "你点击了”批量撤回“按钮",
+
+                type: "info"
+            });
+            break;
+        case HANDLE_CODES.BATCHAUTH:
+            ElMessage({
+                message: "你点击了”批量授权“按钮",
+
+                type: "info"
+            });
+            break;
+        case HANDLE_CODES.DOWNLOAD:
+            ElMessage({
+                message: "你点击了”导出表格“按钮",
+
+                type: "info"
+            });
+            break;
+        case HANDLE_CODES.CREATE:
+            ElMessage({
+                message: "你点击了”新建计划“按钮",
+
+                type: "info"
+            });
+            break;
+        case HANDLE_CODES.COPY:
+            ElMessage({
+                message: "你点击了”复制“按钮",
+
+                type: "info"
+            });
+            break;
+        case HANDLE_CODES.MONITOR:
+            ElMessage({
+                message: "你点击了”监控“按钮",
+
+                type: "info"
+            });
+            break;
+        case HANDLE_CODES.SEARCHEXAMINE:
+            ElMessage({
+                message: "你点击了”审核详情“按钮",
+
+                type: "info"
+            });
+            break;
+        case HANDLE_CODES.SUBMIT:
+            ElMessage({
+                message: "你点击了”提交“按钮",
+
+                type: "info"
+            });
+            break;
+        case HANDLE_CODES.UPDATE:
+            ElMessage({
+                message: "你点击了”编辑“按钮",
+                type: "info"
+            });
+            break;
+        case HANDLE_CODES.RESET:
+            ElMessage({
+                message: "你点击了”撤回“按钮",
+                type: "info"
+            });
+            break;
+        case HANDLE_CODES.PAUSE:
+            ElMessage({
+                message: "你点击了”暂停“按钮",
+                type: "info"
+            });
+            break;
+        case HANDLE_CODES.STARTUP:
+            ElMessage({
+                message: "你点击了”启动“按钮",
+                type: "info"
+            });
+            break;
+        case HANDLE_CODES.SUPPLEMENT:
+            ElMessage({
+                message: "你点击了”变更素材“按钮",
+                type: "info"
+            });
+            break;
+        case HANDLE_CODES.DELETE:
+            ElMessage({
+                message: "你点击了”删除“按钮",
+                type: "info"
+            });
+            break;
+        default:
+            break;
+    }
 };
 
-// 批量撤回操作
-const batchCancelHandle = function (selectRows) {
-    console.info(">>>>>>>>>>batchCancelHandle", selectRows);
-};
-
-// 批量授权
-const batchAuthHandle = function (selectRows) {
-    console.info(">>>>>>>>>>batchAuthHandle", selectRows);
-};
-
-// 导出表格
-const downloadDataHandle = function () {
-    console.info(">>>>>>>>>>downloadDataHandle");
-};
-
-// 新建计划
-const gotoPlanPage = function (row, button) {
-    console.info(">>>>>>>>>>gotoPlanPage", row, button);
-};
-
-// 提交
-const submitHandle = function (row) {
-    console.info(">>>>>>>>>>submitHandle", row);
-};
-
-// 撤回
-const cancelHandle = function (row) {
-    console.info(">>>>>>>>>>cancelHandle", row);
-};
-
-// 暂停
-const pauseHandle = function (row) {
-    console.info(">>>>>>>>>>pauseHandle", row);
-};
-
-// 启动
-const startUpHandle = function (row) {
-    console.info(">>>>>>>>>>startUpHandle", row);
-};
-
-// 监控
-const monitorHandle = function (row) {
-    console.info(">>>>>>>>>>monitorHandle", row);
-};
-
-// 删除
-const deleteHandle = function (row) {
-    console.info(">>>>>>>>>>deleteHandle", row);
-};
-
-// 审核详情
-const auditDetaile = function (row) {
-    console.info(">>>>>>>>>>auditDetaile", row);
+// 修改数据列展示状态操作
+const saveColumnShowStatusHandle = async function (columnKeys) {
+    if (!searchPageRef.value) {
+        await nextTick();
+    }
+    searchPageRef.value?.updateTableColumnsShowStatus(columnKeys);
 };
 
 // 搜索页配置数据
-const searchConfigData = reactive(
-    searchConfig({
-        batchSubmitHandle,
-        batchCancelHandle,
-        batchAuthHandle,
-        downloadDataHandle,
-        gotoPlanPage,
-        submitHandle,
-        cancelHandle,
-        pauseHandle,
-        startUpHandle,
-        monitorHandle,
-        deleteHandle,
-        auditDetaile
-    })
-);
+const { searchPageConfig, isLoadingForInit } = searchConfig(actionHandle);
 
 const init = async function () {
     await queryConfigData();
-    searchConfigData.isLoadingForInit = false;
+    isLoadingForInit.value = false;
 };
 
 init();
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .plan-name-text {
     text-decoration: underline;
     cursor: pointer;

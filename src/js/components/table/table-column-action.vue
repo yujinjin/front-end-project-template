@@ -1,9 +1,6 @@
 <!--
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 10:31:46
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-19 11:53:13
- * @项目的路径: \front-end-project-template\src\js\components\table\table-column-action.vue
  * @描述: 数据列表操作列
 -->
 <template>
@@ -117,7 +114,7 @@ watch(
     { immediate: true, deep: true }
 );
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .table-column-action {
     display: flex;
     align-items: center;
@@ -137,7 +134,7 @@ watch(
     }
 }
 </style>
-<style lang="less">
+<style lang="scss">
 .el-popper.custom-action-dropdown {
     min-width: 100px;
 

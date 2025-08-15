@@ -1,9 +1,6 @@
 /*
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 10:10:59
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-30 13:45:14
- * @项目的路径: \front-end-project-template\src\js\components\index.js
  * @描述: 系统自定义全局组件入口
  */
 

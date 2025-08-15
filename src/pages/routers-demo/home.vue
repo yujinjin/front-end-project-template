@@ -1,20 +1,24 @@
 <!--
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 11:18:01
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-30 13:48:04
- * @项目的路径: \front-end-project-template\src\pages\routers-demo\home.vue
  * @描述: 路由页面演示
 -->
 <template>
-    <search-page v-bind="searchConfigData" @selectRowsChange="selectRowsChangeHandle" ref="searchPageRef">
+    <search-page v-bind="searchPageConfig" @selectRowsChange="selectRowsChangeHandle" ref="searchPageRef">
         <template #dataTable_orderNo="scope">
             <el-link @click="showDialogFormHandle(scope.row, { handleCode: HANDLE_CODES.QUERY })" type="primary">{{ scope.row.orderNo }}</el-link>
         </template>
-        <info-form-dialog v-model:isShow="isShowInfoFormDialog" @refresh="refreshHandle" :actionType="actionType" :row="selectedRow" />
-        <batch-update-dialog v-model:isShow="isShowBatchUpdateDialog" @refresh="refreshHandle" :rows="selectRows" />
-        <export-dialog v-model:isShow="isShowExportDialog" :fields="searchConfigData.exportFields" :export="exportHandle" />
-        <import-dialog v-model:isShow="isShowImportDialog" :templateFileUrl="`${publicPath}demo/学期日历.xltm`" :columns="searchConfigData.importColumns" :upload="uploadHandle" :save="saveHandle" />
+        <info-form-dialog v-if="isShowInfoFormDialog" @close="isShowInfoFormDialog = false" @refresh="refreshHandle" :actionType="actionType" :row="selectedRow" />
+        <batch-update-dialog v-if="isShowBatchUpdateDialog" @close="isShowBatchUpdateDialog = false" @refresh="refreshHandle" :rows="selectRows" />
+        <export-dialog v-if="isShowExportDialog" @close="isShowExportDialog = false" :tableColumns="searchPageConfig.dataTableProps.columns" :export="exportHandle" />
+        <import-dialog
+            v-if="isShowImportDialog"
+            @close="isShowImportDialog = false"
+            :templateFileUrl="`${publicPath}demo/学期日历.xltm`"
+            :columns="importColumns"
+            :upload="uploadHandle"
+            :save="saveHandle"
+        />
     </search-page>
 </template>
 
@@ -138,7 +142,7 @@ const saveHandle = async function (datas) {
 };
 
 // 搜索页配置数据
-const searchConfigData = searchConfig({
+const { searchPageConfig, importColumns } = searchConfig({
     showDialogFormHandle,
     deleteHandle,
     batchUpdateHandle,
@@ -154,5 +158,3 @@ onUnmounted(() => {
     console.info("App onUnmounted");
 });
 </script>
-
-<style lang="less" scoped></style>

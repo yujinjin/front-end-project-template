@@ -1,9 +1,6 @@
 <!--
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 10:31:46
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-12 11:35:23
- * @项目的路径: \front-end-project-template\src\pages\tpl.vue
  * @描述: 组件模板页
 -->
 <template>
@@ -22,7 +19,7 @@
 
 // const emits = defineEmits([""])
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .tpl {
 }
 </style>

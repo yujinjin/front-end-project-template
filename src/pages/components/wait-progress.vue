@@ -1,9 +1,6 @@
 <!--
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-01-29 10:01:53
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-29 18:11:41
- * @项目的路径: \front-end-project-template\src\pages\components\wait-progress.vue
  * @描述: 等待进度条加载动画
 -->
 <template>
@@ -108,7 +105,7 @@ onUnmounted(() => {
     destroyed();
 });
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .wait-progress {
     width: 100%;
     text-align: center;

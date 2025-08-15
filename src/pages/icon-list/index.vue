@@ -1,22 +1,19 @@
 <!--
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-01-19 17:02:03
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-30 15:01:02
- * @项目的路径: \front-end-project-template\src\pages\icon-list\index.vue
  * @描述: 图标集合页
 -->
 <template>
     <div class="icon-list" ref="iconListRef">
-        <div class="icon-item" v-for="icon in icons" :key="icon" :data-clipboard-text="'<i class=\'icomoon-' + icon + '\'></i>'">
+        <div class="icon-item" v-for="icon in icons" :key="icon" @click="copyHandle('<i class=\'icomoon-' + icon + '\'></i>')">
             <i :class="'icomoon-' + icon"></i>
             <span class="icon-name">{{ icon }}</span>
         </div>
     </div>
 </template>
 <script setup>
-import { onMounted, ref } from "vue";
-import Clipboard from "clipboard";
+import { ref } from "vue";
+import { useClipboard } from "@vueuse/core";
 import { ElMessage } from "element-plus";
 
 // var a = []; document.querySelectorAll("div.glyphNameWrapper.mls > span.glyphName").forEach(item => a.push(item.value)); JSON.stringify(a);
@@ -515,22 +512,21 @@ const icons = ref([
     "IcoMoon"
 ]);
 
-const iconListRef = ref(null);
+const { copy, isSupported } = useClipboard({ legacy: true });
 
-onMounted(() => {
-    const clipboard = new Clipboard(iconListRef.value.querySelectorAll(".icon-list > .icon-item"));
-    clipboard.on("success", function () {
-        ElMessage({
-            message: "已复制.",
-            type: "success"
-        });
+const copyHandle = async function (text) {
+    if (!isSupported.value) {
+        ElMessage.error("您的浏览器不支持 Clipboard API");
+        return;
+    }
+    await copy(text);
+    ElMessage({
+        message: "已复制.",
+        type: "success"
     });
-    clipboard.on("error", function () {
-        ElMessage.error("复制失败.");
-    });
-});
+};
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .icon-list {
     border-top: 1px solid #dcdfe6;
     border-left: 1px solid #dcdfe6;

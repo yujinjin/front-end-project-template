@@ -1,15 +1,21 @@
 <!--
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 10:31:46
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-06-06 18:03:18
- * @项目的路径: \front-end-project-template\src\js\components\search-page.vue
  * @描述: 搜索页组件
 -->
 <template>
     <div class="search-page" v-loading="isLoadingForInit">
-        <search-form v-if="searchFormProps" v-bind="searchFormProps" :pageName="pageName" :isSearchLoading="isSearchLoading" @search="searchHandle" @change="searchValueChangeHandle"
-            @reset="resetHandle" @fieldsChange="searchFieldsChangeHandle" ref="searchFormRef">
+        <search-form
+            v-if="searchFormProps"
+            v-bind="searchFormProps"
+            :pageName="pageName"
+            :isSearchLoading="isSearchLoading"
+            @search="searchHandle"
+            @change="searchValueChangeHandle"
+            @reset="resetHandle"
+            @fieldsChange="searchFieldsChangeHandle"
+            ref="searchFormRef"
+        >
             <template v-for="name in distributeSlots.searchForm" #[name]="scope">
                 <slot :name="name" v-bind="scope"></slot>
             </template>
@@ -19,8 +25,16 @@
                 <slot :name="name" v-bind="scope"></slot>
             </template>
         </action-bar>
-        <data-table v-if="dataTableInnerProps" v-bind="dataTableInnerProps" :pageName="pageName" :filters="searchFormInput" ref="dataTableRef" v-model:selectRows="selectRows"
-            :autoInitQuery="!isLoadingForInit" @search="isLoading => (isSearchLoading = isLoading)">
+        <data-table
+            v-if="dataTableInnerProps"
+            v-bind="dataTableInnerProps"
+            :pageName="pageName"
+            :filters="searchFormInput"
+            ref="dataTableRef"
+            v-model:selectRows="selectRows"
+            :autoInitQuery="!isLoadingForInit"
+            @search="isLoading => (isSearchLoading = isLoading)"
+        >
             <template v-for="name in distributeSlots.dataTable" #[name]="scope">
                 <slot :name="name" v-bind="scope"></slot>
             </template>
@@ -196,10 +210,17 @@ defineExpose({
     // 修改当前生成的button按钮值
     changeButtons: function (callback) {
         actionBarRef.value?.changeButtons(callback);
+    },
+    /**
+     * 更新数据列显示状态
+     * @param columnKeys 显示列key值数组（不传值表示都展示）
+     */
+    updateTableColumnsShowStatus(columnKeys) {
+        dataTableRef.value?.updateTableColumnsShowStatus(columnKeys);
     }
 });
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .search-page {
     display: flex;
     flex-direction: column;

@@ -1,9 +1,6 @@
 <!--
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 10:31:46
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-18 15:06:39
- * @项目的路径: \front-end-project-template\src\js\components\action-bar.vue
  * @描述: 列表操作栏
 -->
 <template>
@@ -108,7 +105,7 @@ defineExpose({
     }
 });
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .action-bar-panel {
     padding: 16px 16px 0px;
 

@@ -1,20 +1,19 @@
 /*
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-01-18 13:39:27
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-29 16:10:22
- * @项目的路径: \front-end-project-template\mock\demo.js
  * @描述: demo模块mock数据
  */
-const Mock = require("mockjs");
-const wrapResponse = require("./wrap-response");
+import Mock from "mockjs";
+import wrapResponse from "./wrap-response";
 
-module.exports = function (app) {
+export default [
     // 常用页面demo 分页查询
-    app.post("/demo/queryPageListForCommon", function (request, response) {
-        const time = new Date().getTime();
-        response.json(
-            wrapResponse({
+    {
+        url: "/demo/queryPageListForCommon",
+        type: "post",
+        data: function () {
+            const time = new Date().getTime();
+            return wrapResponse({
                 "total|10-1000": 0,
                 "rows|50": [
                     {
@@ -41,13 +40,14 @@ module.exports = function (app) {
                         updatedBy: "@cname()" // 操作人
                     }
                 ]
-            })
-        );
-    });
-
+            });
+        }
+    },
     // 获取配置数据
-    app.post("/demo/config.do", function (request, response) {
-        response.json(
+    {
+        url: "/demo/getConfig",
+        type: "post",
+        data: () =>
             wrapResponse({
                 "activities|10-20": [
                     {
@@ -166,14 +166,15 @@ module.exports = function (app) {
                     }
                 ]
             })
-        );
-    });
+    },
 
     // 路由页面demo 分页查询
-    app.post("/demo/queryPageListForOrder", function (request, response) {
-        const time = new Date().getTime();
-        response.json(
-            wrapResponse({
+    {
+        url: "/demo/queryPageListForOrder",
+        type: "post",
+        data: function () {
+            const time = new Date().getTime();
+            return wrapResponse({
                 "total|10-1000": 0,
                 "rows|50": [
                     {
@@ -199,35 +200,49 @@ module.exports = function (app) {
                         remark: "@csentence(0, 100)" // 备注
                     }
                 ]
-            })
-        );
-    });
+            });
+        }
+    },
 
     // 新增订单
-    app.post("/demo/insertOrder", function (request, response) {
-        response.json(wrapResponse(Mock.Random.boolean(), true));
-    });
+    {
+        url: "/demo/insertOrder",
+        type: "post",
+        data: () => wrapResponse(Mock.Random.boolean(), true)
+    },
 
     // 修改订单
-    app.post("/demo/updateOrder", function (request, response) {
-        response.json(wrapResponse(Mock.Random.boolean(), true));
-    });
+    {
+        url: "/demo/updateOrder",
+        type: "post",
+        data: () => wrapResponse(Mock.Random.boolean(), true)
+    },
 
     // 复制订单
-    app.post("/demo/copyOrder", function (request, response) {
-        response.json(wrapResponse(Mock.Random.boolean(), true));
-    });
+    {
+        url: "/demo/copyOrder",
+        type: "post",
+        data: function () {
+            return wrapResponse(Mock.Random.boolean(), true);
+        }
+    },
 
     // 导出订单
-    app.post("/demo/downloadOrder", function (request, response) {
-        response.json(wrapResponse(Mock.Random.image(null, Mock.Random.color(), Mock.Random.color()), true));
-    });
+    {
+        url: "/demo/downloadOrder",
+        type: "post",
+        data: function () {
+            return wrapResponse(Mock.Random.image(null, Mock.Random.color(), Mock.Random.color()), true);
+        }
+    },
 
     // 导入订单文件
-    app.post("/demo/importFileForOrder", function (request, response) {
-        const time = new Date().getTime();
-        response.json(
-            wrapResponse(
+    {
+        url: "/demo/importFileForOrder",
+        type: "post",
+        data: function () {
+            const time = new Date().getTime();
+            return wrapResponse(
                 [
                     {
                         orderNo: "ON@date('yyyyMMddHH')@string('number', 8)", // 订单编号
@@ -254,17 +269,21 @@ module.exports = function (app) {
                 ],
                 true,
                 Mock.mock("@integer(10, 400)")
-            )
-        );
-    });
+            );
+        }
+    },
 
     // 导入订单数据
-    app.post("/demo/importDataForOrder", function (request, response) {
-        response.json(wrapResponse(Mock.Random.boolean(), false));
-    });
+    {
+        url: "/demo/importDataForOrder",
+        type: "post",
+        data: () => wrapResponse(Mock.Random.boolean(), false)
+    },
 
     // 根据订单号删除订单
-    app.post("/demo/deleteOrderByOrderNo", function (request, response) {
-        response.json(wrapResponse(Mock.Random.boolean(), true));
-    });
-};
+    {
+        url: "/demo/deleteOrderByOrderNo",
+        type: "post",
+        data: () => wrapResponse(Mock.Random.boolean(), true)
+    }
+];

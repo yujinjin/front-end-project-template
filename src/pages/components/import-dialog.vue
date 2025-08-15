@@ -1,13 +1,10 @@
 <!--
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-01-19 15:07:31
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-29 18:11:10
- * @项目的路径: \front-end-project-template\src\pages\components\import-dialog.vue
  * @描述: 导入弹窗组件
 -->
 <template>
-    <el-dialog v-if="isShow" v-model="dialogVisible" :close-on-click-modal="false" width="650px" class="import-dialog" :title="title || '数据导入'" @closed="dialogClosed">
+    <el-dialog v-if="isShow" v-model="dialogVisible" :close-on-click-modal="false" width="650px" class="import-dialog custom-dialog" :title="title || '数据导入'" @closed="dialogClosed">
         <el-steps :space="200" :active="step" simple>
             <el-step title="上传文件" :icon="UploadFilled" />
             <el-step title="预览数据" :icon="View" />
@@ -105,7 +102,7 @@
     </el-dialog>
 </template>
 <script setup>
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import { UploadFilled, View, DataAnalysis, Download } from "@element-plus/icons-vue";
 import waitProgress from "./wait-progress";
 import commonApi from "@js/api/common";
@@ -113,7 +110,7 @@ import commonApi from "@js/api/common";
 const props = defineProps({
     isShow: {
         type: Boolean,
-        default: false
+        default: true
     },
     title: {
         type: String
@@ -142,10 +139,10 @@ const props = defineProps({
     }
 });
 
-const emits = defineEmits(["update:isShow", "refresh"]);
+const emits = defineEmits(["close", "refresh"]);
 
 // 弹窗显示状态
-const dialogVisible = ref(false);
+const dialogVisible = ref(true);
 
 // 是否需要关闭弹窗后刷新数据
 const isRefresh = ref(false);
@@ -170,8 +167,10 @@ const fileList = ref([]);
 
 // 弹窗关闭
 const dialogClosed = function () {
-    emits("update:isShow", false);
-    emits("refresh", isRefresh.value);
+    emits("close");
+    if (isRefresh.value) {
+        emits("refresh");
+    }
 };
 
 // 下载模板文件
@@ -231,20 +230,11 @@ const init = function () {
     fileList.value = [];
 };
 
-watch(
-    () => props.isShow,
-    value => {
-        if (value) {
-            init();
-            dialogVisible.value = true;
-        }
-    }
-);
+init();
 </script>
-<style lang="less">
+<style lang="scss">
 .el-dialog.import-dialog {
     .el-dialog__body {
-        padding: 0px 20px;
         min-height: 350px;
 
         .upload-file-panel {
@@ -369,15 +359,6 @@ watch(
                     font-weight: bold;
                 }
             }
-        }
-    }
-
-    .el-dialog__footer {
-        padding: 8px 20px;
-        box-shadow: 0px -1px 0px 0px #f5f5f5, 0px 1px 30px 0px rgba(0, 21, 41, 0.12);
-
-        .el-button {
-            min-width: 80px;
         }
     }
 }

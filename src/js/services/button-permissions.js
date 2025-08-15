@@ -30,19 +30,20 @@ const ALL_PAGE_BUTTONS = {
     ]
 };
 // 角色权限配置
-// ELE_NEW_PLATFORM_DEV=开发人员，权限都有，产品角色名=平台管理员
-// ELE_NEW_PLATFORM_MANAGER=管理，权限都有，产品角色名=平台管理员
-// ELE_NEW_PLATFORM_OPERATION_PEOPLE=运营人员，产品角色名=运营人员
-// ELE_NEW_PLATFORM_AUDITOR=审核人员，产品角色名=消保审核人员，合规审核人员
+// NEW_PLATFORM_DEV=开发人员，权限都有，产品角色名=平台管理员
+// NEW_PLATFORM_MANAGER=管理，权限都有，产品角色名=平台管理员
+// NEW_PLATFORM_OPERATION_PEOPLE=运营人员，产品角色名=运营人员
+// NEW_PLATFORM_AUDITOR=审核人员，产品角色名=消保审核人员，合规审核人员
 const ROLE_BUTTON_PERMISSIONS = {
     // 开发人员，权限都有，产品角色名=平台管理员
-    ELE_NEW_PLATFORM_DEV: ALL_PAGE_BUTTONS,
+    NEW_PLATFORM_DEV: ALL_PAGE_BUTTONS,
     // 管理，权限都有，产品角色名=平台管理员
-    ELE_NEW_PLATFORM_MANAGER: ALL_PAGE_BUTTONS,
+    NEW_PLATFORM_MANAGER: ALL_PAGE_BUTTONS,
     // 运营人员，产品角色名=运营人员
-    ELE_NEW_PLATFORM_OPERATION_PEOPLE: {
+    NEW_PLATFORM_OPERATION_PEOPLE: {
         // 展现计划-计划列表
         CommonDemo: [
+            HANDLE_CODES.CUSTOM, // 自定义列
             HANDLE_CODES.CREATE, // 新增
             HANDLE_CODES.DOWNLOAD, // 导出
             HANDLE_CODES.UPDATE, //编辑
@@ -61,7 +62,7 @@ const ROLE_BUTTON_PERMISSIONS = {
         ]
     },
     // 审核人员，产品角色名=消保审核人员，合规审核人员
-    ELE_NEW_PLATFORM_AUDITOR: {
+    NEW_PLATFORM_AUDITOR: {
         CommonDemo: [
             HANDLE_CODES.DOWNLOAD, // 导出
             HANDLE_CODES.MONITOR, //监控
@@ -84,7 +85,7 @@ export default async function () {
     // } else if (!data || data.length === 0) {
     //     return;
     // }
-    const data = ["ELE_NEW_PLATFORM_MANAGER", "ELE_NEW_PLATFORM_OPERATION_PEOPLE", "ELE_NEW_PLATFORM_AUDITOR"];
+    const data = ["NEW_PLATFORM_MANAGER", "NEW_PLATFORM_OPERATION_PEOPLE", "NEW_PLATFORM_AUDITOR"];
     // 当前登录用户的权限信息
     const permission = {};
     data.forEach(role => {

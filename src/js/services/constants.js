@@ -1,9 +1,6 @@
 /*
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-25 10:08:07
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-17 10:40:26
- * @项目的路径: \front-end-project-template\src\js\services\constants.js
  * @描述: 常量集合
  */
 

@@ -1,9 +1,6 @@
 /*
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-20 16:03:42
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-11-10 21:29:44
- * @项目的路径: \360-manager-H5\src\js\api\request.js
  * @描述: http 请求
  */
 import axios from "axios";

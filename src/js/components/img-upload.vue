@@ -8,7 +8,7 @@
                 <div class="el-upload__tip">只能上传图片文件，且不超过{{ maxSize > 1024 ? numberFormat(maxSize / 1024, 1) + "M" : maxSize + "KB" }}</div>
             </template>
         </el-upload>
-        <el-dialog v-model="isShowCropperDialog" class="cropper-dialog" title="图片裁剪" :append-to-body="true" :close-on-click-modal="false" width="1000px">
+        <el-dialog v-model="isShowCropperDialog" class="cropper-dialog custom-dialog" title="图片裁剪" :append-to-body="true" :close-on-click-modal="false" width="1000px">
             <div class="cropper-panel">
                 <div class="cropper-box">
                     <img :src="cropperImg" ref="cropperImgRef" />
@@ -273,59 +273,42 @@ watch(
     }
 );
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .img-upload {
-    // 因为是dialog是放在body上的，所以不能在img-upload下写样式
-    // 由于该插件不能动态计算宽高，所以只能在样式里指定宽高才会展示
-    .cropper-panel {
-        display: flex;
-        width: 100%;
-        height: 500px;
-
-        .cropper-box {
-            width: 780px;
-            height: 500px;
-            border: solid 1px #ddd;
-        }
-
-        .preview-box {
-            display: inline-block;
-            width: 180px;
-            padding-left: 20px;
-
-            .tips-text {
-                line-height: 40px;
-                color: #000;
-            }
-
-            .preview-img-box {
-                width: 160px;
-                height: 160px;
-                overflow: hidden;
-            }
-        }
-    }
-
     :deep(.el-upload-list.is-disabled) {
         .el-upload-list__item:hover {
             display: flex;
         }
     }
 }
-</style>
-<style lang="less">
-.el-dialog.cropper-dialog {
-    .el-dialog__body {
-        padding: 12px 20px 0px;
-        overflow-y: auto;
+
+// 因为是dialog是放在body上的，所以不能在img-upload下写样式
+// 由于该插件不能动态计算宽高，所以只能在样式里指定宽高才会展示
+.cropper-panel {
+    display: flex;
+    width: 100%;
+    height: 500px;
+
+    .cropper-box {
+        width: 780px;
+        height: 500px;
+        border: solid 1px #ddd;
     }
 
-    .el-dialog__footer {
-        padding: 8px 20px;
-        box-shadow: 0px -1px 0px 0px #f5f5f5, 0px 1px 30px 0px rgba(0, 21, 41, 0.12);
+    .preview-box {
+        display: inline-block;
+        width: 180px;
+        padding-left: 20px;
 
-        .el-button {
-            min-width: 80px;
+        .tips-text {
+            line-height: 40px;
+            color: #000;
+        }
+
+        .preview-img-box {
+            width: 160px;
+            height: 160px;
+            overflow: hidden;
         }
     }
 }

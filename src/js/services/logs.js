@@ -1,9 +1,6 @@
 /*
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-21 10:01:07
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-10-21 10:02:49
- * @项目的路径: \360-manager-H5\src\services\logs.js
  * @描述: 日志输出
  */
 
@@ -29,7 +26,8 @@ class Log {
         if (logLevel < this.level) {
             return;
         }
-        console.log(...contents);
+        // 避免被代码打包把console的代码删除，同时eslint 配置不要使用console
+        window["console"]["log"](...contents);
     }
 }
 const log = new Log();

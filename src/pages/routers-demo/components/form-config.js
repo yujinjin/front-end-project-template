@@ -1,5 +1,5 @@
 import { ORDER_STATUS, HANDLE_CODES } from "@js/services/constants";
-import dayjs from "dayjs";
+import { dateFormat } from "@js/utils/format";
 
 export default function ({ actionType, row, saveHandle }) {
     return {
@@ -37,7 +37,7 @@ export default function ({ actionType, row, saveHandle }) {
                 } else {
                     row = JSON.parse(JSON.stringify(row));
                     if (row.createTime) {
-                        row.createTime = dayjs(row.createTime).format("YYYY-MM-DD HH:mm:ss");
+                        row.createTime = dateFormat(row.createTime, "YYYY-MM-DD HH:mm:ss");
                     }
                     return row;
                 }

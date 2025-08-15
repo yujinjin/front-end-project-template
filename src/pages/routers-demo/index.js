@@ -1,9 +1,6 @@
 /*
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 10:57:04
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-30 09:46:49
- * @项目的路径: \front-end-project-template\src\pages\routers-demo\index.js
  * @描述: routers页面演示
  */
 import siteInstance from "@js/main";

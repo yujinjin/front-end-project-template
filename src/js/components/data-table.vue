@@ -1,32 +1,31 @@
 <!--
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 10:31:46
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-02-01 10:57:10
- * @项目的路径: \front-end-project-template\src\js\components\data-table.vue
  * @描述: 组件模板页
 -->
 <template>
     <div class="data-table-panel" ref="dataTablePanelRef">
         <el-table :data="dataList" v-bind="tableProps" v-on="events" @selection-change="selectionChangeHandle" v-loading="isLoadingForSearch" element-loading-text="拼命加载中...">
-            <el-table-column v-for="(columnItem, index) in columnList" :key="(columnItem.prop || '') + '_' + index" v-bind="columnItem">
-                <template v-if="columnItem.slotHeader" #header="scope">
-                    <slot :name="columnItem.slotHeader" v-bind="scope"></slot>
-                </template>
-                <template #default="scope">
-                    <slot v-if="columnItem.slot" :name="columnItem.slot" v-bind="scope"></slot>
-                    <!-- 日期 -->
-                    <table-column-date v-else-if="columnItem.type === 'date'" :value="getCellValue(scope.row, columnItem)" :formate="columnItem.formate" />
-                    <!-- 数字 -->
-                    <table-column-number v-else-if="columnItem.type === 'number'" :value="getCellValue(scope.row, columnItem)" :digit="columnItem.digit || 0" />
-                    <!-- 图片 -->
-                    <table-column-image v-else-if="columnItem.type === 'image'" v-bind="columnItem" :value="getCellValue(scope.row, columnItem)" />
-                    <!-- 枚举 -->
-                    <table-column-enum v-else-if="columnItem.type === 'enum'" v-bind="columnItem" :value="getCellValue(scope.row, columnItem)" />
-                    <!-- 操作按钮 -->
-                    <table-column-action v-else-if="columnItem.type === 'action'" v-bind="columnItem" :row="scope.row" />
-                </template>
-            </el-table-column>
+            <template v-for="(columnItem, index) in columnList">
+                <el-table-column v-if="columnItem.isShow" :key="(columnItem.prop || '') + '_' + index" v-bind="columnItem">
+                    <template v-if="columnItem.slotHeader" #header="scope">
+                        <slot :name="columnItem.slotHeader" v-bind="scope"></slot>
+                    </template>
+                    <template #default="scope">
+                        <slot v-if="columnItem.slot" :name="columnItem.slot" v-bind="scope"></slot>
+                        <!-- 日期 -->
+                        <table-column-date v-else-if="columnItem.type === 'date'" :value="getCellValue(scope.row, columnItem)" :formate="columnItem.formate" />
+                        <!-- 数字 -->
+                        <table-column-number v-else-if="columnItem.type === 'number'" :value="getCellValue(scope.row, columnItem)" :digit="columnItem.digit || 0" />
+                        <!-- 图片 -->
+                        <table-column-image v-else-if="columnItem.type === 'image'" v-bind="columnItem" :value="getCellValue(scope.row, columnItem)" />
+                        <!-- 枚举 -->
+                        <table-column-enum v-else-if="columnItem.type === 'enum'" v-bind="columnItem" :value="getCellValue(scope.row, columnItem)" />
+                        <!-- 操作按钮 -->
+                        <table-column-action v-else-if="columnItem.type === 'action'" v-bind="columnItem" :row="scope.row" />
+                    </template>
+                </el-table-column>
+            </template>
         </el-table>
         <div v-if="isShowPagination" class="pagination-wrapper" ref="paginationRef">
             <el-pagination v-bind="paginationData" @size-change="pageSizeChangeHandle" @current-change="currentPageChangeHandle" />
@@ -220,7 +219,7 @@ const initTableProps = function () {
 const initColumns = function () {
     columnList.value = [];
     props.columns.forEach(columnItem => {
-        const newColumnItem = extend(true, {}, columnItem);
+        const newColumnItem = extend(true, { isShow: true }, columnItem);
         if (newColumnItem.type === "action" && newColumnItem.buttons && newColumnItem.buttons.length > 0) {
             if (props.pageName) {
                 newColumnItem.buttons = newColumnItem.buttons.filter(button => {
@@ -355,9 +354,24 @@ onUnmounted(() => {
     }
 });
 
-defineExpose({ queryDataList, initTableMaxHeight });
+defineExpose({
+    queryDataList,
+    initTableMaxHeight,
+
+    /**
+     * 更新数据列显示状态
+     * @param columnKeys 显示列key值数组（不传值表示都展示）
+     */
+    updateTableColumnsShowStatus(columnKeys) {
+        columnList.value.forEach(column => {
+            if (column.prop) {
+                column.isShow = !columnKeys || columnKeys.includes(column.prop);
+            }
+        });
+    }
+});
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .data-table-panel {
     padding: 12px 16px 0px;
     flex: 1;
@@ -414,10 +428,10 @@ defineExpose({ queryDataList, initTableMaxHeight });
                 width: 16px;
                 height: 16px;
             }
-            .el-checkbox__inner::after {
-                height: 8px;
-                left: 5px;
-            }
+            // .el-checkbox__inner::after {
+            //     height: 8px;
+            //     left: 5px;
+            // }
         }
     }
 

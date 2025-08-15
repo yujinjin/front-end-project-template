@@ -1,9 +1,6 @@
 <!--
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-01-30 11:39:10
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-30 15:02:56
- * @项目的路径: \front-end-project-template\src\js\components\input-field.vue
  * @描述: 输入表单字段
 -->
 <template>

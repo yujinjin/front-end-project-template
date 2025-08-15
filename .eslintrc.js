@@ -31,18 +31,29 @@ module.exports = {
         logs: true,
         config: true
     },
+    settings: {
+        "import/resolver": {
+            alias: {
+                map: [
+                    ["@", "./src"],
+                    ["@js", "./src/js"],
+                    ["@api", "./src/js/api"],
+                    ["@imgs", "./src/assest/images"],
+                    ["@style", "./src/assest/style"], // 样式
+                    ["@pages", "./src/pages"], // 视图
+                    ["@components", "./src/js/components"] // 视图内的组件
+                ],
+                extensions: [".js", ".jsx", ".ts", ".tsx", ".vue"]
+            }
+        }
+    },
     extends: ["plugin:vue/vue3-essential", "eslint:recommended", "prettier", "@vue/prettier", "plugin:promise/recommended"],
     rules: {
         "vue/script-setup-uses-vars": "error",
         "vue/custom-event-name-casing": "off",
         "no-use-before-define": "off",
-        "no-unused-vars": [
-            "error",
-            {
-                argsIgnorePattern: "^_",
-                varsIgnorePattern: "^_"
-            }
-        ],
+        // args:不检查参数; caughtErrors:  catch 块的参数不检查; argsIgnorePattern: 参数的名字符合正则匹配不需要检测(下划线开头); varsIgnorePattern: 变量名称匹配正则模式不需要检测(下划线开头)
+        "no-unused-vars": ["error", { args: "none", caughtErrors: "none", argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
         "space-before-function-paren": "off",
         "vue/attributes-order": "off",
         "vue/one-component-per-file": "off",

@@ -1,9 +1,6 @@
 /*
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-21 11:16:51
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-10-21 11:21:05
- * @项目的路径: \360-manager-H5\src\js\utils\generate.js
  * @描述: 动态生成数据
  */
 
@@ -30,6 +27,12 @@ export function randomId() {
             v = c == "x" ? r : (r & 0x3) | 0x8;
         return v.toString(16);
     });
-    randomId = currentDate.getFullYear() + "" + (currentDate.getMonth() > 8 ? currentDate.getMonth() + 1 : "0" + (1 + currentDate.getMonth())) + "" + (currentDate.getDate() > 9 ? currentDate.getDate() : "0" + currentDate.getDate()) + randomId;
+    randomId =
+        currentDate.getFullYear() +
+        "" +
+        (currentDate.getMonth() > 8 ? currentDate.getMonth() + 1 : "0" + (1 + currentDate.getMonth())) +
+        "" +
+        (currentDate.getDate() > 9 ? currentDate.getDate() : "0" + currentDate.getDate()) +
+        randomId;
     return randomId;
 }

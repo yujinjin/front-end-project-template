@@ -1,26 +1,18 @@
 <!--
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-01-06 15:44:53
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-19 13:44:21
- * @项目的路径: \front-end-project-template\src\pages\routers-demo\components\info-form-dialog.vue
  * @描述: 表单信息弹窗
 -->
 <template>
-    <dialog-form :isShow="isShow" v-bind="formConfigData" @close="emits('update:isShow', false)" />
+    <dialog-form v-bind="formConfigData" @close="emits('close')" />
 </template>
 <script setup>
-import { ref, watch } from "vue";
 import { ElMessage } from "element-plus";
 import { HANDLE_CODES } from "@js/services/constants";
 import formConfig from "./form-config";
 import demoApi from "@js/api/demo";
 
 const props = defineProps({
-    isShow: {
-        type: Boolean,
-        default: false
-    },
     actionType: {
         type: String,
         default: HANDLE_CODES.CREATE
@@ -30,10 +22,7 @@ const props = defineProps({
     }
 });
 
-const emits = defineEmits(["update:isShow", "refresh"]);
-
-// dialog form 配置数据
-const formConfigData = ref({});
+const emits = defineEmits(["close", "refresh"]);
 
 // 保存操作
 const saveHandle = async function (inputFormValue, formRef) {
@@ -54,16 +43,12 @@ const saveHandle = async function (inputFormValue, formRef) {
         type: "success"
     });
     emits("refresh");
+    emits("close");
 };
 
-watch(
-    () => props.isShow,
-    () => {
-        formConfigData.value = formConfig({ actionType: props.actionType, row: props.row, saveHandle });
-    }
-);
+const formConfigData = formConfig({ actionType: props.actionType, row: props.row, saveHandle });
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 :deep(.input-form) {
     width: 100%;
 }

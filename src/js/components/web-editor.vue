@@ -130,7 +130,7 @@ onUnmounted(() => {
     }
 });
 </script>
-<style lang="less">
+<style lang="scss">
 .web-editor-container {
     width: 100%;
     min-height: 200px;

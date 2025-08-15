@@ -205,7 +205,7 @@ defineExpose({
     }
 });
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .input-form {
     :deep(.el-input-number.is-without-controls) {
         .el-input__inner {

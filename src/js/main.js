@@ -1,9 +1,6 @@
 /*
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-21 10:44:06
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-10-31 16:28:43
- * @项目的路径: \360-manager-H5\src\js\main.js
  * @描述: 应用main 入口
  */
 import { createApp } from "vue";
@@ -14,7 +11,6 @@ import components from "@js/components/index";
 import plugins from "@js/plugins/index";
 import directives from "@js/services/directives";
 import buttonPermissions from "@js/services/button-permissions";
-
 import "@style/index.scss";
 import "@style/icomoon.css";
 
@@ -51,6 +47,9 @@ class AppMain {
 
     // 初始化
     async init(Appvue, userPermission) {
+        if (process.env.VUE_APP_MOCK_DATA === "1") {
+            await import("@js/mock/index");
+        }
         this.vueAppInstance = this.initVue(Appvue);
         if (userPermission) {
             buttonPermissions();

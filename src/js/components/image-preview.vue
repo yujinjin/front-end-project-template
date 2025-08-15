@@ -1,9 +1,6 @@
 <!--
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-01-06 10:54:08
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-06 11:39:51
- * @项目的路径: \front-end-project-template\src\js\components\image-preview.vue
  * @描述: 图片预览
 -->
 <template>
@@ -23,7 +20,7 @@
 
 // const emits = defineEmits([""])
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .image-preview {
 }
 </style>

@@ -1,9 +1,6 @@
 /*
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-28 10:41:06
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-30 09:44:20
- * @项目的路径: \front-end-project-template\src\js\api\demo.js
  * @描述: demo 查询用例
  */
 import request from "./request";
@@ -32,8 +29,7 @@ export default {
         return request(
             Object.assign(
                 {
-                    // /api/show/rule/configCache.do(模拟资源位的配置数据)
-                    url: "/demo/config.do"
+                    url: "/demo/getConfig"
                 },
                 ajaxOptions || {}
             )

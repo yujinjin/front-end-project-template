@@ -27,7 +27,7 @@ import { useSlots, ref, watch } from "vue";
 const props = defineProps({
     isShow: {
         type: Boolean,
-        default: false
+        default: true
     },
     dialogProps: {
         type: Object
@@ -43,14 +43,25 @@ const props = defineProps({
 const emits = defineEmits(["fieldValueChange", "close"]);
 
 // 弹窗显示状态
-const dialogVisible = ref(false);
+const dialogVisible = ref(true);
 
 const slots = useSlots();
 
 const inputFormRef = ref(null);
 
 // 弹窗内部属性
-const dialogInnerProps = ref({});
+const dialogInnerProps = ref(
+    Object.assign(
+        {
+            closeOnClickModal: false,
+            appendToBody: true,
+            alignCenter: true,
+            destroyOnClose: true,
+            width: "750px"
+        },
+        props.dialogProps
+    )
+);
 
 // 实际数据列中的操作按钮列表
 // isLoading: 当前按钮是否正在加载
@@ -105,27 +116,6 @@ const clickHandle = async function (button) {
 };
 
 watch(
-    () => props.isShow,
-    value => {
-        if (value) {
-            dialogVisible.value = true;
-            dialogInnerProps.value = Object.assign(
-                {
-                    closeOnClickModal: false,
-                    appendToBody: true,
-                    destroyOnClose: true,
-                    width: "750px"
-                },
-                props.dialogProps
-            );
-        }
-    },
-    {
-        immediate: true
-    }
-);
-
-watch(
     () => props.buttons,
     () => {
         initActionButtons();
@@ -156,24 +146,3 @@ defineExpose({
     }
 });
 </script>
-<style lang="less">
-.el-dialog.dialog-form {
-    .el-dialog__header {
-    }
-
-    .el-dialog__body {
-        padding: 12px 20px 0px;
-        max-height: 500px;
-        overflow-y: auto;
-    }
-
-    .el-dialog__footer {
-        padding: 8px 20px;
-        box-shadow: 0px -1px 0px 0px #f5f5f5, 0px 1px 30px 0px rgba(0, 21, 41, 0.12);
-
-        .el-button {
-            min-width: 80px;
-        }
-    }
-}
-</style>

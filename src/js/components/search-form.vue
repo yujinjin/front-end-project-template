@@ -1,9 +1,6 @@
 <!--
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-10-24 16:04:46
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-04-10 11:24:02
- * @项目的路径: \front-end-project-template\src\js\components\search-form.vue
  * @描述: 搜索表单组件
 -->
 <template>
@@ -19,8 +16,15 @@
         <!-- 占位 -->
         <div class="placeholder-button-box" :style="{ width: buttonBoxWidth + 'px' }" v-show="isShowCollapse && collapseStatus"></div>
         <div class="button-box" ref="buttonBoxRef">
-            <el-button v-for="(button, index) in extendButtons" :key="(button.handleCode || '') + '_' + index" v-permission="{ value: button.handleCode, pageName }" v-bind="button.props || {}"
-                @click="extendButtonClickHandle(button)" :loading="button.isLoading" type="primary">
+            <el-button
+                v-for="(button, index) in extendButtons"
+                :key="(button.handleCode || '') + '_' + index"
+                v-permission="{ value: button.handleCode, pageName }"
+                v-bind="button.props || {}"
+                @click="extendButtonClickHandle(button)"
+                :loading="button.isLoading"
+                type="primary"
+            >
                 {{ button.text }}
             </el-button>
             <el-button @click="searchHandle" :loading="isSearchLoading" type="primary">查询</el-button>
@@ -246,7 +250,7 @@ defineExpose({
 });
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .search-panel {
     --el-component-size: 28px;
     --el-input-icon-color: #babac2;

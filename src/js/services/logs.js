@@ -3,7 +3,7 @@
  * @创建时间: 2022-10-21 10:01:07
  * @描述: 日志输出
  */
-
+import config from "@js/config";
 import { LogLevels, BuildEnv } from "@js/services/enums";
 
 class Log {

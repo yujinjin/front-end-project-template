@@ -11,6 +11,8 @@ import components from "@js/components/index";
 import plugins from "@js/plugins/index";
 import directives from "@js/services/directives";
 import buttonPermissions from "@js/services/button-permissions";
+import config from "@js/config";
+import logs from "@js/services/logs";
 import "@style/index.scss";
 import "@style/icomoon.css";
 
@@ -47,7 +49,7 @@ class AppMain {
 
     // 初始化
     async init(Appvue, userPermission) {
-        if (process.env.VUE_APP_MOCK_DATA === "1") {
+        if (VITE_MOCK_DATA === "1") {
             await import("@js/mock/index");
         }
         this.vueAppInstance = this.initVue(Appvue);

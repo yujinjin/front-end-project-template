@@ -3,6 +3,8 @@
  * @创建时间: 2022-10-21 17:18:53
  * @描述: 浏览器本地存储操作
  */
+import config from "@js/config";
+import logs from "@js/services/logs";
 
 // 本地存储的应用名称
 const localStorageName = config.appName + "Storage";

@@ -40,7 +40,7 @@
 <script setup>
 import { ref } from "vue";
 import { Download } from "@element-plus/icons-vue";
-import waitProgress from "./wait-progress";
+import waitProgress from "./wait-progress.vue";
 import commonApi from "@js/api/common";
 import customerColumnDialog from "@pages/components/customer-column-dialog.vue";
 

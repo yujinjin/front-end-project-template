@@ -12,10 +12,10 @@ export default {
     buildEnv: process.env.NODE_ENV,
 
     /** 应用名称 */
-    appName: process.env.VUE_APP_NAME,
+    appName: import.meta.env.VITE_APP_NAME,
 
     /** 是否调试模式 */
-    isDebug: process.env.NODE_ENV !== BuildEnv.PRODUCTION,
+    isDebug: process.env.NODE_ENV !== BuildEnv.PRODUCTION || import.meta.env.MODE === BuildEnv.DEVELOPMENT,
 
     /** web站点的接口地址 */
     webApiDomain: ""

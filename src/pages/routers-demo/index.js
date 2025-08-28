@@ -4,7 +4,7 @@
  * @描述: routers页面演示
  */
 import siteInstance from "@js/main";
-import vueApp from "@pages/App";
+import vueApp from "@pages/App.vue";
 import { createRouter, createWebHashHistory } from "vue-router";
 
 siteInstance(
@@ -16,7 +16,7 @@ siteInstance(
                 {
                     name: "home",
                     path: "/",
-                    component: () => import("./home")
+                    component: () => import("./home.vue")
                 }
             ]
         })

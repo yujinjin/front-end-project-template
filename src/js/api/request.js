@@ -6,6 +6,8 @@
 import axios from "axios";
 import loading from "@js/plugins/loading";
 import { ElMessage } from "element-plus";
+import config from "@js/config";
+import logs from "@js/services/logs";
 
 export default function (requestConfig) {
     // 自定义非axios的配置

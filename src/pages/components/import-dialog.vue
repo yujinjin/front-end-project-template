@@ -104,7 +104,7 @@
 <script setup>
 import { ref } from "vue";
 import { UploadFilled, View, DataAnalysis, Download } from "@element-plus/icons-vue";
-import waitProgress from "./wait-progress";
+import waitProgress from "./wait-progress.vue";
 import commonApi from "@js/api/common";
 
 const props = defineProps({

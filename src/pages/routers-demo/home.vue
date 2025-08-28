@@ -27,10 +27,10 @@ import { onMounted, onUnmounted, ref } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import searchConfig from "./search-config";
 import { HANDLE_CODES } from "@js/services/constants";
-import infoFormDialog from "./components/info-form-dialog";
-import batchUpdateDialog from "./components/batch-update-dialog";
-import exportDialog from "@pages/components/export-dialog";
-import importDialog from "@pages/components/import-dialog";
+import infoFormDialog from "./components/info-form-dialog.vue";
+import batchUpdateDialog from "./components/batch-update-dialog.vue";
+import exportDialog from "@pages/components/export-dialog.vue";
+import importDialog from "@pages/components/import-dialog.vue";
 import demoApi from "@js/api/demo";
 import { sleep } from "@js/utils/others";
 
@@ -52,7 +52,7 @@ const isShowImportDialog = ref(false);
 // 学期日历-order-import-template
 // const templateFileUrl = ref(require("@assest/test/学期日历.xltm"));
 // const templateFileUrl = ref(require("@assest/test/order-import-template.xltm"));
-const publicPath = process.env.BASE_URL;
+const publicPath = import.meta.env.BASE_URL;
 
 // 当前数据操作类型
 const actionType = ref(HANDLE_CODES.CREATE);

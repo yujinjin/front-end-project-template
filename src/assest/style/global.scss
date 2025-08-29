@@ -100,8 +100,6 @@ div {
 
 /**************************** 自定义confirm样式 start *********************************/
 .custom-confirm {
-    padding-bottom: 0px;
-    --el-font-size-base: 14px;
     .el-message-box__content {
         padding: 20px 24px;
         min-height: 84px;
@@ -109,11 +107,9 @@ div {
         .el-message-box__container {
             i {
                 color: #ffae0d;
-                top: 12px;
             }
 
             .el-message-box__message {
-                padding: 0px 0px 0px 30px;
                 font-size: 16px;
                 font-weight: 500;
                 color: #262626;
@@ -123,10 +119,8 @@ div {
     }
 
     .el-message-box__btns {
-        padding: 0px 24px 20px;
-
         .el-button {
-            width: 80px;
+            min-width: 80px;
         }
     }
 }

@@ -10,54 +10,48 @@ console.log(chalk.bgBlueBright("------------------------------------------------
 const glob = require("glob");
 const fs = require("fs-extra");
 
-function pathResolve(dir) {
+const HTML_DIR = process.env.NODE_ENV !== "production" || !process.env.VUE_APP_BUILD_HTML_DIR ? "" : (process.env.VUE_APP_BUILD_HTML_DIR + "/" + process.env.VUE_APP_NAME + "/");
+const OUTPUT_DIR = process.env.NODE_ENV !== "production" || !process.env.VUE_APP_BUILD_STATIC_DIR ? "dist" : (process.env.VUE_APP_BUILD_STATIC_DIR + "/" + process.env.VUE_APP_NAME);
+const PUBLIC_PATH = process.env.NODE_ENV !== "production" || !process.env.VUE_APP_BUILD_BASE_PATH ? "/" : (process.env.VUE_APP_BUILD_BASE_PATH + "/" + process.env.VUE_APP_NAME);
+
+const pathResolve = function (dir) {
     return path.resolve(process.cwd(), ".", dir);
 }
 
-// html页面访问路径
-let fileValue = "";
-// 应用基本URL
-let baseUrl = "/";
-let outputDir = "dist";
-// const projectName = process.env.VUE_APP_NAME;
-// if (process.env.NODE_ENV === "production") {
-//     fileValue = "../../../modules/" + projectName + "/dist/";
-//     baseUrl = "/static/modules/" + projectName + "/";
-//     outputDir = "../../static/modules/" + projectName + "/";
-//     console.log("清空“dist”目录下所有文件");
-//     if (fs.pathExistsSync("./dist")) {
-//         fs.emptyDir("./dist");
-//     } else {
-//         fs.mkdirs("./dist");
-//     }
-// }
-
-function getEntry(globPath) {
-    let entries = {};
-    let tmp;
-    glob.sync(globPath).forEach(function (entry) {
-        tmp = entry.split("/").splice(-3);
-        console.log("加载应用：" + tmp[1]);
-        entries[tmp[1]] = {
-            entry: "src/" + tmp[0] + "/" + tmp[1] + "/index.js",
-            filename: fileValue + tmp[1] + ".html"
+const getEntyPages = function() {
+    if(process.env.NODE_ENV === "production" && HTML_DIR) {
+         // 手动清空html目录
+        const htmlDirPath = path.resolve(process.cwd(), ".", OUTPUT_DIR, HTML_DIR);
+        if(fs.pathExistsSync(htmlDirPath)) {
+            fs.emptyDirSync(htmlDirPath);
+        }
+    }
+    const entryPages = {};
+    const indexJSFiles = glob.sync("./src/pages/**/index.js", {
+        absolute: true
+    });
+    indexJSFiles.forEach((indexJsPath) => {
+        const pagePath = path.relative(pathResolve("src/pages"), indexJsPath).split("\\").slice(0, -1).join("/");
+        const pageName = pagePath.replace(/\//g, "_");
+        entryPages[pageName] = {
+            entry: indexJsPath,
+            filename: `${HTML_DIR}${pagePath}.html`
         };
-        if (fs.pathExistsSync("src/" + tmp[0] + "/" + tmp[1] + "/index.html")) {
-            // 如果当前模块定义html模板就使用模板
-            entries[tmp[1]].template = "src/" + tmp[0] + "/" + tmp[1] + "/index.html";
+        if (fs.pathExistsSync("src/pages/" + pagePath + "/index.html")) {
+            entryPages[pageName].template = "src/pages/" + pagePath + "/index.html";
         } else {
-            entries[tmp[1]].template = "src/pages/template.html";
+            entryPages[pageName].template = "src/pages/template.html";
         }
     });
-    return entries;
+    return entryPages;
 }
 
 module.exports = {
-    outputDir,
-    publicPath: baseUrl,
+    outputDir: OUTPUT_DIR,
+    publicPath: PUBLIC_PATH,
     productionSourceMap: false,
     lintOnSave: true,
-    pages: getEntry("./src/pages/*/index.js"),
+    pages: getEntyPages(),
     configureWebpack: {
         resolve: {
             alias: {
@@ -70,11 +64,11 @@ module.exports = {
                 "@components": pathResolve("src/js/components") // 视图内的组件
             }
         },
-        plugins: [
-            new webpack.DefinePlugin({
-                __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: JSON.stringify(process.env.NODE_ENV !== "production")
-            })
-        ],
+        // plugins: [
+        //     new webpack.DefinePlugin({
+        //         __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: JSON.stringify(process.env.NODE_ENV !== "production")
+        //     })
+        // ],
         optimization: {
             splitChunks: {
                 chunks: "all",

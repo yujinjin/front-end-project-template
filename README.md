@@ -80,3 +80,26 @@
 #### 6.weixin-app-template
 -   说明：weixin-app项目脚手架的模板
 -   可选：vant
+
+
+### 模板配置说明(template-config.json)
+```json
+{
+    // 模板名称
+    "name": "front-end-project-template",
+    // 模板描述
+    "description": "前端项目模板",
+    // 模板提示词列表
+    "prompts": [
+        {
+            "type": "input", // 类型，其他类型看官方文档
+            "name": "projectName", // 请输入项目描述
+            "message": "请输入项目名称",
+            "default": "" // 默认值，用户不输入时用此值
+        }
+    ],
+    // 需要编译处理的文件列表
+    "compileFiles": ["/package.json", "/.env"]
+}
+```
+

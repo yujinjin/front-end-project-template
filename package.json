@@ -1,7 +1,7 @@
 {
-    "name": "qifu-cms-vuecli",
-    "description": "qifu公司定制化、无菜单、多页",
-    "author": "jackyu",
+    "name": "{{projectName}}",
+    "description": "{{projectDescription}}",
+    "author": "{{projectAuthor}}",
     "scripts": {
         "mserve": "cross-env MOCK_DATA=1 vue-cli-service serve --mode dev --copy",
         "serve": "vue-cli-service serve",

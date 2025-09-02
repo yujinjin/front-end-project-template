@@ -10,19 +10,19 @@ console.log(chalk.bgBlueBright("------------------------------------------------
 const glob = require("glob");
 const fs = require("fs-extra");
 
-const HTML_DIR = process.env.NODE_ENV !== "production" || !process.env.VUE_APP_BUILD_HTML_DIR ? "" : (process.env.VUE_APP_BUILD_HTML_DIR + "/" + process.env.VUE_APP_NAME + "/");
-const OUTPUT_DIR = process.env.NODE_ENV !== "production" || !process.env.VUE_APP_BUILD_STATIC_DIR ? "dist" : (process.env.VUE_APP_BUILD_STATIC_DIR + "/" + process.env.VUE_APP_NAME);
-const PUBLIC_PATH = process.env.NODE_ENV !== "production" || !process.env.VUE_APP_BUILD_BASE_PATH ? "/" : (process.env.VUE_APP_BUILD_BASE_PATH + "/" + process.env.VUE_APP_NAME);
+const HTML_DIR = process.env.NODE_ENV !== "production" || !process.env.VUE_APP_BUILD_HTML_DIR ? "" : process.env.VUE_APP_BUILD_HTML_DIR + "/" + process.env.VUE_APP_NAME + "/";
+const OUTPUT_DIR = process.env.NODE_ENV !== "production" || !process.env.VUE_APP_BUILD_STATIC_DIR ? "dist" : process.env.VUE_APP_BUILD_STATIC_DIR + "/" + process.env.VUE_APP_NAME;
+const PUBLIC_PATH = process.env.NODE_ENV !== "production" || !process.env.VUE_APP_BUILD_BASE_PATH ? "/" : process.env.VUE_APP_BUILD_BASE_PATH + "/" + process.env.VUE_APP_NAME;
 
 const pathResolve = function (dir) {
     return path.resolve(process.cwd(), ".", dir);
-}
+};
 
-const getEntyPages = function() {
-    if(process.env.NODE_ENV === "production" && HTML_DIR) {
-         // 手动清空html目录
+const getEntyPages = function () {
+    if (process.env.NODE_ENV === "production" && HTML_DIR) {
+        // 手动清空html目录
         const htmlDirPath = path.resolve(process.cwd(), ".", OUTPUT_DIR, HTML_DIR);
-        if(fs.pathExistsSync(htmlDirPath)) {
+        if (fs.pathExistsSync(htmlDirPath)) {
             fs.emptyDirSync(htmlDirPath);
         }
     }
@@ -30,7 +30,7 @@ const getEntyPages = function() {
     const indexJSFiles = glob.sync("./src/pages/**/index.js", {
         absolute: true
     });
-    indexJSFiles.forEach((indexJsPath) => {
+    indexJSFiles.forEach(indexJsPath => {
         const pagePath = path.relative(pathResolve("src/pages"), indexJsPath).split("\\").slice(0, -1).join("/");
         const pageName = pagePath.replace(/\//g, "_");
         entryPages[pageName] = {
@@ -44,7 +44,7 @@ const getEntyPages = function() {
         }
     });
     return entryPages;
-}
+};
 
 module.exports = {
     outputDir: OUTPUT_DIR,

@@ -1,7 +1,7 @@
 export default {
     name: "qifu-cms-vuecli-template",
     description: "qifu公司定制化、无菜单、多页，基于vue-cli5 + vue3 + pinia + element-plus + vue-router + sass",
-    prompts: [
+    questions: [
         {
             type: "input",
             name: "projectDescription",

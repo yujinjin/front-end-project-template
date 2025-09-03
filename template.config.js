@@ -60,5 +60,8 @@ export default {
             }
         }
     ],
-    compileFiles: ["/package.json", "/.env"]
+    // 编译文件列表
+    compileFiles: ["/package.json", "/.env"],
+    // npm 脚本
+    scripts: ["mserve", "serve", "build"]
 };

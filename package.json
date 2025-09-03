@@ -4,6 +4,7 @@
     "author": "jackyu",
     "scripts": {
         "mdev": "cross-env MOCK_DATA=1 vite --mode dev",
+        "dev": "vite --mode dev",
         "build": "vite build",
         "preview": "vite preview",
         "format": "prettier --write \"**/*.{js,cjs,mjs,ts,tsx,json,css,scss,vue,html,md}\"",

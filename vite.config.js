@@ -152,7 +152,7 @@ export default defineConfig(({ command, mode }) => {
         server: {
             host: true,
             port: Number(env.SERVER_PORT) || 8080,
-            open: env.SERVER_OPEN === "true" && "/dist/",
+            open: env.SERVER_OPEN === "true" && "/dist/routers-demo.html",
             proxy: {
                 // '/api': 'http://localhost:4567'
             },

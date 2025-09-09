@@ -1,7 +1,7 @@
 {
     "name": "cms-ts-main",
     "version": "0.1.0",
-    "description": "基于vite + vue3 + vue-router + pinia + element-plus2 + mockjs + typescript搭建的后台管理系统框架，风格：绿色、紧凑型",
+    "description": "基于vite + vue3 + vue-router + pinia + element-plus + mockjs + typescript搭建的后台管理系统框架，风格：绿色、紧凑型",
     "type": "module",
     "keywords": [
         "h5"

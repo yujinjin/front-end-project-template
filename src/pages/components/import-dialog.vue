@@ -168,6 +168,14 @@ const dataList = ref([]);
 // 上传的文件列表
 const fileList = ref([]);
 
+const init = function () {
+    step.value = 1;
+    isRefresh.value = false;
+    uploadErrorMessage.value = "";
+    dataList.value = [];
+    fileList.value = [];
+};
+
 // 弹窗关闭
 const dialogClosed = function () {
     emits("close");
@@ -224,15 +232,6 @@ const saveHandle = async function () {
     }
     isLoadingForImport.value = false;
 };
-
-const init = function () {
-    step.value = 1;
-    isRefresh.value = false;
-    uploadErrorMessage.value = "";
-    dataList.value = [];
-    fileList.value = [];
-};
-
 init();
 </script>
 <style lang="scss">

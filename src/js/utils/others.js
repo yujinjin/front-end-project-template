@@ -11,7 +11,7 @@ export const setObjectProperty = function (object, path, value) {
         throw "设置的目标必须是对象类型";
     }
     let keyArray = [];
-    if (typeof path == "string") {
+    if (typeof path === "string") {
         //将a[b].c转换为a.b.c
         path = path.replace(/\[(\w+)\]/g, ".$1");
         path = path.replace(/^\./, "");
@@ -22,13 +22,13 @@ export const setObjectProperty = function (object, path, value) {
     } else {
         throw "path 属性路径只能为字符串类型或数组类型";
     }
-    if (keyArray.length == 1) {
+    if (keyArray.length === 1) {
         object[keyArray[0]] = value;
         return { rootObject: { [keyArray[0]]: value } };
     }
     const getValue = function (targetObject, key, isArray) {
         let value = targetObject[key];
-        if (value == undefined || value == null || typeof value != "object") {
+        if (value === undefined || value === null || typeof value !== "object") {
             targetObject[key] = value = isArray ? [] : {};
         }
         return value;
@@ -52,7 +52,7 @@ export const getObjectProperty = function (object, path, defaultValue) {
         throw "获取的目标必须是对象类型";
     }
     let keyArray = [];
-    if (typeof path == "string") {
+    if (typeof path === "string") {
         //将a[b].c转换为a.b.c
         path = path.replace(/\[(\w+)\]/g, ".$1");
         path = path.replace(/^\./, "");
@@ -67,11 +67,11 @@ export const getObjectProperty = function (object, path, defaultValue) {
     for (let i = 0; i < keyArray.length; i++) {
         if (Object.prototype.hasOwnProperty.call(targetValue, keyArray[i])) {
             targetValue = targetValue[keyArray[i]];
-            if (targetValue == null) return null;
+            if (targetValue === null) return null;
         } else {
             targetValue = undefined;
         }
-        if (targetValue == undefined) {
+        if (targetValue === undefined) {
             return defaultValue;
         }
     }

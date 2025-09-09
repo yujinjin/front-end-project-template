@@ -38,7 +38,7 @@ const props = defineProps({
         default: 1
     },
     // form表单属性
-    formProps: {
+    props: {
         type: Object,
         default() {
             return {};

@@ -2,7 +2,7 @@ import eslint from "@eslint/js";
 import { defineConfig } from "eslint/config";
 import globals from "globals";
 import tseslint from "typescript-eslint";
-import eslintPluginImportX from "eslint-plugin-import-x";
+import eslintPluginImportX, { configs } from "eslint-plugin-import-x";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import eslintPluginVue from "eslint-plugin-vue";
 import eslintPluginJsonc from "eslint-plugin-jsonc";
@@ -47,7 +47,7 @@ export default defineConfig(
             }
         },
         rules: {
-            ...eslintPluginImportX.configs.recommended.rules,
+            ...configs.recommended.rules,
             "import-x/no-unresolved": "off",
             "import-x/order": "error",
             "import-x/consistent-type-specifier-style": ["error", "prefer-inline"],
@@ -64,9 +64,14 @@ export default defineConfig(
         files: ["**/*.{js,mjs,cjs,jsx,mjsx,ts,tsx,mtsx,vue}"],
         languageOptions: {
             globals: {
-                Nullable: true,
                 ...globals.browser,
-                ...globals.node
+                ...globals.node,
+                ...globals.es2021,
+                Nullable: true,
+                // 添加 Vite 定义的全局变量
+                VITE_APP_BUILD_TIME: true,
+                VITE_MOCK_DATA: true,
+                VITE_APP_PROJECT_CONTENT_PATH: true
             },
             parserOptions: {
                 ecmaFeatures: {

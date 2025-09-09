@@ -74,6 +74,20 @@ const inputFormValue = ref({});
 // 表单字段列表
 const formFields = ref([]);
 
+// 初始化表单数据
+const initInputFormValue = function () {
+    inputFormValue.value = extend(true, {}, props.value);
+    formFields.value.forEach(field => {
+        // 设置field 的value值
+        let fieldValue = getObjectProperty(inputFormValue.value, field.name);
+        if (fieldValue === undefined) {
+            fieldValue = Object.prototype.hasOwnProperty.call(field, "value") ? field.value : null;
+            setObjectProperty(inputFormValue.value, field.name, fieldValue);
+            emits("fieldValueChange", field, fieldValue, formFields.value);
+        }
+    });
+};
+
 // 生成表单字段列表
 const generateFormFields = function () {
     formFields.value = [];
@@ -130,20 +144,6 @@ const generateFormFields = function () {
         formFields.value.push(newField);
     });
     initInputFormValue();
-};
-
-// 初始化表单数据
-const initInputFormValue = function () {
-    inputFormValue.value = extend(true, {}, props.value);
-    formFields.value.forEach(field => {
-        // 设置field 的value值
-        let fieldValue = getObjectProperty(inputFormValue.value, field.name);
-        if (fieldValue === undefined) {
-            fieldValue = Object.prototype.hasOwnProperty.call(field, "value") ? field.value : null;
-            setObjectProperty(inputFormValue.value, field.name, fieldValue);
-            emits("fieldValueChange", field, fieldValue, formFields.value);
-        }
-    });
 };
 
 // 设置字段的值

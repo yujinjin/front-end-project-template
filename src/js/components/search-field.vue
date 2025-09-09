@@ -11,25 +11,25 @@
             <!-- input -->
             <el-input
                 v-if="field.type === 'input'"
-                :modelValue="field.value"
-                @update:modelValue="value => changeValue(value.trim())"
-                @change="changeHandle"
+                :model-value="field.value"
                 v-bind="field.props || {}"
+                @update:model-value="value => changeValue(value.trim())"
+                @change="changeHandle"
                 v-on="field.events || {}"
             />
 
             <!-- input-number -->
             <el-input-number
                 v-else-if="field.type === 'inputNumber'"
-                :modelValue="field.value"
-                @update:modelValue="changeValue"
-                @change="changeHandle"
+                :model-value="field.value"
                 v-bind="field.props || {}"
+                @update:model-value="changeValue"
+                @change="changeHandle"
                 v-on="field.events || {}"
             />
 
             <!-- select -->
-            <el-select v-else-if="field.type === 'select'" :modelValue="field.value" @update:modelValue="changeValue" @change="changeHandle" v-bind="field.props || {}" v-on="field.events || {}">
+            <el-select v-else-if="field.type === 'select'" :model-value="field.value" v-bind="field.props || {}" @update:model-value="changeValue" @change="changeHandle" v-on="field.events || {}">
                 <el-option
                     v-for="(item, index) in field.data"
                     :key="(item[field.optionValueKey || 'value'] || '') + '_' + index"
@@ -42,10 +42,10 @@
             <!-- date-picker -->
             <el-date-picker
                 v-else-if="field.type === 'datePicker'"
-                :modelValue="field.value"
-                @update:modelValue="changeValue"
-                @change="changeHandle"
+                :model-value="field.value"
                 v-bind="field.props || {}"
+                @update:model-value="changeValue"
+                @change="changeHandle"
                 v-on="field.events || {}"
             />
         </template>

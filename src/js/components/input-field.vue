@@ -8,16 +8,16 @@
     <slot v-if="field.slot"></slot>
 
     <!-- 标签内容 -->
-    <div class="label-contents" v-else-if="field.type === 'label'">{{ modelValue }}</div>
+    <div v-else-if="field.type === 'label'" class="label-contents">{{ modelValue }}</div>
 
     <!-- 图片上传 -->
-    <img-upload v-else-if="field.type === 'imgUpload'" :modelValue="modelValue" @update:modelValue="value => changeValue(value.trim())" v-bind="field.props || {}" />
+    <img-upload v-else-if="field.type === 'imgUpload'" :model-value="modelValue" v-bind="field.props || {}" @update:model-value="value => changeValue(value.trim())" />
 
     <!-- 富文本框 -->
-    <web-editor v-else-if="field.type === 'webEditor'" :modelValue="modelValue" @update:modelValue="value => changeValue(value)" v-bind="field.props || {}" />
+    <web-editor v-else-if="field.type === 'webEditor'" :model-value="modelValue" v-bind="field.props || {}" @update:model-value="value => changeValue(value)" />
 
     <!-- select -->
-    <el-select v-else-if="field.type === 'select'" :modelValue="modelValue" @update:modelValue="value => changeValue(value)" v-bind="field.props || {}" v-on="field.events || {}">
+    <el-select v-else-if="field.type === 'select'" :model-value="modelValue" v-bind="field.props || {}" @update:model-value="value => changeValue(value)" v-on="field.events || {}">
         <el-option
             v-for="(item, index) in field.data"
             :key="(item[field.optionValueKey || 'value'] || '') + '_' + index"
@@ -28,7 +28,7 @@
     </el-select>
 
     <!-- checkbox -->
-    <el-checkbox-group v-else-if="field.type === 'checkbox'" :modelValue="modelValue" @update:modelValue="value => changeValue(value)" v-bind="field.props || {}" v-on="field.events || {}">
+    <el-checkbox-group v-else-if="field.type === 'checkbox'" :model-value="modelValue" v-bind="field.props || {}" @update:model-value="value => changeValue(value)" v-on="field.events || {}">
         <el-checkbox
             v-for="(item, index) in field.data"
             :key="(item[field.optionValueKey || 'value'] || '') + '_' + index"
@@ -40,7 +40,7 @@
     </el-checkbox-group>
 
     <!-- radio -->
-    <el-radio-group v-else-if="field.type === 'radio'" :modelValue="modelValue" @update:modelValue="value => changeValue(value)" v-bind="field.props || {}" v-on="field.events || {}">
+    <el-radio-group v-else-if="field.type === 'radio'" :model-value="modelValue" v-bind="field.props || {}" @update:model-value="value => changeValue(value)" v-on="field.events || {}">
         <el-radio-button
             v-for="(item, index) in field.data"
             :key="(item[field.optionValueKey || 'value'] || '') + '_' + index"
@@ -51,12 +51,15 @@
         </el-radio-button>
     </el-radio-group>
     <!-- element 组件 -->
-    <component v-else :is="getElComponentName(field)" :modelValue="modelValue" @update:modelValue="value => changeValue(value)" v-bind="field.props || {}" v-on="field.events || {}" />
+    <component :is="getElComponentName(field)" v-else :model-value="modelValue" v-bind="field.props || {}" @update:model-value="value => changeValue(value)" v-on="field.events || {}" />
 </template>
 <script setup>
 defineProps({
     modelValue: {
-        type: [String, Number, Object]
+        type: [String, Number, Object],
+        default() {
+            return null;
+        }
     },
     field: {
         type: Object,

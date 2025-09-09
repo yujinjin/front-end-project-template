@@ -11,13 +11,16 @@ import { computed } from "vue";
 
 const props = defineProps({
     value: {
-        type: [String, Number, Boolean]
+        type: [String, Number, Boolean],
+        default() {
+            return null;
+        }
     },
     data: {
         type: Array,
-        default: function () {
-            return [];
-        },
+        // default: function () {
+        //     return [];
+        // },
         required: true
     },
     // 分隔符，value值用','隔开时
@@ -52,9 +55,8 @@ const enumText = computed(() => {
             const findItem = props.data.find(dateItem => dateItem[props.valueKey] === item);
             if (findItem) {
                 return findItem[props.textKey];
-            } else {
-                return item;
             }
+            return item;
         })
         .join(props.separator);
 });

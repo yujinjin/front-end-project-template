@@ -5,29 +5,29 @@
 -->
 <template>
     <div class="search-panel" :class="{ collapse: !collapseStatus }" :style="{ paddingRight: collapseStatus ? '' : buttonBoxWidth + 'px' }">
-        <div class="field-box" v-for="(field, index) in formFields" :key="(field.name || '') + '_' + index">
-            <div class="label-text" :style="{ width: (field.labelWidth || labelWidth) + 'px' }" v-if="field.label">{{ field.label }}</div>
-            <search-field :field="field" v-model="field.value" @change="changeHandle" :style="{ width: (field.inputWidth || inputWidth) + 'px' }">
+        <div v-for="(field, index) in formFields" :key="(field.name || '') + '_' + index" class="field-box">
+            <div v-if="field.label" class="label-text" :style="{ width: (field.labelWidth || labelWidth) + 'px' }">{{ field.label }}</div>
+            <search-field v-model="field.value" :field="field" :style="{ width: (field.inputWidth || inputWidth) + 'px' }" @change="changeHandle">
                 <!-- <template v-if="field.slot"> -->
-                <slot v-if="field.slot" :name="field.slot" :field="field" :formFields="formFields"></slot>
+                <slot v-if="field.slot" :name="field.slot" :field="field" :form-fields="formFields"></slot>
                 <!-- </template> -->
             </search-field>
         </div>
         <!-- 占位 -->
-        <div class="placeholder-button-box" :style="{ width: buttonBoxWidth + 'px' }" v-show="isShowCollapse && collapseStatus"></div>
-        <div class="button-box" ref="buttonBoxRef">
+        <div v-show="isShowCollapse && collapseStatus" class="placeholder-button-box" :style="{ width: buttonBoxWidth + 'px' }"></div>
+        <div ref="buttonBoxRef" class="button-box">
             <el-button
                 v-for="(button, index) in extendButtons"
                 :key="(button.handleCode || '') + '_' + index"
                 v-permission="{ value: button.handleCode, pageName }"
                 v-bind="button.props || {}"
-                @click="extendButtonClickHandle(button)"
                 :loading="button.isLoading"
                 type="primary"
+                @click="extendButtonClickHandle(button)"
             >
                 {{ button.text }}
             </el-button>
-            <el-button @click="searchHandle" :loading="isSearchLoading" type="primary">查询</el-button>
+            <el-button :loading="isSearchLoading" type="primary" @click="searchHandle">查询</el-button>
             <el-button @click="resetHandle">重置</el-button>
             <el-button v-if="isShowCollapse" type="primary" link @click="collapseStatus = !collapseStatus">{{ collapseStatus ? "收起" : "展开" }}</el-button>
         </div>
@@ -44,9 +44,9 @@ const props = defineProps({
     // 查询表单字段列表 [{name: 查询项的名称，同时也是父级组件的字段属性, label: 选项的标签名称, value: 选项的值, type: 组件的类型, labelWidth: label宽度,  inputWidth: 表单宽度, data: 数据（比如：select的选项值列表）, props: 组件的自定义选项(可无), events: 组件自定义事件 slot: 自定义插槽名称（可无，如有值其他选项无效）}]
     fields: {
         type: Array,
-        default() {
-            return [];
-        },
+        // default() {
+        //     return [];
+        // },
         required: true
     },
     // 是否正在搜索加载
@@ -77,7 +77,12 @@ const props = defineProps({
         }
     },
     // 页面名称，配合buttons权限使用
-    pageName: String
+    pageName: {
+        type: String,
+        default() {
+            return null;
+        }
+    }
 });
 
 // fieldsChange: 当前表单字段变化事件; search: 搜索操作; change: 表单字段值变化事件; reset: 重置操作按钮;

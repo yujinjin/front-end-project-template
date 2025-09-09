@@ -18,9 +18,8 @@ export default function (template, randomFlag = false, dataSize, codes) {
         msg: function () {
             if (this.flag === "F") {
                 return Mock.Random.ctitle(5, 20);
-            } else {
-                return null;
             }
+            return null;
         }
     };
     if (dataSize) {

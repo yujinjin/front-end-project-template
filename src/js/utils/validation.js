@@ -51,7 +51,7 @@ export function chinaIDCardValidate(IDCard) {
             sum += ai * wi;
         }
         const last = String(parity[sum % 11]);
-        if (last != IDCardArray[17].toLocaleUpperCase()) {
+        if (last !== IDCardArray[17].toLocaleUpperCase()) {
             return false;
         }
         return true;

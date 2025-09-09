@@ -4,8 +4,8 @@
  * @描述: 图标集合页
 -->
 <template>
-    <div class="icon-list" ref="iconListRef">
-        <div class="icon-item" v-for="icon in icons" :key="icon" @click="copyHandle('<i class=\'icomoon-' + icon + '\'></i>')">
+    <div ref="iconListRef" class="icon-list">
+        <div v-for="icon in icons" :key="icon" class="icon-item" @click="copyHandle('<i class=\'icomoon-' + icon + '\'></i>')">
             <i :class="'icomoon-' + icon"></i>
             <span class="icon-name">{{ icon }}</span>
         </div>

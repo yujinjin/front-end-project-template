@@ -4,8 +4,8 @@
  * @描述: 组件模板页
 -->
 <template>
-    <div class="data-table-panel" ref="dataTablePanelRef">
-        <el-table :data="dataList" v-bind="tableProps" v-on="events" @selection-change="selectionChangeHandle" v-loading="isLoadingForSearch" element-loading-text="拼命加载中...">
+    <div ref="dataTablePanelRef" class="data-table-panel">
+        <el-table v-loading="isLoadingForSearch" :data="dataList" v-bind="tableProps" element-loading-text="拼命加载中..." v-on="events" @selection-change="selectionChangeHandle">
             <template v-for="(columnItem, index) in columnList">
                 <el-table-column v-if="columnItem.isShow" :key="(columnItem.prop || '') + '_' + index" v-bind="columnItem">
                     <template v-if="columnItem.slotHeader" #header="scope">
@@ -27,7 +27,7 @@
                 </el-table-column>
             </template>
         </el-table>
-        <div v-if="isShowPagination" class="pagination-wrapper" ref="paginationRef">
+        <div v-if="isShowPagination" ref="paginationRef" class="pagination-wrapper">
             <el-pagination v-bind="paginationData" @size-change="pageSizeChangeHandle" @current-change="currentPageChangeHandle" />
         </div>
     </div>
@@ -35,14 +35,14 @@
 <script setup>
 import { onMounted, onUnmounted, ref, watch, nextTick } from "vue";
 import { PAGE_ITEMS } from "@js/services/constants";
-import tableColumnDate from "./table/table-column-date";
-import tableColumnNumber from "./table/table-column-number";
-import tableColumnImage from "./table/table-column-image";
-import tableColumnEnum from "./table/table-column-enum";
-import tableColumnAction from "./table/table-column-action";
 import { dataStore } from "@js/stores/";
 import extend from "@js/utils/extend";
 import { debounce } from "@js/utils/others";
+import tableColumnDate from "./table/table-column-date.vue";
+import tableColumnNumber from "./table/table-column-number.vue";
+import tableColumnImage from "./table/table-column-image.vue";
+import tableColumnEnum from "./table/table-column-enum.vue";
+import tableColumnAction from "./table/table-column-action.vue";
 
 // import { Router, useRouter } from "vue-router";
 // import { useStore } from "vuex";
@@ -65,9 +65,9 @@ const props = defineProps({
     // props: el-table-column 的属性值具体参照element plus Table-column 属性，注意：如果有type有值prop值必传
     columns: {
         type: Array,
-        default() {
-            return [];
-        },
+        // default() {
+        //     return [];
+        // },
         required: true
     },
     // 是否自动初始化查询
@@ -105,11 +105,17 @@ const props = defineProps({
     },
     // 查询参数数据加工（查询前参数处理函数）
     queryParametersProcess: {
-        type: Function
+        type: Function,
+        default() {
+            return null;
+        }
     },
     // 查询数据结果加工（查询后数据结果处理函数）
     queryResponseProcess: {
-        type: Function
+        type: Function,
+        default() {
+            return null;
+        }
     },
     // 是否显示分页
     isShowPagination: {
@@ -128,7 +134,12 @@ const props = defineProps({
     //     type: Number
     // },
     // 页面名称，用于获取有权限的按钮数据
-    pageName: String
+    pageName: {
+        type: String,
+        default() {
+            return null;
+        }
+    }
 });
 
 const emits = defineEmits(["update:selectRows", "search"]);
@@ -236,9 +247,8 @@ const initColumns = function () {
             newColumnItem.index = function (index) {
                 if (props.isShowPagination) {
                     return (paginationData.value.currentPage - 1) * paginationData.value.pageSize + index + 1;
-                } else {
-                    return index + 1;
                 }
+                return index + 1;
             };
         } else if (!newColumnItem.type && !newColumnItem.formatter) {
             newColumnItem.formatter = function (row, column, cellValue) {
@@ -291,9 +301,8 @@ const getCellValue = function (row, columnItem) {
     }
     if (columnItem.prop.split(",").length > 1) {
         return columnItem.prop.split(",").map(key => row[key]);
-    } else {
-        return row[columnItem.prop];
     }
+    return row[columnItem.prop];
 };
 
 // 分页中每页条目数据变换

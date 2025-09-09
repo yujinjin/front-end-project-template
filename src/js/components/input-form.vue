@@ -1,12 +1,12 @@
 <template>
-    <div class="input-form" v-loading="isLoading">
-        <el-form v-bind="formProps" :model="inputFormValue" ref="inputFormRef">
+    <div v-loading="isLoading" class="input-form">
+        <el-form v-bind="formProps" ref="inputFormRef" :model="inputFormValue">
             <el-row>
                 <el-col v-for="(field, index) in formFields" :key="(field.name || '') + '_' + index" :span="field.span">
                     <el-form-item v-bind="field.formItemProps">
-                        <input-field :field="field" :modelValue="getObjectProperty(inputFormValue, field.name)" @update:modelValue="value => setFieldValue(value, field)">
+                        <input-field :field="field" :model-value="getObjectProperty(inputFormValue, field.name)" @update:model-value="value => setFieldValue(value, field)">
                             <!-- 自定义插件，插槽 -->
-                            <slot v-if="field.slot" :name="field.slot" :field="field" :value="getObjectProperty(inputFormValue, field.name)" :formFields="formFields"></slot>
+                            <slot v-if="field.slot" :name="field.slot" :field="field" :value="getObjectProperty(inputFormValue, field.name)" :form-fields="formFields"></slot>
                         </input-field>
                     </el-form-item>
                 </el-col>
@@ -23,9 +23,9 @@ import extend from "@js/utils/extend";
 const props = defineProps({
     fields: {
         type: Array,
-        default() {
-            return [];
-        },
+        // default() {
+        //     return [];
+        // },
         required: true
     },
     isLoading: {
@@ -38,12 +38,18 @@ const props = defineProps({
         default: 1
     },
     // form表单属性
-    props: {
-        type: Object
+    formProps: {
+        type: Object,
+        default() {
+            return {};
+        }
     },
     // form表单事件
     events: {
-        type: Object
+        type: Object,
+        default() {
+            return {};
+        }
     },
     // 表单数据默认值
     value: {

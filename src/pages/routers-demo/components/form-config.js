@@ -34,13 +34,12 @@ export default function ({ actionType, row, saveHandle }) {
             value: (function () {
                 if (actionType === HANDLE_CODES.CREATE) {
                     return null;
-                } else {
-                    row = JSON.parse(JSON.stringify(row));
-                    if (row.createTime) {
-                        row.createTime = dateFormat(row.createTime, "YYYY-MM-DD HH:mm:ss");
-                    }
-                    return row;
                 }
+                row = JSON.parse(JSON.stringify(row));
+                if (row.createTime) {
+                    row.createTime = dateFormat(row.createTime, "YYYY-MM-DD HH:mm:ss");
+                }
+                return row;
             })(),
             fields: [
                 {

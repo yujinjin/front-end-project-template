@@ -4,23 +4,23 @@
  * @描述: 搜索页组件
 -->
 <template>
-    <div class="search-page" v-loading="isLoadingForInit">
+    <div v-loading="isLoadingForInit" class="search-page">
         <search-form
             v-if="searchFormProps"
             v-bind="searchFormProps"
-            :pageName="pageName"
-            :isSearchLoading="isSearchLoading"
+            ref="searchFormRef"
+            :page-name="pageName"
+            :is-search-loading="isSearchLoading"
             @search="searchHandle"
             @change="searchValueChangeHandle"
             @reset="resetHandle"
-            @fieldsChange="searchFieldsChangeHandle"
-            ref="searchFormRef"
+            @fields-change="searchFieldsChangeHandle"
         >
             <template v-for="name in distributeSlots.searchForm" #[name]="scope">
                 <slot :name="name" v-bind="scope"></slot>
             </template>
         </search-form>
-        <action-bar v-if="actionBarProps" v-bind="actionBarProps" :pageName="pageName" :selectRows="selectRows" ref="actionBarRef">
+        <action-bar v-if="actionBarProps" v-bind="actionBarProps" ref="actionBarRef" :page-name="pageName" :select-rows="selectRows">
             <template v-for="name in distributeSlots.actionBar" #[name]="scope">
                 <slot :name="name" v-bind="scope"></slot>
             </template>
@@ -28,11 +28,11 @@
         <data-table
             v-if="dataTableInnerProps"
             v-bind="dataTableInnerProps"
-            :pageName="pageName"
-            :filters="searchFormInput"
             ref="dataTableRef"
-            v-model:selectRows="selectRows"
-            :autoInitQuery="!isLoadingForInit"
+            v-model:select-rows="selectRows"
+            :page-name="pageName"
+            :filters="searchFormInput"
+            :auto-init-query="!isLoadingForInit"
             @search="isLoading => (isSearchLoading = isLoading)"
         >
             <template v-for="name in distributeSlots.dataTable" #[name]="scope">
@@ -54,18 +54,32 @@ const props = defineProps({
     },
     // search-form 组件属性
     searchFormProps: {
-        type: Object
+        type: Object,
+        default() {
+            return {};
+        }
     },
     // action-bar 组件属性
     actionBarProps: {
-        type: Object
+        type: Object,
+        default() {
+            return {};
+        }
     },
     // data-table 组件属性
     dataTableProps: {
-        type: Object
+        type: Object,
+        default() {
+            return {};
+        }
     },
     // 页面名称，用于获取有权限的按钮数据
-    pageName: String
+    pageName: {
+        type: String,
+        default() {
+            return null;
+        }
+    }
 });
 
 const emits = defineEmits(["searchValueChange", "searchFieldsChange", "selectRowsChange", "resetFields"]);

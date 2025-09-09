@@ -9,8 +9,8 @@
 <script setup>
 import { ElMessage } from "element-plus";
 import { HANDLE_CODES } from "@js/services/constants";
-import formConfig from "./form-config";
 import demoApi from "@js/api/demo";
+import formConfig from "./form-config";
 
 const props = defineProps({
     actionType: {
@@ -18,7 +18,8 @@ const props = defineProps({
         default: HANDLE_CODES.CREATE
     },
     row: {
-        type: Object
+        type: Object,
+        default: () => null
     }
 });
 

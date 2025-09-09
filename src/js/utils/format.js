@@ -53,11 +53,10 @@ export function timeDifferenceFormat(date, separator = "/") {
         return parseInt(String(timeDifference / 3600), 10) + "小时前";
     } else if (timeDifference < 60 * 60 * 24 * 30) {
         return parseInt(String(timeDifference / (60 * 60 * 24)), 10) + "天前";
-    } else if (compareTime.getFullYear() == currentTime.getFullYear()) {
+    } else if (compareTime.getFullYear() === currentTime.getFullYear()) {
         return dateFormat(compareTime, `MM${separator}DD`);
-    } else {
-        return dateFormat(compareTime, `YYYY${separator}MM${separator}DD`);
     }
+    return dateFormat(compareTime, `YYYY${separator}MM${separator}DD`);
 }
 
 /**

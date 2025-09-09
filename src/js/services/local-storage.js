@@ -49,9 +49,8 @@ export const getValue = function (key, type = 0) {
     }
     if (key) {
         return localStorageObject[key];
-    } else {
-        return localStorageObject;
     }
+    return localStorageObject;
 };
 
 /**

@@ -14,7 +14,8 @@ import demoApi from "@js/api/demo";
 
 const props = defineProps({
     rows: {
-        type: Object
+        type: Object,
+        default: () => null
     }
 });
 

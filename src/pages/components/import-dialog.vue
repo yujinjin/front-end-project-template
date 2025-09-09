@@ -11,38 +11,39 @@
             <el-step title="导入数据" :icon="DataAnalysis" />
         </el-steps>
         <!-- 上传文件 -->
-        <div class="upload-file-panel" v-if="step === 1">
+        <div v-if="step === 1" class="upload-file-panel">
             <!-- 文件上传失败 -->
-            <div class="upload-fail" v-if="uploadErrorMessage">
+            <div v-if="uploadErrorMessage" class="upload-fail">
                 <div class="icon-box">
                     <el-icon><Download /></el-icon>
                 </div>
                 <div class="fail-tips">
                     <div class="title-text">异常提示</div>
+                    <!-- eslint-disable-next-line vue/no-v-html -->
                     <div class="content" v-html="uploadErrorMessage"></div>
                 </div>
             </div>
             <!-- 文件上传中 -->
             <wait-progress v-else-if="isLoadingForUpload" />
             <!-- 选择上传文件 -->
-            <div class="selected-file-box" v-else>
+            <div v-else class="selected-file-box">
                 <slot name="tips">
                     <ul class="tips-list">
                         <li>支持5MB以内的xls、xlsx格式文件</li>
                         <li>文件中的数据不能超过10000行，100列</li>
                         <li>
                             请按照数据模板的格式准备导入数据，模板中的表头名称不可更改，表头行不能删除。
-                            <el-button link type="primary" v-if="templateFileUrl" @click="downExcelTemplate">模板下载</el-button>
+                            <el-button v-if="templateFileUrl" link type="primary" @click="downExcelTemplate">模板下载</el-button>
                         </li>
                     </ul>
                 </slot>
                 <el-upload
+                    v-model:file-list="fileList"
                     class="upload-inner"
                     action=""
                     :drag="true"
-                    :autoUpload="false"
+                    :auto-upload="false"
                     accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
-                    v-model:file-list="fileList"
                     :limit="1"
                     :on-exceed="fileExceedHandle"
                 >
@@ -55,7 +56,7 @@
             </div>
         </div>
         <!-- 预览数据 -->
-        <div class="data-preview-panel" v-if="step === 2">
+        <div v-if="step === 2" class="data-preview-panel">
             <div class="import-result-text">
                 <i class="el-icon-warning"></i>
                 共
@@ -64,10 +65,10 @@
                 <span>{{ columns.length }}</span>
                 列
             </div>
-            <data-table :props="{ height: 250 }" :query="() => ({ rows: dataList })" :isShowPagination="false" :columns="columns" />
+            <data-table :props="{ height: 250 }" :query="() => ({ rows: dataList })" :is-show-pagination="false" :columns="columns" />
         </div>
         <!-- 数据导入结果 -->
-        <div class="import-result-panel" v-if="step === 3">
+        <div v-if="step === 3" class="import-result-panel">
             <!-- 文件上传中 -->
             <wait-progress v-if="isLoadingForImport">
                 <div class="state-text">
@@ -88,10 +89,10 @@
                 </div>
             </template>
         </div>
-        <template #footer v-if="!isLoadingForUpload || !isLoadingForImport">
+        <template v-if="!isLoadingForUpload || !isLoadingForImport" #footer>
             <div class="dialog-footer">
                 <el-button @click="dialogVisible = false">取消</el-button>
-                <el-button type="primary" :disabled="fileList.length === 0" v-if="step === 1" @click="uploadHandle">{{ uploadErrorMessage ? "重新上传" : "确定上传" }}</el-button>
+                <el-button v-if="step === 1" type="primary" :disabled="fileList.length === 0" @click="uploadHandle">{{ uploadErrorMessage ? "重新上传" : "确定上传" }}</el-button>
                 <template v-else-if="step === 2">
                     <el-button @click="step = 1">上一步</el-button>
                     <el-button type="primary" @click="saveHandle">确定导入</el-button>
@@ -104,8 +105,8 @@
 <script setup>
 import { ref } from "vue";
 import { UploadFilled, View, DataAnalysis, Download } from "@element-plus/icons-vue";
-import waitProgress from "./wait-progress.vue";
 import commonApi from "@js/api/common";
+import waitProgress from "./wait-progress.vue";
 
 const props = defineProps({
     isShow: {
@@ -113,18 +114,20 @@ const props = defineProps({
         default: true
     },
     title: {
-        type: String
+        type: String,
+        default: () => null
     },
     // 模板文件下载地址
     templateFileUrl: {
-        type: String
+        type: String,
+        default: () => null
     },
     // 预览数据列
     columns: {
         type: Array,
-        default() {
-            return [];
-        },
+        // default() {
+        //     return [];
+        // },
         required: true
     },
     // 上传文件回调函数

@@ -4,7 +4,7 @@
  * @描述: 常用页演示
 -->
 <template>
-    <search-page v-bind="searchPageConfig" :isLoadingForInit="isLoadingForInit" @searchValueChange="searchValueChangeHandle" @selectRowsChange="selectRowsChangeHandle" ref="searchPageRef">
+    <search-page v-bind="searchPageConfig" ref="searchPageRef" :is-loading-for-init="isLoadingForInit" @search-value-change="searchValueChangeHandle" @select-rows-change="selectRowsChangeHandle">
         <template #searchForm_showPlanCodeName="scope">
             <el-input v-model="scope.field.value" placeholder="请输入计划名称" />
         </template>
@@ -13,9 +13,9 @@
         </template>
         <customer-column-dialog
             :is-show="isShowCustomerColumnDialog"
-            :tableColumns="searchPageConfig.dataTableProps.columns"
-            localStorageKey="commonDemoCustomerColumns"
-            localStorageKeyVersion="1.0"
+            :table-columns="searchPageConfig.dataTableProps.columns"
+            local-storage-key="commonDemoCustomerColumns"
+            local-storage-key-version="1.0"
             @close="isShowCustomerColumnDialog = false"
             @save="saveColumnShowStatusHandle"
         />
@@ -25,10 +25,10 @@
 <script setup>
 import { ref, nextTick } from "vue";
 import { ElMessage } from "element-plus";
-import searchConfig from "./search-config";
 import demoAPI from "@js/api/demo";
 import { HANDLE_CODES } from "@js/services/constants";
 import customerColumnDialog from "@pages/components/customer-column-dialog.vue";
+import searchConfig from "./search-config";
 
 const searchPageRef = ref(null);
 
@@ -45,6 +45,26 @@ let activities = [];
 
 // 搜索表单中的产品列表选择的索引
 let searchPoductIndex = 0;
+
+// 初始化搜索表单的下拉选项
+const initSearchFormSelectOptions = function (formFields) {
+    if (!formFields || formFields.length === 0 || productList.length === 0) {
+        return;
+    }
+    formFields[0].data = productList;
+    formFields[4].data = activities;
+    if (formFields[0].value) {
+        searchPoductIndex = productList.findIndex(item => item.value === formFields[0].value);
+    }
+    if (searchPoductIndex >= 0) {
+        formFields[1].data = [{ name: "全部", code: "" }, ...elementList[searchPoductIndex].serviceModules];
+    }
+    if (!formFields[1].value && !formFields[2].value) {
+        formFields[3].data = [{ name: "全部", typeCode: "" }, ...elementList[searchPoductIndex].eleSourceTypeBos];
+    } else {
+        formFields[3].data = [{ name: "全部", typeCode: "" }, ...elementList[searchPoductIndex].eleSourceTypeBos.filter(item => item.serviceModule === formFields[1].value)];
+    }
+};
 
 const queryConfigData = async function () {
     const configData = await demoAPI.queryConfigData({ eleSourceTypeState: null });
@@ -80,26 +100,6 @@ const selectRowsChangeHandle = function (selectRows) {
         buttons[2].props.disabled = isDisabled;
         buttons[3].props.disabled = isDisabled;
     });
-};
-
-// 初始化搜索表单的下拉选项
-const initSearchFormSelectOptions = function (formFields) {
-    if (!formFields || formFields.length === 0 || productList.length === 0) {
-        return;
-    }
-    formFields[0].data = productList;
-    formFields[4].data = activities;
-    if (formFields[0].value) {
-        searchPoductIndex = productList.findIndex(item => item.value === formFields[0].value);
-    }
-    if (searchPoductIndex >= 0) {
-        formFields[1].data = [{ name: "全部", code: "" }, ...elementList[searchPoductIndex].serviceModules];
-    }
-    if (!formFields[1].value && !formFields[2].value) {
-        formFields[3].data = [{ name: "全部", typeCode: "" }, ...elementList[searchPoductIndex].eleSourceTypeBos];
-    } else {
-        formFields[3].data = [{ name: "全部", typeCode: "" }, ...elementList[searchPoductIndex].eleSourceTypeBos.filter(item => item.serviceModule === formFields[1].value)];
-    }
 };
 
 const actionHandle = function (selectRows, { handleCode }) {

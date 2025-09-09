@@ -13,7 +13,10 @@ import { dateFormat } from "@js/utils/format";
 const props = defineProps({
     // 日期值
     value: {
-        type: [String, Number, Array]
+        type: [String, Number, Array],
+        default() {
+            return null;
+        }
     },
     // 日期格式化字符串
     formate: {
@@ -33,9 +36,8 @@ const dateText = computed(() => {
     }
     if (Object.prototype.toString.call(props.value) === "[object Array]") {
         return props.value.map(item => (item ? dateFormat(item, props.formate) : "")).join(props.separator);
-    } else {
-        return props.value ? dateFormat(props.value, props.formate) : "-";
     }
+    return props.value ? dateFormat(props.value, props.formate) : "-";
 });
 </script>
 <style lang="scss" scoped>

@@ -11,7 +11,7 @@ export default (function () {
         class2type["[object " + item + "]"] = item.toLowerCase();
     });
     let type = function (obj) {
-        if (obj == null) {
+        if (obj === null) {
             return obj + "";
         }
         return typeof obj === "object" || typeof obj === "function" ? class2type[toString.call(obj)] || "object" : typeof obj;
@@ -20,10 +20,10 @@ export default (function () {
         return type(obj) === "function";
     };
     let isWindow = function (obj) {
-        return obj != null && obj == obj.window;
+        return obj !== null && obj === obj.window;
     };
     let isPlainObject = function (obj) {
-        var key;
+        let key;
         // Must be an Object.
         // Because of IE, we also have to check the presence of the constructor property.
         // Make sure that DOM nodes and window objects don't pass through, as well
@@ -52,7 +52,7 @@ export default (function () {
             return type(obj) === "array";
         };
     let extend = function () {
-        var src,
+        let src,
             copyIsArray,
             copy,
             name,
@@ -81,7 +81,7 @@ export default (function () {
         }
         for (; i < length; i++) {
             // Only deal with non-null/undefined values
-            if ((options = arguments[i]) != null) {
+            if ((options = arguments[i]) !== null) {
                 // Extend the base object
                 for (name in options) {
                     src = target[name];

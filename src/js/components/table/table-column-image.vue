@@ -5,8 +5,8 @@
 -->
 <template>
     <div class="table-column-img">
-        <div class="no-image" v-if="!previewImgList || previewImgList.length === 0">没有图片</div>
-        <el-image v-else v-for="(img, index) in previewImgList" :key="img + '_' + index" :src="img" :preview-src-list="previewImgList" :initial-index="index" fit="contain" :preview-teleported="true">
+        <div v-if="!previewImgList || previewImgList.length === 0" class="no-image">没有图片</div>
+        <el-image v-for="(img, index) in previewImgList" v-else :key="img + '_' + index" :src="img" :preview-src-list="previewImgList" :initial-index="index" fit="contain" :preview-teleported="true">
             <template #error>
                 <div class="error-box">
                     <el-icon><Picture /></el-icon>
@@ -40,11 +40,17 @@ import { Picture } from "@element-plus/icons-vue";
 // TODO: 支持SVGA 图片格式
 const props = defineProps({
     value: {
-        type: [String, Array]
+        type: [String, Array],
+        default() {
+            return null;
+        }
     },
     // value 是string,分隔符传值才有效
     separator: {
-        type: String
+        type: String,
+        default() {
+            return null;
+        }
     }
 });
 
@@ -53,9 +59,8 @@ const previewImgList = computed(() => {
     if (!props.value) return null;
     if (Array.isArray(props.value)) {
         return props.value;
-    } else {
-        return props.separator ? props.value.split(props.separator) : [props.value];
     }
+    return props.separator ? props.value.split(props.separator) : [props.value];
 });
 </script>
 <style lang="scss" scoped>

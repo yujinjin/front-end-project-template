@@ -3,7 +3,7 @@
  * @描述: 自定义数据列弹窗
 -->
 <template>
-    <el-dialog :model-value="isShow" title="自定义列" width="750px" appendToBody destroyOnClose @closed="close" :close-on-click-modal="false" class="custom-column-dialog">
+    <el-dialog :model-value="isShow" title="自定义列" width="750px" append-to-body destroy-on-close :close-on-click-modal="false" class="custom-column-dialog" @closed="close">
         <div class="search-panel">
             <el-input v-model.trim="keyword" style="width: 360px" clearable placeholder="搜索列名" :prefix-icon="Search" @input="searchHandle" />
         </div>
@@ -13,14 +13,14 @@
                 <div v-else-if="noDataForSearch" class="empty-text">未匹配到数据</div>
                 <div v-else-if="groupColumnKeys && customGroupColumns?.length" class="checkbox-list-wrapper">
                     <el-collapse v-model="activeNames">
-                        <el-collapse-item v-for="(item, index) in customGroupColumns" :key="item.key" :name="item.key" v-show="item.isShow">
+                        <el-collapse-item v-for="(item, index) in customGroupColumns" v-show="item.isShow" :key="item.key" :name="item.key">
                             <template #title>
-                                <el-checkbox @click.stop v-model="item.selected" :indeterminate="item.indeterminate" :label="item.key" @change="checkChange(item.selected, true, index)">
+                                <el-checkbox v-model="item.selected" :indeterminate="item.indeterminate" :label="item.key" @click.stop @change="checkChange(item.selected, true, index)">
                                     {{ item.name }}
                                 </el-checkbox>
                             </template>
                             <el-row>
-                                <el-col :span="12" v-for="childItem in item.childList" :key="childItem.key" v-show="childItem.isShow">
+                                <el-col v-for="childItem in item.childList" v-show="childItem.isShow" :key="childItem.key" :span="12">
                                     <el-checkbox v-model="childItem.selected" :label="childItem.key" :disabled="childItem.disabled" @change="checkChange(item.selected, false, index)">
                                         <span class="checkbox-label-text" :title="childItem.name">{{ childItem.name }}</span>
                                     </el-checkbox>
@@ -34,7 +34,7 @@
                         <el-col :span="24">
                             <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" label="全选" @change="checkChange(checkAll, true)" />
                         </el-col>
-                        <el-col v-for="item in customColumns" :key="item.key" v-show="item.isShow" :span="12">
+                        <el-col v-for="item in customColumns" v-show="item.isShow" :key="item.key" :span="12">
                             <el-checkbox v-model="item.selected" :disabled="item.disabled" @change="checkChange(item.selected, false)">
                                 <span class="checkbox-label-text" :title="item.name">{{ item.name }}</span>
                             </el-checkbox>
@@ -48,7 +48,7 @@
                     <div class="label-text active" @click="restoreColumns">恢复初始</div>
                 </div>
                 <div class="inner-row">
-                    <div class="row-info" v-for="(item, index) in flapCustomColumns" v-show="item.selected" :key="item.key">
+                    <div v-for="(item, index) in flapCustomColumns" v-show="item.selected" :key="item.key" class="row-info">
                         <div class="name-text" :title="item.name">
                             {{ item.name }}
                         </div>
@@ -81,19 +81,23 @@ const props = defineProps({
     },
     // 固定展示自定义列的key，如果不传值取tableColumns中的fixed属性值来判断，如果传空数组表示没有固定展示的自定义列
     fixedColumnKeys: {
-        type: Array
+        type: Array,
+        default: () => null
     },
     // 本地存储列表名称的key值, 如果值为空就不做本地保存
     localStorageKey: {
-        type: String
+        type: String,
+        default: () => null
     },
     // 本地存储的自定列key的版本，新发版本字段有变动的兼容, 如果值为空就不做兼容
     localStorageKeyVersion: {
-        type: String
+        type: String,
+        default: () => null
     },
     // 所有的自定义列key数据
     groupColumnKeys: {
-        type: Array
+        type: Array,
+        default: () => null
     },
     // 数据列表中的列
     tableColumns: {
@@ -145,6 +149,44 @@ const flapCustomColumns = computed(() => {
 const selectedColumns = computed(() => {
     return flapCustomColumns.value.filter(item => item.selected);
 });
+
+/**
+ * 复选框check变化
+ * @param selected check的值
+ * @param isCheckAll 是否全选
+ * @param index 数据列分组的索引
+ */
+const checkChange = function (selected, isCheckAll, index) {
+    if (isCheckAll && !props.groupColumnKeys) {
+        // 当前没有分组，全选check触发
+        customColumns.value.forEach(item => {
+            if (item.isShow && !item.disabled) {
+                item.selected = selected;
+            }
+        });
+        isIndeterminate.value = !selected && customColumns.value.some(item => item.selected);
+    } else if (isCheckAll && props.groupColumnKeys) {
+        // 当前有分组，全选check触发
+        customGroupColumns.value[index].childList.forEach(item => {
+            if (item.isShow && !item.disabled) {
+                item.selected = selected;
+            }
+        });
+        customGroupColumns.value[index].indeterminate = !selected && customGroupColumns.value[index].childList.some(item => item.selected);
+    } else if (props.groupColumnKeys) {
+        // 当前是分组，其childList中的数据选择有变化
+        const selectedNumber = customGroupColumns.value[index].childList.filter(childItem => childItem.selected && childItem.isShow).length;
+        const totalNumber = customGroupColumns.value[index].childList.filter(childItem => childItem.isShow).length;
+        customGroupColumns.value[index].selected = totalNumber > 0 && selectedNumber === totalNumber;
+        customGroupColumns.value[index].indeterminate = selectedNumber > 0 && selectedNumber < totalNumber;
+    } else {
+        // 当前未分组，其childList中的数据选择有变化
+        const selectedNumber = customColumns.value.filter(item => item.selected && item.isShow).length;
+        const totalNumber = customColumns.value.filter(item => item.isShow).length;
+        checkAll.value = totalNumber > 0 && selectedNumber === totalNumber;
+        isIndeterminate.value = selectedNumber > 0 && selectedNumber < totalNumber;
+    }
+};
 
 // 初始化
 const init = function () {
@@ -237,44 +279,6 @@ const searchHandle = function () {
 
 const close = function () {
     emits("close");
-};
-
-/**
- * 复选框check变化
- * @param selected check的值
- * @param isCheckAll 是否全选
- * @param index 数据列分组的索引
- */
-const checkChange = function (selected, isCheckAll, index) {
-    if (isCheckAll && !props.groupColumnKeys) {
-        // 当前没有分组，全选check触发
-        customColumns.value.forEach(item => {
-            if (item.isShow && !item.disabled) {
-                item.selected = selected;
-            }
-        });
-        isIndeterminate.value = !selected && customColumns.value.some(item => item.selected);
-    } else if (isCheckAll && props.groupColumnKeys) {
-        // 当前有分组，全选check触发
-        customGroupColumns.value[index].childList.forEach(item => {
-            if (item.isShow && !item.disabled) {
-                item.selected = selected;
-            }
-        });
-        customGroupColumns.value[index].indeterminate = !selected && customGroupColumns.value[index].childList.some(item => item.selected);
-    } else if (props.groupColumnKeys) {
-        // 当前是分组，其childList中的数据选择有变化
-        const selectedNumber = customGroupColumns.value[index].childList.filter(childItem => childItem.selected && childItem.isShow).length;
-        const totalNumber = customGroupColumns.value[index].childList.filter(childItem => childItem.isShow).length;
-        customGroupColumns.value[index].selected = totalNumber > 0 && selectedNumber === totalNumber;
-        customGroupColumns.value[index].indeterminate = selectedNumber > 0 && selectedNumber < totalNumber;
-    } else {
-        // 当前未分组，其childList中的数据选择有变化
-        const selectedNumber = customColumns.value.filter(item => item.selected && item.isShow).length;
-        const totalNumber = customColumns.value.filter(item => item.isShow).length;
-        checkAll.value = totalNumber > 0 && selectedNumber === totalNumber;
-        isIndeterminate.value = selectedNumber > 0 && selectedNumber < totalNumber;
-    }
 };
 
 // 恢复初始

@@ -4,9 +4,9 @@
  * @描述: dev server mock数据
  */
 import Mock from "mockjs";
+import config from "@js/config";
 import common from "./common";
 import demo from "./demo";
-import config from "@js/config";
 
 [...common, ...demo].forEach(mockItem => {
     Mock.mock(RegExp(config.webApiDomain + mockItem.url + "(\\?(\\w+=.*)+)?$"), mockItem.type, function ({ body, type, url }) {

@@ -62,9 +62,9 @@ const props = defineProps({
     // 导入的全部字段
     tableColumns: {
         type: Array,
-        default() {
-            return [];
-        },
+        // default() {
+        //     return [];
+        // },
         required: true
     }
 });

@@ -16,14 +16,14 @@ import searchPage from "./search-page.vue";
 import dialogForm from "./dialog-form.vue";
 
 export default function (vueAppInstance) {
-    vueAppInstance.component("img-upload", imgUpload);
-    vueAppInstance.component("web-editor", webEditor);
-    vueAppInstance.component("search-field", searchField);
-    vueAppInstance.component("input-field", inputField);
-    vueAppInstance.component("input-form", inputForm);
-    vueAppInstance.component("search-form", searchForm);
-    vueAppInstance.component("action-bar", actionBar);
-    vueAppInstance.component("data-table", dataTable);
-    vueAppInstance.component("search-page", searchPage);
-    vueAppInstance.component("dialog-form", dialogForm);
+    vueAppInstance.component("ImgUpload", imgUpload);
+    vueAppInstance.component("WebEditor", webEditor);
+    vueAppInstance.component("SearchField", searchField);
+    vueAppInstance.component("InputField", inputField);
+    vueAppInstance.component("InputForm", inputForm);
+    vueAppInstance.component("SearchForm", searchForm);
+    vueAppInstance.component("ActionBar", actionBar);
+    vueAppInstance.component("DataTable", dataTable);
+    vueAppInstance.component("SearchPage", searchPage);
+    vueAppInstance.component("DialogForm", dialogForm);
 }

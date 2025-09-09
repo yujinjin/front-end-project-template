@@ -4,7 +4,7 @@
  * @描述: 导出弹窗业务组件
 -->
 <template>
-    <customer-column-dialog :is-show="loadType === 0 && isShow" :tableColumns="tableColumns" @close="loadType === 0 && emits('close')" @save="submitHandle" />
+    <customer-column-dialog :is-show="loadType === 0 && isShow" :table-columns="tableColumns" @close="loadType === 0 && emits('close')" @save="submitHandle" />
     <el-dialog
         v-if="isShow && [1, 2, 3].includes(loadType)"
         v-model="dialogVisible"
@@ -15,11 +15,11 @@
         @closed="emits('close')"
     >
         <!-- 导入中 -->
-        <wait-progress class="exporting-box" v-if="loadType == 1">
+        <wait-progress v-if="loadType == 1" class="exporting-box">
             <div class="state-text">正在批量导出数据，请稍后...</div>
         </wait-progress>
         <!-- 导入成功 -->
-        <el-result icon="success" title="批量导出完成" v-else-if="loadType == 2">
+        <el-result v-else-if="loadType == 2" icon="success" title="批量导出完成">
             <template #extra>
                 <el-button size="default" type="primary" @click="downFileHandle">
                     <el-icon><Download /></el-icon>
@@ -28,11 +28,11 @@
             </template>
         </el-result>
         <!-- 导入失败 -->
-        <el-result icon="error" title="导出失败了" :sub-title="errorMessage" v-else-if="loadType == 3" />
-        <template #footer v-if="loadType !== 1">
+        <el-result v-else-if="loadType == 3" icon="error" title="导出失败了" :sub-title="errorMessage" />
+        <template v-if="loadType !== 1" #footer>
             <div class="dialog-footer">
                 <el-button @click="dialogVisible = false">取消</el-button>
-                <el-button type="primary" v-if="loadType == 2 || loadType == 3" @click="init">重新导出</el-button>
+                <el-button v-if="loadType == 2 || loadType == 3" type="primary" @click="init">重新导出</el-button>
             </div>
         </template>
     </el-dialog>
@@ -40,17 +40,19 @@
 <script setup>
 import { ref } from "vue";
 import { Download } from "@element-plus/icons-vue";
-import waitProgress from "./wait-progress.vue";
 import commonApi from "@js/api/common";
 import customerColumnDialog from "@pages/components/customer-column-dialog.vue";
+import waitProgress from "./wait-progress.vue";
 
 const props = defineProps({
     isShow: {
         type: Boolean,
         default: true
     },
+    // 弹窗标题
     title: {
-        type: String
+        type: String,
+        default: () => null
     },
     // 导出函数
     export: {
@@ -60,9 +62,9 @@ const props = defineProps({
     // 导入的全部字段
     tableColumns: {
         type: Array,
-        default() {
-            return [];
-        },
+        // default() {
+        //     return [];
+        // },
         required: true
     }
 });

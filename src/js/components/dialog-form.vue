@@ -1,6 +1,6 @@
 <template>
     <el-dialog v-if="isShow" v-model="dialogVisible" v-bind="dialogInnerProps" class="dialog-form" @closed="dialogClosed">
-        <input-form v-bind="inputFormProps" @fieldValueChange="inputFormFieldValueChange" ref="inputFormRef">
+        <input-form v-bind="inputFormProps" ref="inputFormRef" @field-value-change="inputFormFieldValueChange">
             <template v-for="name in Object.keys(slots)" #[name]="scope">
                 <slot :name="name" v-bind="scope"></slot>
             </template>
@@ -9,7 +9,7 @@
             <div class="dialog-footer">
                 <template v-for="(button, index) in actionButtons">
                     <slot v-if="button.slot" :name="button.slot" :button="button"></slot>
-                    <el-button v-else :key="index" v-bind="button.props" @click="clickHandle(button)" :loading="button.isLoading">
+                    <el-button v-else :key="index" v-bind="button.props" :loading="button.isLoading" @click="clickHandle(button)">
                         <template v-if="button.icon">
                             <i v-if="typeof button.icon === 'string'" :class="[button.icon]"></i>
                             <el-icon v-else><component :is="button.icon" /></el-icon>
@@ -23,6 +23,7 @@
 </template>
 <script setup>
 import { useSlots, ref, watch } from "vue";
+import logs from "@js/services/logs";
 
 const props = defineProps({
     isShow: {
@@ -30,13 +31,22 @@ const props = defineProps({
         default: true
     },
     dialogProps: {
-        type: Object
+        type: Object,
+        default() {
+            return {};
+        }
     },
     buttons: {
-        type: Array
+        type: Array,
+        default() {
+            return [];
+        }
     },
     inputFormProps: {
-        type: Object
+        type: Object,
+        default() {
+            return {};
+        }
     }
 });
 

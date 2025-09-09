@@ -9,9 +9,9 @@
             v-for="(button, index) in showStatusButtons"
             :key="(button.handleCode || '') + '_' + index"
             v-bind="button.props"
-            @click="clickHandle(button)"
             :loading="button.isLoading"
             type="primary"
+            @click="clickHandle(button)"
         >
             {{ button.text }}
         </el-button>
@@ -22,8 +22,8 @@
             <template #dropdown>
                 <el-dropdown-menu>
                     <!-- v-loading="button.isLoading" -->
-                    <el-dropdown-item v-for="(button, index) in hideStatusButtons" :command="index" :key="(button.handleCode || '') + '_' + index">
-                        <el-icon class="is-loading" v-if="button.isLoading">
+                    <el-dropdown-item v-for="(button, index) in hideStatusButtons" :key="(button.handleCode || '') + '_' + index" :command="index">
+                        <el-icon v-if="button.isLoading" class="is-loading">
                             <Loading />
                         </el-icon>
                         {{ button.text }}
@@ -36,6 +36,7 @@
 <script setup>
 import { ref, watch, computed } from "vue";
 import { Loading } from "@element-plus/icons-vue";
+import logs from "@js/services/logs";
 
 const props = defineProps({
     buttons: {

@@ -5,6 +5,7 @@
  */
 
 import { ElLoading } from "element-plus";
+import logs from "@js/services/logs";
 
 let loadingInstance = null;
 let showTimes = 0;

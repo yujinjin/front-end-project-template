@@ -1,21 +1,21 @@
 <template>
     <div class="img-upload">
-        <el-upload v-bind="uploadInnerProps" v-model:file-list="fileList" ref="updloadRef">
+        <el-upload v-bind="uploadInnerProps" ref="updloadRef" v-model:file-list="fileList">
             <template #default>
                 <slot><el-button type="primary">点击上传</el-button></slot>
             </template>
-            <template #tip v-if="maxSize > 0">
+            <template v-if="maxSize > 0" #tip>
                 <div class="el-upload__tip">只能上传图片文件，且不超过{{ maxSize > 1024 ? numberFormat(maxSize / 1024, 1) + "M" : maxSize + "KB" }}</div>
             </template>
         </el-upload>
         <el-dialog v-model="isShowCropperDialog" class="cropper-dialog custom-dialog" title="图片裁剪" :append-to-body="true" :close-on-click-modal="false" width="1000px">
             <div class="cropper-panel">
                 <div class="cropper-box">
-                    <img :src="cropperImg" ref="cropperImgRef" />
+                    <img ref="cropperImgRef" :src="cropperImg" />
                 </div>
                 <div class="preview-box">
                     <div class="tips-text">图片预览：</div>
-                    <div class="preview-img-box" ref="previewImgRef"></div>
+                    <div ref="previewImgRef" class="preview-img-box"></div>
                 </div>
             </div>
             <template #footer>
@@ -36,15 +36,22 @@ import { numberFormat } from "@js/utils/format";
 import Cropper from "cropperjs";
 import "cropperjs/dist/cropper.css";
 import commonAPI from "@api/common";
+import logs from "@js/services/logs";
 
 const props = defineProps({
     // 上传的组件的值
     modelValue: {
-        type: [String, Array]
+        type: [String, Array],
+        default() {
+            return null;
+        }
     },
     // 上传属性配置选项，具体见（element-plus upload文档）
     uploadProps: {
-        type: Object
+        type: Object,
+        default() {
+            return {};
+        }
     },
     // 图片裁剪的配置选项，具体见（cropperjs文档）, 如果需要裁剪一次只能上传一张图片
     cropperProps: {

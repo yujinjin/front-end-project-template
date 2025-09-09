@@ -4,20 +4,20 @@
  * @描述: 路由页面演示
 -->
 <template>
-    <search-page v-bind="searchPageConfig" @selectRowsChange="selectRowsChangeHandle" ref="searchPageRef">
+    <search-page v-bind="searchPageConfig" ref="searchPageRef" @select-rows-change="selectRowsChangeHandle">
         <template #dataTable_orderNo="scope">
-            <el-link @click="showDialogFormHandle(scope.row, { handleCode: HANDLE_CODES.QUERY })" type="primary">{{ scope.row.orderNo }}</el-link>
+            <el-link type="primary" @click="showDialogFormHandle(scope.row, { handleCode: HANDLE_CODES.QUERY })">{{ scope.row.orderNo }}</el-link>
         </template>
-        <info-form-dialog v-if="isShowInfoFormDialog" @close="isShowInfoFormDialog = false" @refresh="refreshHandle" :actionType="actionType" :row="selectedRow" />
-        <batch-update-dialog v-if="isShowBatchUpdateDialog" @close="isShowBatchUpdateDialog = false" @refresh="refreshHandle" :rows="selectRows" />
-        <export-dialog v-if="isShowExportDialog" @close="isShowExportDialog = false" :tableColumns="searchPageConfig.dataTableProps.columns" :export="exportHandle" />
+        <info-form-dialog v-if="isShowInfoFormDialog" :action-type="actionType" :row="selectedRow" @close="isShowInfoFormDialog = false" @refresh="refreshHandle" />
+        <batch-update-dialog v-if="isShowBatchUpdateDialog" :rows="selectRows" @close="isShowBatchUpdateDialog = false" @refresh="refreshHandle" />
+        <export-dialog v-if="isShowExportDialog" :table-columns="searchPageConfig.dataTableProps.columns" :export="exportHandle" @close="isShowExportDialog = false" />
         <import-dialog
             v-if="isShowImportDialog"
-            @close="isShowImportDialog = false"
-            :templateFileUrl="`${publicPath}demo/学期日历.xltm`"
+            :template-file-url="`${publicPath}demo/学期日历.xltm`"
             :columns="importColumns"
             :upload="uploadHandle"
             :save="saveHandle"
+            @close="isShowImportDialog = false"
         />
     </search-page>
 </template>
@@ -25,14 +25,15 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
-import searchConfig from "./search-config";
 import { HANDLE_CODES } from "@js/services/constants";
-import infoFormDialog from "./components/info-form-dialog.vue";
-import batchUpdateDialog from "./components/batch-update-dialog.vue";
 import exportDialog from "@pages/components/export-dialog.vue";
 import importDialog from "@pages/components/import-dialog.vue";
 import demoApi from "@js/api/demo";
 import { sleep } from "@js/utils/others";
+import logs from "@js/services/logs";
+import batchUpdateDialog from "./components/batch-update-dialog.vue";
+import infoFormDialog from "./components/info-form-dialog.vue";
+import searchConfig from "./search-config";
 
 // search page 组件
 const searchPageRef = ref(null);

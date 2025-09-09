@@ -13,7 +13,10 @@ import { numberFormat } from "@js/utils/format";
 const props = defineProps({
     // 日期值
     value: {
-        type: [String, Number]
+        type: [String, Number],
+        default() {
+            return null;
+        }
     },
     // 日期格式化字符串
     digit: {
@@ -29,7 +32,3 @@ const numberText = computed(() => {
     return numberFormat(props.value, props.digit);
 });
 </script>
-<style lang="scss" scoped>
-.table-column-number {
-}
-</style>

@@ -63,16 +63,15 @@ export default function (requestConfig) {
                     return response;
                 } else if (response.data.flag === "S") {
                     return response.config.isResultData ? response.data.data : response.data;
-                } else {
-                    if (response.config.isShowError) {
-                        ElMessage({
-                            message: response.data.msg || "很抱歉，服务出错，请稍后再试~",
-                            type: "error"
-                        });
-                        logs.warn("接口出错:" + JSON.stringify(response.data));
-                    }
-                    return Promise.reject(response.data);
                 }
+                if (response.config.isShowError) {
+                    ElMessage({
+                        message: response.data.msg || "很抱歉，服务出错，请稍后再试~",
+                        type: "error"
+                    });
+                    logs.warn("接口出错:" + JSON.stringify(response.data));
+                }
+                return Promise.reject(response.data);
             },
             // 在发送请求数据的error函数
             error: function (error) {
@@ -144,14 +143,14 @@ export default function (requestConfig) {
                 if (!data) {
                     return data;
                 }
-                if (headers["Content-Type"] == "application/x-www-form-urlencoded") {
+                if (headers["Content-Type"] === "application/x-www-form-urlencoded") {
                     // 将数据转换为表单数据
                     const formData = [];
                     Object.keys(data).forEach(key => {
                         formData.push(encodeURIComponent(String(key)) + "=" + encodeURIComponent(String(data[key])));
                     });
                     return formData.join("&");
-                } else if (headers["Content-Type"].indexOf("multipart/form-data") != -1) {
+                } else if (headers["Content-Type"].indexOf("multipart/form-data") !== -1) {
                     return data;
                 }
                 return JSON.stringify(data);

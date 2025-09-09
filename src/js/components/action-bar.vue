@@ -6,10 +6,10 @@
 <template>
     <div class="action-bar-panel">
         <slot></slot>
-        <div class="buttons-panel" :style="{ textAlign: align }" v-if="actionButtons.length > 0">
+        <div v-if="actionButtons.length > 0" class="buttons-panel" :style="{ textAlign: align }">
             <template v-for="(button, index) in actionButtons">
                 <slot v-if="button.slot" :name="button.slot" :button="button"></slot>
-                <el-button v-else :key="(button.handleCode || '') + '_' + index" v-bind="button.props" @click="clickHandle(button)" :loading="button.isLoading">
+                <el-button v-else :key="(button.handleCode || '') + '_' + index" v-bind="button.props" :loading="button.isLoading" @click="clickHandle(button)">
                     <template v-if="button.icon">
                         <i v-if="typeof button.icon === 'string'" :class="[button.icon]"></i>
                         <el-icon v-else><component :is="button.icon" /></el-icon>
@@ -23,6 +23,7 @@
 <script setup>
 import { ref, watch } from "vue";
 import { dataStore } from "@js/stores/";
+import logs from "@js/services/logs";
 
 const props = defineProps({
     buttons: {
@@ -45,7 +46,10 @@ const props = defineProps({
     },
     // 页面名称，用于获取有权限的按钮数据
     pageName: {
-        type: String
+        type: String,
+        default() {
+            return null;
+        }
     }
 });
 

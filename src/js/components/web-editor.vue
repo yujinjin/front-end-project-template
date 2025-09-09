@@ -1,7 +1,7 @@
 <template>
     <div class="web-editor-container" :class="{ 'is-disabled': isDisabled }">
-        <div class="web-editor" ref="webEditorRef"></div>
-        <input type="file" @change="imgFileChangeHandle" accept="image/*" ref="inputFileRef" v-show="false" />
+        <div ref="webEditorRef" class="web-editor"></div>
+        <input v-show="false" ref="inputFileRef" type="file" accept="image/*" @change="imgFileChangeHandle" />
     </div>
 </template>
 <script setup>
@@ -13,13 +13,25 @@ import commonAPI from "@api/common";
 import { formItemContextKey, formContextKey } from "element-plus";
 
 const props = defineProps({
-    modelValue: String,
+    modelValue: {
+        type: String,
+        default() {
+            return null;
+        }
+    },
     disabled: {
         type: Boolean,
-        default: undefined
+        default() {
+            return undefined;
+        }
     },
     // quill 的配置选项
-    options: Object
+    options: {
+        type: Object,
+        default() {
+            return {};
+        }
+    }
 });
 
 const emits = defineEmits(["update:modelValue"]);

@@ -38,6 +38,7 @@ import { PAGE_ITEMS } from "@js/services/constants";
 import { dataStore } from "@js/stores/";
 import extend from "@js/utils/extend";
 import { debounce } from "@js/utils/others";
+import logs from "@js/services/logs";
 import tableColumnDate from "./table/table-column-date.vue";
 import tableColumnNumber from "./table/table-column-number.vue";
 import tableColumnImage from "./table/table-column-image.vue";

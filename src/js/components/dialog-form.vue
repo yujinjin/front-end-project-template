@@ -23,6 +23,7 @@
 </template>
 <script setup>
 import { useSlots, ref, watch } from "vue";
+import logs from "@js/services/logs";
 
 const props = defineProps({
     isShow: {

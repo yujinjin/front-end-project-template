@@ -39,6 +39,7 @@ import { onMounted, ref, watch, nextTick } from "vue";
 import { SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES } from "@js/services/constants";
 import { setObjectProperty } from "@js/utils/others";
 import extend from "@js/utils/extend";
+import logs from "@js/services/logs";
 
 const props = defineProps({
     // 查询表单字段列表 [{name: 查询项的名称，同时也是父级组件的字段属性, label: 选项的标签名称, value: 选项的值, type: 组件的类型, labelWidth: label宽度,  inputWidth: 表单宽度, data: 数据（比如：select的选项值列表）, props: 组件的自定义选项(可无), events: 组件自定义事件 slot: 自定义插槽名称（可无，如有值其他选项无效）}]

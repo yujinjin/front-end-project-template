@@ -16,11 +16,13 @@ const localStorageName = config.appName + "Storage";
  */
 const storeUp = function (type = 0, value) {
     if (!window) {
+        // eslint-disable-next-line no-alert
         alert("您开启了秘密浏览或无痕浏览模式，请关闭!");
         return;
     }
     const storage = type === 0 ? window.localStorage : window.sessionStorage;
     if (!storage) {
+        // eslint-disable-next-line no-alert
         alert("您开启了秘密浏览或无痕浏览模式，请关闭!");
         return;
     }

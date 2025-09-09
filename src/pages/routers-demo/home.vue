@@ -30,6 +30,7 @@ import exportDialog from "@pages/components/export-dialog.vue";
 import importDialog from "@pages/components/import-dialog.vue";
 import demoApi from "@js/api/demo";
 import { sleep } from "@js/utils/others";
+import logs from "@js/services/logs";
 import batchUpdateDialog from "./components/batch-update-dialog.vue";
 import infoFormDialog from "./components/info-form-dialog.vue";
 import searchConfig from "./search-config";

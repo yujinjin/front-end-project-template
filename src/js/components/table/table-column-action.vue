@@ -36,6 +36,7 @@
 <script setup>
 import { ref, watch, computed } from "vue";
 import { Loading } from "@element-plus/icons-vue";
+import logs from "@js/services/logs";
 
 const props = defineProps({
     buttons: {

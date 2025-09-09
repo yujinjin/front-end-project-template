@@ -36,6 +36,7 @@ import { numberFormat } from "@js/utils/format";
 import Cropper from "cropperjs";
 import "cropperjs/dist/cropper.css";
 import commonAPI from "@api/common";
+import logs from "@js/services/logs";
 
 const props = defineProps({
     // 上传的组件的值

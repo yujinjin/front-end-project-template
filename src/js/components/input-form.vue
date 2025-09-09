@@ -19,6 +19,7 @@ import { ref, watch } from "vue";
 import { INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES } from "@js/services/constants";
 import { setObjectProperty, getObjectProperty } from "@js/utils/others";
 import extend from "@js/utils/extend";
+import logs from "@js/services/logs";
 
 const props = defineProps({
     fields: {

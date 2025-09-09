@@ -23,6 +23,7 @@
 <script setup>
 import { ref, watch } from "vue";
 import { dataStore } from "@js/stores/";
+import logs from "@js/services/logs";
 
 const props = defineProps({
     buttons: {

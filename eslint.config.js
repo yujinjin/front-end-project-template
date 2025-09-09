@@ -6,7 +6,7 @@
 import { defineConfig } from "eslint/config";
 import globals from "globals";
 import eslint from "@eslint/js";
-import eslintPluginImportX from "eslint-plugin-import-x";
+import eslintPluginImportX, { configs } from "eslint-plugin-import-x";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import eslintPluginVue from "eslint-plugin-vue";
 import eslintPluginJsonc from "eslint-plugin-jsonc";
@@ -42,7 +42,7 @@ export default defineConfig([
             }
         },
         rules: {
-            ...eslintPluginImportX.configs.recommended.rules,
+            ...configs.recommended.rules,
             "import-x/no-unresolved": "off",
             "import-x/order": "error",
             "import-x/consistent-type-specifier-style": ["error", "prefer-inline"],

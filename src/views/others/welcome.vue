@@ -5,16 +5,20 @@
 <template>
     <div class="welcome">
         <img alt="Vue logo" src="/logo.png" />
+        <h2>{{ loginUserInfo.userName }}，</h2>
         <h3>{{ civilityText }}，欢迎来到中台管理系统</h3>
     </div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
+import { mapState } from "pinia";
 import dayjs from "dayjs";
+import { storageStore } from "@/stores"; // @ is an alias to /src
 
 export default defineComponent({
     name: "welcome",
     computed: {
+        ...mapState(storageStore, ["loginUserInfo"]),
         civilityText() {
             const hour = dayjs().hour();
             if (hour < 6) {

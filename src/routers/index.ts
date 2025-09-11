@@ -8,19 +8,31 @@
  */
 import { type RouteRecordRaw, type Router, createRouter, createWebHashHistory, createWebHistory } from "vue-router";
 import { ElMessage } from "element-plus";
+import system from "./system";
 import others from "./others";
 import plays from "./plays";
 import config from "@/config";
-import { storageStore } from "@/stores";
+import { storageStore, eventsStore } from "@/stores";
 
 export default function (): Router {
     const dataStorages = storageStore();
-
+    const dataEvents = eventsStore();
     const router: Router = createRouter({
         history: config.isWebHash ? createWebHashHistory(config.projectContentPath ? config.projectContentPath + "/" : "") : createWebHistory(config.projectContentPath || "/"), // HTML5 hash模式 |history模式
         routes: <Array<RouteRecordRaw>>[
-            ...others,
-            ...plays,
+            {
+                path: "/",
+                component: () => import("@views/home/index.vue"),
+                children: [...system, ...others, ...plays]
+            },
+            {
+                path: "/login",
+                name: "login", // 登录页
+                meta: {
+                    requireAuth: false
+                },
+                component: () => import("@views/login.vue")
+            },
             {
                 path: "/*",
                 name: "not-found", // 未发现该页面
@@ -28,6 +40,23 @@ export default function (): Router {
                     requireAuth: false
                 },
                 component: () => import("@views/error/not-found.vue")
+            },
+            {
+                path: "/outside/home",
+                name: "outside-home", // 外部页面（测试专用）
+                meta: {
+                    requireAuth: false
+                },
+                component: () => import("@views/outside/home.vue")
+                // component: outsideHome
+            },
+            {
+                path: "/outside/about",
+                name: "outside-about", // 外部页面（测试专用）
+                meta: {
+                    requireAuth: false
+                },
+                component: () => import("@views/outside/about.vue")
             }
         ],
         scrollBehavior: () => ({ left: 0, top: 0 }),
@@ -35,7 +64,12 @@ export default function (): Router {
     });
     // 注册一个全局前置守卫
     router.beforeEach(to => {
-        // TODO: 自定义业务实现
+        if (to.meta.requireAuth !== false && !dataStorages.isLogin()) {
+            // 未登录的用户进入了需要登录的页面, 全局触发去登录事件
+            dataEvents.trigger({ eventName: "gotoLogin", args: [to.fullPath] });
+            // 取消当前的导航
+            return false;
+        }
         return true;
     });
     // 注册全局后置钩子

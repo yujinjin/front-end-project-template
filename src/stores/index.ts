@@ -5,6 +5,7 @@
 import { createPinia } from "pinia";
 import eventsStore from "./event";
 import dataStore from "./data";
+import pageViewsStore from "./page-views";
 import storageStore from "./storage";
 
 const store = createPinia();
@@ -15,4 +16,4 @@ export default store;
 //     app.use(store);
 // }
 
-export { eventsStore, storageStore, dataStore };
+export { eventsStore, storageStore, dataStore, pageViewsStore };

@@ -1,6 +1,6 @@
-# cms-ts-main
+# mid-platform
 
-- 说明：普通的业务内容管理系统主分支，没有菜单导航，主要用于修改内部组件等业务功能的
+- 说明：中台单页系统主分支，有导航菜单，支持多个子系统集成（IFRAME 嵌套引入），主要用于修改内部菜单等业务功能的
 - 项目框架：vite + vue3 + vue-router + pinia + element-plus + mockjs + typescript
 - 风格：绿色、紧凑型
 

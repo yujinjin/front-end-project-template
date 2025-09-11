@@ -5,14 +5,15 @@
 import { defineStore } from "pinia";
 
 interface LocationInfo {
-    tempData: Record<string, any>;
+    /** 是否显示侧边栏 */
+    isShowSideBar: boolean;
 }
 
 export default defineStore("data", {
     state: () => ({
         /* 站点临时数据*/
         locationInfo: <LocationInfo>{
-            tempData: {}
+            isShowSideBar: true
         },
         // 按钮操作权限
         buttonPermissions: {} as Record<string, string[]>

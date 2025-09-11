@@ -26,13 +26,15 @@
 </template>
 <script setup lang="ts">
 import { reactive } from "vue";
-import { useRoute, onBeforeRouteUpdate } from "vue-router";
+import { useRoute, useRouter, onBeforeRouteUpdate } from "vue-router";
 import { randomId } from "@yujinjin/utils";
-import iframeMessage from "@/services/iframe-message";
+import { pageViewsStore } from "@/stores";
 
 defineOptions({
     name: "play-details"
 });
+
+const router = useRouter();
 
 // 当前路由对象
 const route = useRoute();
@@ -42,6 +44,8 @@ const inputForm = reactive({
     content: ""
 });
 
+const pageViews = pageViewsStore();
+
 onBeforeRouteUpdate(to => {
     inputForm.parameterId = to.query.id as string;
 });
@@ -49,10 +53,8 @@ onBeforeRouteUpdate(to => {
 // 打开新tab页
 const openNewTabPageHandle = function () {
     const id = randomId();
-    iframeMessage.openNewTabPage({
-        url: "/play/details?id=" + id,
-        title: "详情路由(" + id + ")"
-    });
+    pageViews.openPageByTabPage({ url: "/play/details?id=" + id, fromPageId: pageViews.visitedViews[pageViews.currentVisiteIndex].id, title: "详情路由(" + id + ")" });
+    router.push(pageViews.visitedViews[pageViews.currentVisiteIndex].routePath);
 };
 </script>
 <style lang="scss" scoped>

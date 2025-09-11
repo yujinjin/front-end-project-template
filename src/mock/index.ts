@@ -5,9 +5,10 @@
 import Mock, { type MockjsRequestOptions } from "mockjs";
 import common from "./common";
 import demo from "./demo";
+import system from "./system";
 import config from "@/config";
 
-[...common, ...demo].forEach(mockItem => {
+[...common, ...demo, ...system].forEach(mockItem => {
     Mock.mock(RegExp(config.webApiDomain + mockItem.url + "(\\?(\\w+=.*)+)?$"), mockItem.type, function ({ body, type, url }) {
         if (type.toLowerCase() === "get") {
             body = body || {};

@@ -108,7 +108,13 @@ export default function ({ actionType, row, saveHandle }) {
                         uploadProps: {
                             limit: 5
                         }
-                    }
+                    },
+                    rules: [
+                        {
+                            required: true,
+                            message: "请上传商品图片"
+                        }
+                    ]
                 },
                 {
                     type: "inputNumber",

@@ -1,6 +1,6 @@
 <template>
     <div class="img-upload">
-        <el-upload v-bind="uploadInnerProps" ref="updloadRef" v-model:file-list="fileList">
+        <el-upload v-bind="uploadInnerProps" ref="updloadRef" v-model:file-list="fileList" :disabled="isDisabled">
             <template #default>
                 <slot><el-button type="primary">点击上传</el-button></slot>
             </template>
@@ -30,8 +30,8 @@
     </div>
 </template>
 <script setup>
-import { ref, watch, nextTick } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { ref, watch, nextTick, inject, computed } from "vue";
+import { ElMessage, ElMessageBox, formItemContextKey, formContextKey } from "element-plus";
 import { numberFormat } from "@js/utils/format";
 import Cropper from "cropperjs";
 import "cropperjs/dist/cropper.css";
@@ -72,6 +72,12 @@ const props = defineProps({
 
 const emits = defineEmits(["update:modelValue"]);
 
+// 当前elForm实例
+const elForm = inject(formContextKey, {});
+
+// 当前elFormItem实例
+const elFormItem = inject(formItemContextKey, {});
+
 // 上传组件内部属性
 const uploadInnerProps = ref({});
 
@@ -100,6 +106,8 @@ let newModelValue = "";
 
 // 剪切图片的方向
 let directionCropper = false;
+
+const isDisabled = computed(() => props.uploadProps?.disabled === true || (elForm?.disabled === true && props.uploadProps?.disabled !== false));
 
 // 把当前modelValue转换成upload组件所用的文件格式列表
 const generateFileList = function () {
@@ -172,6 +180,7 @@ const fileListChange = function () {
         newModelValue = fileList.value.map(item => item.url).join(props.separator);
         emits("update:modelValue", newModelValue);
     }
+    elFormItem?.validate("change");
 };
 
 // 复位

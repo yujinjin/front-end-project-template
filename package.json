@@ -1,0 +1,101 @@
+{
+    "name": "web-app-ts",
+    "version": "0.1.0",
+    "description": "基于vite + vue3 + ts + scss + vant4 + vue-router + pinia 等技术栈搭建的移动端项目",
+    "type": "module",
+    "keywords": [
+        "h5"
+    ],
+    "homepage": "https://yujinjin.github.io/",
+    "bugs": {
+        "email": "yujinjin9@126.com",
+        "url": "https://github.com/yujinjin/front-end-project-template/issues"
+    },
+    "author": {
+        "name": "jack yu",
+        "email": "yujinjin9@126.com",
+        "url": "https://yujinjin.github.io/"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/yujinjin/front-end-project-template.git"
+    },
+    "scripts": {
+        "mdev": "cross-env MOCK_DATA=1 vite --mode dev",
+        "dev": "vite --mode dev",
+        "uat": "vite --mode uat",
+        "prd": "vite --mode prd",
+        "B_DEV": "vue-tsc -b && vite build --mode dev",
+        "B_UAT": "vue-tsc -b && vite build --mode uat",
+        "B_PRE": "vue-tsc -b && vite build --mode pre",
+        "B_PRD": "vue-tsc -b && vite build --mode prd",
+        "preview": "vite preview",
+        "format": "prettier --write \"**/*.{js,cjs,mjs,ts,tsx,json,css,scss,vue,html,md}\"",
+        "lint": "eslint .",
+        "lint:fix": "eslint --fix ."
+    },
+    "dependencies": {
+        "vue": "^3.5.22",
+        "pinia": "^3.0.3",
+        "vue-router": "^4.6.3",
+        "axios": "^1.13.0",
+        "vant": "^4.9.21",
+        "mockjs": "^1.1.0",
+        "@vueuse/core": "^14.0.0"
+    },
+    "devDependencies": {
+        "alphabetjs": "^0.1.4",
+        "vite": "^7.1.12",
+        "vitest": "^4.0.4",
+        "@vitejs/plugin-vue": "^6.0.1",
+        "@vitejs/plugin-vue-jsx": "^5.1.1",
+        "vconsole": "^3.15.1",
+        "vite-plugin-vconsole": "^2.1.1",
+        "sass": "1.93.2",
+        "autoprefixer": "^10.4.22",
+        "postcss-mobile-forever": "^5.0.0",
+        "vue-tsc": "^3.1.2",
+        "prettier": "^3.6.2",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.9.3",
+        "tsx": "^4.20.6",
+        "globals": "^16.4.0",
+        "eslint": "^9.38.0",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-prettier": "^5.5.4",
+        "eslint-plugin-import-x": "^4.16.1",
+        "eslint-import-resolver-typescript": "^4.4.4",
+        "eslint-plugin-vue": "^10.5.1",
+        "eslint-plugin-jsonc": "^2.21.0",
+        "eslint-plugin-vitest": "^0.5.4",
+        "@types/mockjs": "^1.0.10",
+        "@types/node": "^24.9.1",
+        "@typescript-eslint/eslint-plugin": "^8.46.2",
+        "@typescript-eslint/parser": "^8.46.2",
+        "@vue/eslint-config-prettier": "^10.2.0",
+        "@vue/eslint-config-typescript": "^14.6.0",
+        "@vue/tsconfig": "^0.8.1",
+        "cross-env": "^10.1.0"
+    },
+    "prettier": {
+        "tabWidth": 4,
+        "useTabs": false,
+        "jsxBracketSameLine": false,
+        "printWidth": 200,
+        "trailingComma": "none",
+        "arrowParens": "avoid",
+        "semi": true,
+        "singleQuote": false,
+        "quoteProps": "consistent",
+        "htmlWhitespaceSensitivity": "ignore",
+        "bracketSpacing": true
+    },
+    "engines": {
+        "node": ">=22"
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not dead"
+    ]
+}

@@ -96,20 +96,21 @@
     │   │   └── qifu-cms-vuecli-template
     │   └── qifu-cms-vite
     │       └── qifu-cms-vite-template
-    ├── cms-main
+    ├── qifu-cms-ts-main(vite)
+    ├── cms-main(待增加)
     │   ├── cms-template
     │   └── mid-platform
     │       └── mid-platform-template
     ├── cms-ts-main
-    │   ├── cms-ts-template
+    │   ├── cms-ts-template(待增加)
     │   └── mid-platform-ts
-    │       └── mid-platform-ts-template
-    ├── web-app
-    │   └── web-app-template
+    │       └── mid-platform-ts-template(待增加)
+    ├── web-app(待增加)
+    │   └── web-app-template(待增加)
     ├── web-app-ts
-    │   └── web-app-ts-template
-    └── weixin-app
-        └── weixin-app-template
+    │   └── web-app-ts-template(待增加)
+    └── weixin-app(待增加)
+        └── weixin-app-template(待增加)
 
 ```
 

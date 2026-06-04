@@ -3,7 +3,7 @@
  * @描述: 自定义数据列弹窗
 -->
 <template>
-    <el-dialog :model-value="isShow" title="自定义列" width="750px" append-to-body destroy-on-close :close-on-click-modal="false" class="custom-column-dialog" @closed="close">
+    <el-dialog :model-value="isShow" title="自定义列" width="750px" align-center append-to-body destroy-on-close :close-on-click-modal="false" class="custom-column-dialog" @closed="close">
         <div class="search-panel">
             <el-input v-model.trim="keyword" style="width: 360px" clearable placeholder="搜索列名" :prefix-icon="Search" @input="searchHandle" />
         </div>

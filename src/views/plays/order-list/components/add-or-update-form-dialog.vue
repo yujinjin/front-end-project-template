@@ -137,7 +137,7 @@ const buttons = ref<DialogFormButton[]>([
         type: "primary",
         click: async function (inputFormValue) {
             await dialogFormRef.value?.validate();
-            await demoAPI.addOrder(inputFormValue);
+            await demoAPI.addOrder(inputFormValue!);
             ElMessage.success("操作成功");
             emits("update:isShow", false);
             emits("refresh");

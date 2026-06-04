@@ -71,7 +71,7 @@
     </search-page>
 </template>
 <script setup lang="ts">
-import { type SearchPageRef, type TableButton } from "@yujinjin/cms-components";
+import { type SearchPageRef, type ActionButton } from "@yujinjin/cms-components";
 import { ref, reactive, nextTick } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import { QuestionFilled } from "@element-plus/icons-vue";
@@ -123,7 +123,7 @@ const refreshHandle = async function () {
 
 // 当前选择的数据变化事件
 const selectRowsChangeHandle = function (rows: any[]) {
-    searchPageRef.value?.changeButtons((actionButtons: TableButton[]) => {
+    searchPageRef.value?.changeButtons((actionButtons: ActionButton[]) => {
         const button = actionButtons.find(button => button.handleCode === HANDLE_CODES.BATCHCANCEL);
         if (!button) {
             return;

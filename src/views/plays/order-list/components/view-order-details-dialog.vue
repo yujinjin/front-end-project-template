@@ -3,7 +3,7 @@
  * @描述: 查看订单详情信息弹窗
 -->
 <template>
-    <el-dialog v-model="dialogVisible" title="查看订单详细信息" class="common-dialog" width="800px" @closed="dialogClosed">
+    <el-dialog v-model="dialogVisible" title="查看订单详细信息" align-center append-to-body class="common-dialog" width="800px" @closed="dialogClosed">
         <el-collapse v-model="activeCollapseNames">
             <el-collapse-item name="1">
                 <template #title>
@@ -88,7 +88,7 @@
                 <el-descriptions
                     v-for="(logisticsItem, index) in orderDetails.logisticsList"
                     :key="logisticsItem.logisticsNumber"
-                    :title="'包裹' + (index + 1)"
+                    :title="'包裹' + ((index as number) + 1)"
                     direction="vertical"
                     :column="2"
                     border
@@ -114,7 +114,7 @@
                     <div class="title-bar">售后信息</div>
                 </template>
                 <el-tag v-if="!orderDetails.afterSalesList || orderDetails.afterSalesList.length === 0" type="info">无售后信息</el-tag>
-                <el-descriptions v-for="(afterSalesItem, index) in orderDetails.afterSalesList" :key="index" :title="'售后' + (index + 1)" direction="vertical" :column="2" border>
+                <el-descriptions v-for="(afterSalesItem, index) in orderDetails.afterSalesList" :key="index" :title="'售后' + ((index as number) + 1)" direction="vertical" :column="2" border>
                     <el-descriptions-item label="售后类型">
                         <el-tag>{{ afterSalesItem.type }}</el-tag>
                     </el-descriptions-item>

@@ -3,7 +3,7 @@
  * @描述: Excel大数据导出弹窗
 -->
 <template>
-    <el-dialog v-model="dialogVisible" title="订单Excel大数据导出" class="common-dialog" width="800px" @closed="dialogClosed">
+    <el-dialog v-model="dialogVisible" title="订单Excel大数据导出" align-center append-to-body class="common-dialog" width="800px" @closed="dialogClosed">
         <el-collapse v-show="!progressInfo.isShow" v-model="activeCollapseNames" style="border: 0px">
             <el-collapse-item name="1">
                 <template #title>

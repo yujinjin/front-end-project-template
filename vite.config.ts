@@ -19,13 +19,15 @@ export default defineConfig(({ mode }) => {
     return {
         base: PROJECT_CONTENT_PATH,
         resolve: {
+            extensions: [".ts", ".vue", ".d.ts", ".tsx", ".json", ".jsx", ".mjs", ".js", ".mts"],
             alias: {
                 "@": path.resolve(__dirname, "src"),
                 "@views": path.resolve(__dirname, "src/views"),
                 "@components": path.resolve(__dirname, "src/components"),
                 "@style": path.resolve(__dirname, "src/assets/style"),
                 "@imgs": path.resolve(__dirname, "src/assets/images"),
-                "@api": path.resolve(__dirname, "src/api")
+                "@api": path.resolve(__dirname, "src/api"),
+                "/#": path.resolve(__dirname, "types")
             }
         },
         define: {

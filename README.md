@@ -59,6 +59,11 @@
 #### 8. mid-platform-ts-template
 -   说明：mid-platform-ts项目脚手架的模板
 
+#### 9. cms-custom-components
+- 说明：普通业务内容管理系统，使用自己内部自定义的组件方便自定义风格的组件开发，没有菜单导航
+- 项目框架：vite + vue3 + vue-router + pinia + element-plus2 + mockjs + typescript
+- 风格：绿色、紧凑型
+
 
 ### 移动端分支说明
 
@@ -99,6 +104,7 @@
     ├── qifu-cms-ts-main(vite)
     ├── cms-main(待增加)
     │   ├── cms-template
+    │   ├── cms-custom-components
     │   └── mid-platform
     │       └── mid-platform-template
     ├── cms-ts-main

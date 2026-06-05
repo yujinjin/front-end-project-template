@@ -3,21 +3,20 @@ import { type Router } from "vue-router";
 import { createApp, type App as VueApplication } from "vue";
 import ElementPlus from "element-plus";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
-import CMSComponents from "@yujinjin/cms-components";
+import components from "@/components/index";
 import Appvue from "@/views/app.vue";
 import config, { type Config } from "@/config";
 import logs, { type Logs } from "@/services/logs";
 import routers from "@/routers/";
 import store from "@/stores/index";
-// import components from "@/components/index";
 import directives from "@/services/directives";
 import plugins from "@/plugins/index";
 import registerEvents from "@/services/register-events";
 // import "../mock/test.js";
 import "@style/element-variables.scss";
-import "@yujinjin/cms-components/dist/index.css";
 import "@style/index.scss";
 import "@style/icomoon.css";
+import "@style/components/index.scss";
 
 /** App Main类 */
 class AppMain {
@@ -82,7 +81,7 @@ class AppMain {
         }
         vueAppInstance.use(this.store);
         vueAppInstance.use(ElementPlus, { locale: zhCn });
-        vueAppInstance.use(CMSComponents);
+        vueAppInstance.use(components);
         this.router = routers();
         vueAppInstance.use(this.router);
         // 注册全局指令

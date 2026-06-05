@@ -71,7 +71,6 @@
     </search-page>
 </template>
 <script setup lang="ts">
-import { type SearchPageRef, type ActionButton } from "@yujinjin/cms-components";
 import { ref, reactive, nextTick } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import { QuestionFilled } from "@element-plus/icons-vue";
@@ -80,6 +79,7 @@ import tableColumnCopy from "./components/table-column-copy.vue";
 import viewOrderDetailsDialog from "./components/view-order-details-dialog.vue";
 import excelExportDialog from "./components/excel-export-dialog.vue";
 import addOrUpdateFormDialog from "./components/add-or-update-form-dialog.vue";
+import { type SearchPageRef, type ActionButton } from "@/components/index";
 import customerColumnDialog from "@views/components/customer-column-dialog.vue";
 import demoAPI from "@api/demo";
 import { HANDLE_CODES } from "@/services/constants";

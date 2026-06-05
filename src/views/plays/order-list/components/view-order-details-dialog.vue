@@ -153,9 +153,9 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { dateFormat, numberFormat } from "@yujinjin/utils";
-import { type DataTableColumn } from "@yujinjin/cms-components";
 import { DEVICE_SOURCE_ENUM, ORDER_STATUS_ENUM, PAY_WAY_ENUM } from "../constants";
+import { dateFormat, numberFormat } from "@/utils/index";
+import { type DataTableColumn } from "@/components/index";
 import demoAPI from "@api/demo";
 
 const props = defineProps({

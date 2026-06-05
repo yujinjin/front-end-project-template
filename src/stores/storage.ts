@@ -3,7 +3,7 @@
  * @描述: 本地存储数据管理
  */
 import { defineStore } from "pinia";
-import { randomId } from "@yujinjin/utils";
+import { randomId } from "@/utils/index";
 import { getValue, setValue } from "@/services/local-storage";
 
 export default defineStore("storage", {

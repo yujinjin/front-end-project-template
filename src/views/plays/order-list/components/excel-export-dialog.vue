@@ -49,10 +49,10 @@
     </el-dialog>
 </template>
 <script setup lang="ts">
-import { type SearchFormField, type DataTableColumn, type SearchFormRef } from "@yujinjin/cms-components";
 import { type PropType, ref, watch, computed, reactive } from "vue";
 import { Search } from "@element-plus/icons-vue";
-import { debounce, getObjectProperty, dateFormat } from "@yujinjin/utils";
+import { debounce, getObjectProperty, dateFormat } from "@/utils/index";
+import { type SearchFormField, type DataTableColumn, type SearchFormRef } from "@/components/index";
 import commonApi from "@/api/common";
 import virtuallyProgress from "@views/components/virtually-progress.vue";
 import tempateFile from "/templates/订单数据导出模板.xlsx?url";

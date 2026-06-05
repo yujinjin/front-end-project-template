@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { useRoute, onBeforeRouteUpdate } from "vue-router";
-import { randomId } from "@yujinjin/utils";
+import { randomId } from "@/utils/index";
 import iframeMessage from "@/services/iframe-message";
 
 defineOptions({

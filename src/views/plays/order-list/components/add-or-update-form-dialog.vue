@@ -20,9 +20,9 @@
     <html-editor-dialog v-if="isShowHtmlEditorDialog" v-model="htmlEditorValue" @close="toggleHtmlEditorDialogShowStatus(false)" />
 </template>
 <script setup lang="ts">
-import { type DialogFormRef, type InputFormProps, type DialogFormButton } from "@yujinjin/cms-components";
 import { ref, reactive } from "vue";
 import { ElMessage } from "element-plus";
+import { type DialogFormRef, type InputFormProps, type DialogFormButton } from "@/components/index";
 import demoAPI from "@api/demo";
 import htmlEditorDialog from "@views/components/html-editor-dialog.vue";
 import { IconFullScreen } from "@/components/icon-svg";

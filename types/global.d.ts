@@ -14,9 +14,9 @@ declare global {
     }
 }
 
+export {};
+
 // 移除 readonly
-declare type NotReadonly<T> = {
+export type NotReadonly<T> = {
     -readonly [K in keyof T]: T[K];
 };
-
-export {};

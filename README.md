@@ -1,6 +1,6 @@
-# cms-ts-main
+# cms-custom-components
 
-- 说明：普通的业务内容管理系统主分支，没有菜单导航，主要用于修改内部组件等业务功能的
+- 说明：普通业务内容管理系统，使用自己内部自定义的组件方便自定义风格的组件开发，没有菜单导航
 - 项目框架：vite + vue3 + vue-router + pinia + element-plus + mockjs + typescript
 - 风格：绿色、紧凑型
 

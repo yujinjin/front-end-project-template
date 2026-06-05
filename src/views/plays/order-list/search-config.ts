@@ -2,9 +2,9 @@
  * @创建者: yujinjin9@126.com
  * @描述: 订单查询配置
  */
-import { type DataTableColumn, type SearchFormField, type ActionBarProps } from "@yujinjin/cms-components";
 import dayjs from "dayjs";
 import { DEVICE_SOURCE_ENUM, ORDER_STATUS_ENUM } from "./constants";
+import { type DataTableColumn, type SearchFormField, type ActionBarProps } from "@/components/index";
 import demoAPI from "@api/demo";
 import { HANDLE_CODES } from "@/services/constants";
 

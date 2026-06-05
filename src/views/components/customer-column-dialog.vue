@@ -70,9 +70,9 @@
 </template>
 <script lang="ts" setup>
 import { type PropType, computed, ref } from "vue";
-import { type DataTableColumn } from "@yujinjin/cms-components";
 import { Search, Delete } from "@element-plus/icons-vue";
-import { debounce } from "@yujinjin/utils";
+import { debounce } from "@/utils/index";
+import { type DataTableColumn } from "@/components/index";
 import { getValue, setValue } from "@/services/local-storage";
 
 /** 分组的单个数据列(父组件传过来的数值) */

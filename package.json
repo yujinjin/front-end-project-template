@@ -46,7 +46,7 @@
         "monaco-editor": "^0.52.2",
         "@vueuse/core": "^13.5.0",
         "mockjs": "^1.1.0",
-        "@yujinjin/utils": "^0.0.4",
+        "@yujinjin/utils": "^0.0.5",
         "@yujinjin/cms-components": "0.0.2"
     },
     "devDependencies": {

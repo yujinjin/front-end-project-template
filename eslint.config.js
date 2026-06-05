@@ -29,6 +29,12 @@ export default defineConfig(
      * 会合并根目录下的.prettier.config.js 文件
      */
     eslintPluginPrettierRecommended,
+    /** prettier 换行符规则覆盖（auto：保留文件现有换行符，由 Git + .gitattributes 保证仓库统一为 LF） */
+    {
+        rules: {
+            "prettier/prettier": ["error", { endOfLine: "auto" }]
+        }
+    },
     /** import-x 配置 */
     {
         plugins: {

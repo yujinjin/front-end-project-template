@@ -1,0 +1,17 @@
+# EditorConfig 统一编辑器配置
+# https://editorconfig.org
+
+root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 4
+end_of_line = lf
+# 编辑器保存时统一为 LF，搭配 .gitattributes 的 text=auto eol=lf 确保仓库一致
+# Prettier endOfLine 设为 auto，不强制转换，兼容各平台开发者的本地换行符
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.md]
+trim_trailing_whitespace = false

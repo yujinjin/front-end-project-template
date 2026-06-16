@@ -107,7 +107,7 @@ const generateFormFields = function () {
             console.error("字段没有属性name值", field);
             return;
         }
-        const newField: InputFormField = extend(true, { isShow: true, type: "input" }, field);
+        const newField: InputFormField = extend(true, { isShow: true, type: "input" }, field) as InputFormField;
         if (!newField.span) {
             newField.span = 24 / props.columns;
         }

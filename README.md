@@ -101,14 +101,13 @@
     │   │   └── qifu-cms-vuecli-template
     │   └── qifu-cms-vite
     │       └── qifu-cms-vite-template
-    ├── qifu-cms-ts-main(vite)
     ├── cms-main(待增加)
     │   ├── cms-template
-    │   ├── cms-custom-components
     │   └── mid-platform
     │       └── mid-platform-template
     ├── cms-ts-main
     │   ├── cms-ts-template(待增加)
+    │   ├── cms-custom-components
     │   └── mid-platform-ts
     │       └── mid-platform-ts-template(待增加)
     ├── web-app(待增加)
